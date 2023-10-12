@@ -1,0 +1,9 @@
+<mat-toolbar class="mat-elevation-z4">
+    <button mat-icon-button
+            (click)="menuToggle()"
+            *ngIf="isMobile">
+        <mat-icon *ngIf="!isMenuOpen">menu</mat-icon>
+        <mat-icon *ngIf="isMenuOpen">close</mat-icon>
+    </button>
+    <span>Dental service</span>
+</mat-toolbar>

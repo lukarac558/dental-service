@@ -5,6 +5,8 @@ import { AppDetailsRoutingModule } from '../app-details/app-details-routing.modu
 import { MaterialModule } from '../material.module';
 import { MainRoutingModule } from './basic-routing.module';
 import { HomePageComponent } from './home-page/home-page.component';
+import { MenuComponent } from './menu/menu.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 
 @NgModule({
@@ -15,8 +17,13 @@ import { HomePageComponent } from './home-page/home-page.component';
         AppDetailsRoutingModule
     ],
     declarations: [
-        HomePageComponent
+        HomePageComponent,
+        MenuComponent,
+        NavbarComponent
     ],
-    exports: []
+    exports: [
+        MenuComponent,
+        NavbarComponent
+    ]
 })
 export class MainModule { }

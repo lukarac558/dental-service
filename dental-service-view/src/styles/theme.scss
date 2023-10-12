@@ -1,18 +1,19 @@
 @use '@angular/material' as mat;
+@use 'palette';
 
 @include mat.core();
 
 $primary: (
-    50: #e3f2ff,
-    100: #badeff,
-    200: #8dcaff,
-    300: #5eb4ff,
-    400: #36a4ff,
-    500: #0095ff,
-    600: #0986f0,
-    700: #0c74dc,
-    800: #0d63ca,
-    900: #0d44ab,
+    50: palette.$primary-50,
+    100: palette.$primary-100,
+    200: palette.$primary-200,
+    300: palette.$primary-300,
+    400: palette.$primary-400,
+    500: palette.$primary-500,
+    600: palette.$primary-600,
+    700: palette.$primary-700,
+    800: palette.$primary-800,
+    900: palette.$primary-900,
     contrast: (50: #000000,
         100: #000000,
         200: #000000,
@@ -26,16 +27,16 @@ $primary: (
 );
 
 $accent: (
-    50: #fff8e1,
-    100: #ffecb3,
-    200: #ffdf82,
-    300: #ffd450,
-    400: #ffc92a,
-    500: #ffc00f,
-    600: #ffb208,
-    700: #ff9f08,
-    800: #fe8e08,
-    900: #fe6e07,
+    50: palette.$accent-50,
+    100: palette.$accent-100,
+    200: palette.$accent-200,
+    300: palette.$accent-300,
+    400: palette.$accent-400,
+    500: palette.$accent-500,
+    600: palette.$accent-600,
+    700: palette.$accent-700,
+    800: palette.$accent-800,
+    900: palette.$accent-900,
     contrast: (50: #000000,
         100: #000000,
         200: #000000,

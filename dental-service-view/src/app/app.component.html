@@ -1,3 +1,19 @@
-<main class="container">
-    <router-outlet></router-outlet>
-</main>
+<ds-navbar [isMobile]="isMobile$ | async"
+           [isMenuOpen]="isMenuOpen$ | async"
+           (menuToggled)="menuToggle()">
+</ds-navbar>
+
+<mat-sidenav-container>
+    <mat-sidenav #sideNav="matSidenav"
+                 [fixedInViewport]="true"
+                 [fixedTopGap]="64"
+                 [mode]="(isMobile$ | async) ? 'over' : 'side'"
+                 [opened]="isMenuOpen$ | async">
+        <ds-menu></ds-menu>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <main class="container">
+            <router-outlet></router-outlet>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>
