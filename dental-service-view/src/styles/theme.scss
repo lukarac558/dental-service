@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use 'palette';
+@use "typography" as typ;
 
 @include mat.core();
 
@@ -9,7 +10,7 @@ $primary: (
     200: palette.$primary-200,
     300: palette.$primary-300,
     400: palette.$primary-400,
-    500: palette.$primary-500,
+    500: palette.$primary,
     600: palette.$primary-600,
     700: palette.$primary-700,
     800: palette.$primary-800,
@@ -19,8 +20,8 @@ $primary: (
         200: #000000,
         300: #000000,
         400: #000000,
-        500: #000000,
-        600: #000000,
+        500: #ffffff,
+        600: #ffffff,
         700: #ffffff,
         800: #ffffff,
         900: #ffffff)
@@ -32,7 +33,7 @@ $accent: (
     200: palette.$accent-200,
     300: palette.$accent-300,
     400: palette.$accent-400,
-    500: palette.$accent-500,
+    500: palette.$accent,
     600: palette.$accent-600,
     700: palette.$accent-700,
     800: palette.$accent-800,
@@ -54,8 +55,8 @@ $ds-accent: mat.define-palette($accent);
 
 $my-warn: mat.define-palette(mat.$red-palette);
 
-$mspicy-theme: mat.define-light-theme((color: (primary: $ds-primary,
+$ds-theme: mat.define-light-theme((color: (primary: $ds-primary,
                 accent: $ds-accent,
-                warn: $my-warn, )));
+                warn: $my-warn, ), typography: typ.$my-typography));
 
-@include mat.all-component-themes($mspicy-theme);
+@include mat.all-component-themes($ds-theme);

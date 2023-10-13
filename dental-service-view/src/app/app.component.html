@@ -4,11 +4,13 @@
 </ds-navbar>
 
 <mat-sidenav-container>
-    <mat-sidenav #sideNav="matSidenav"
+    <mat-sidenav *ngIf="isAuth$ | async"
+                 #sideNav="matSidenav"
                  [fixedInViewport]="true"
                  [fixedTopGap]="64"
                  [mode]="(isMobile$ | async) ? 'over' : 'side'"
-                 [opened]="isMenuOpen$ | async">
+                 [opened]="isMenuOpen$ | async"
+                 (closed)="onSidenavClose()">
         <ds-menu></ds-menu>
     </mat-sidenav>
     <mat-sidenav-content>

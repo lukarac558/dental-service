@@ -1,0 +1,6 @@
+@use '@angular/material' as mat;
+@use 'variables' as var;
+
+$button-level: mat.define-typography-level($font-family: var.$font-family, $font-size: 16px, $line-height: 24px, $font-weight: 400, $letter-spacing: 0.5px);
+
+$my-typography: mat.define-typography-config($button: $button-level);

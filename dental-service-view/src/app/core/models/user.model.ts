@@ -1,4 +1,10 @@
-export type User = {
+export type UserDetails = {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    zipCode: string;
+    city: string;
+    address: string;
 };

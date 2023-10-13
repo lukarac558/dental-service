@@ -1,0 +1,9 @@
+.account-info {
+    margin-bottom: 25px;
+    display: grid;
+    grid-template-columns: 150px auto;
+
+    &__value {
+        font-weight: 500;
+    }
+}

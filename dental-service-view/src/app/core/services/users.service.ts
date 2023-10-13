@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { delay, Observable, of } from 'rxjs';
 
-import { User } from '../models/user.model';
-
+import { UserDetails } from '../models/user.model';
 
 @Injectable({
     providedIn: 'root'
@@ -12,10 +11,16 @@ export class UsersService {
 
     constructor(private _http: HttpClient) { }
 
-    getUser(): Observable<User> {
+    getUserDetails(): Observable<UserDetails> {
         return of({
             id: 1,
-            name: 'Jan Nowak'
-        });
+            firstName: 'Jan',
+            lastName: 'Nowak',
+            email: 'jannowak@gmail.com',
+            phoneNumber: '543321567',
+            zipCode: '44-100',
+            city: 'Gliwice',
+            address: 'Kujawska 4/1'
+        }).pipe(delay(500));
     }
 }

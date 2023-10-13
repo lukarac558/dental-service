@@ -1,4 +1,5 @@
 @use "variables" as var;
+@use "palette";
 
 mat-sidenav-container {
     position: absolute;
@@ -8,6 +9,7 @@ mat-sidenav-container {
 
     mat-sidenav {
         width: 220px;
+        background-color: palette.$primary;
     }
 
     mat-sidenav-content {
