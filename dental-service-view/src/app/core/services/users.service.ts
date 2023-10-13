@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { delay, EMPTY, Observable, of, startWith } from 'rxjs';
 
 import { UserDetails } from '../models/user.model';
 
@@ -13,7 +13,6 @@ export class UsersService {
 
     getUserDetails(): Observable<UserDetails> {
         return of({
-            id: 1,
             firstName: 'Jan',
             lastName: 'Nowak',
             email: 'jannowak@gmail.com',
@@ -22,5 +21,9 @@ export class UsersService {
             city: 'Gliwice',
             address: 'Kujawska 4/1'
         }).pipe(delay(500));
+    }
+
+    updateUserDetails(userDetails: UserDetails): Observable<void> {
+        return EMPTY.pipe(startWith(undefined), delay(500));
     }
 }
