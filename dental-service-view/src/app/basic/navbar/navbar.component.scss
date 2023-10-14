@@ -14,10 +14,21 @@ mat-toolbar {
         align-items: center;
 
         &__logo {
-            text-decoration: none;
-            color: var.$font-color;
-            font-weight: 500;
-            border-bottom: 2px solid palette.$primary;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            img {
+                height: 32px;
+            }
+
+            a {
+                text-decoration: none;
+                font-weight: 500;
+                background: -webkit-linear-gradient(palette.$accent-300, palette.$primary);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
         }
     }
 }

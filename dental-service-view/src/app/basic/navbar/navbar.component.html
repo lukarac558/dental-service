@@ -4,14 +4,18 @@
             <div class="d-flex align-items-center">
                 <button mat-icon-button
                         (click)="menuToggle()"
-                        *ngIf="isMobile">
+                        *ngIf="isMobile && (isAuth$ | async)">
                     <mat-icon *ngIf="!isMenuOpen">menu</mat-icon>
                     <mat-icon *ngIf="isMenuOpen">close</mat-icon>
                 </button>
-                <a class="navbar__logo"
-                   [routerLink]="'/'">
-                    Dental service
-                </a>
+                <div class="navbar__logo">
+                    <img src="/assets/images/logo.png">
+                    <div>
+                        <a [routerLink]="'/'">
+                            Dental service
+                        </a>
+                    </div>
+                </div>
             </div>
             <div>
                 <button *ngIf="!(isAuth$ | async)"
