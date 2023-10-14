@@ -1,0 +1,10 @@
+<button mat-flat-button
+        color="primary"
+        (click)="onClick()"
+        [disabled]="isLoading"
+        class="spinner-button">
+    <mat-spinner *ngIf="isLoading"
+                 diameter="18">
+    </mat-spinner>
+    <ng-content></ng-content>
+</button>

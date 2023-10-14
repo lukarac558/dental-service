@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { ErrorMessageModule } from 'src/app/shared/components/error-message/error-message.module';
+import { SpinnerButtonModule } from 'src/app/shared/components/spinner-button/spinner-button.module';
 import { SpinnerModule } from 'src/app/shared/components/spinner/spinner.module';
 
 import { AccountEditComponent } from './account-edit/account-edit.component';
@@ -20,7 +21,8 @@ import { AccountComponent } from './account/account.component';
         MaterialModule,
         SpinnerModule,
         ReactiveFormsModule,
-        ErrorMessageModule
+        ErrorMessageModule,
+        SpinnerButtonModule
     ]
 })
 export class AccountModule { }

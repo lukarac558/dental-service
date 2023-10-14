@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { UserDetails } from 'src/app/core/models/user.model';
 import { UsersService } from 'src/app/core/services/users.service';
+import { indicate } from 'src/app/shared/operators/indicate';
 import { ControlsOf } from 'src/main';
 
 @Component({
@@ -14,6 +15,7 @@ import { ControlsOf } from 'src/main';
 export class AccountEditComponent implements OnInit, OnDestroy {
     userDetails$: Observable<UserDetails>;
     form: FormGroup;
+    isSaving$ = new Subject<boolean>();
 
     private _destroy$ = new Subject<void>();
 
@@ -50,7 +52,8 @@ export class AccountEditComponent implements OnInit, OnDestroy {
             const userDetails = this.form.value as UserDetails;
 
             this._usersSerivce.updateUserDetails(userDetails).pipe(
-                takeUntil(this._destroy$)
+                takeUntil(this._destroy$),
+                indicate(this.isSaving$)
             ).subscribe(_ => {
                 this._toastr.success('Pomyślnie zapisano informacje.');
                 this._router.navigateByUrl('/account');

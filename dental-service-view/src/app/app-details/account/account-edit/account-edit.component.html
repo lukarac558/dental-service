@@ -78,11 +78,10 @@
         </ng-container>
     </mat-card-content>
     <mat-card-actions align="end">
-        <button mat-flat-button
-                color="primary"
-                (click)="save()">
+        <ds-spinner-button (clicked)="save()"
+                           [isLoading]="isSaving$ | async">
             Zapisz
-        </button>
+        </ds-spinner-button>
     </mat-card-actions>
 </mat-card>
 
