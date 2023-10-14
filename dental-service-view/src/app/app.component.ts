@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
         shareReplay({ refCount: true, bufferSize: 1 })
     );
     isAuth$: Observable<boolean>;
+    isAuthLoading$: Observable<boolean>;
 
     private _isMenuOpen$ = new BehaviorSubject<boolean>(false);
 
@@ -30,6 +31,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         this.isAuth$ = this._authService.isAuth$;
+        this.isAuthLoading$ = this._authService.isLoading$;
     }
 
     menuToggle(): void {

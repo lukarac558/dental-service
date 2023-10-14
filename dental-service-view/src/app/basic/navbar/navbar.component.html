@@ -18,12 +18,12 @@
                 </div>
             </div>
             <div>
-                <button *ngIf="!(isAuth$ | async)"
-                        mat-flat-button
-                        color="primary"
-                        (click)="login()">
+                <a *ngIf="!(isAuth$ | async)"
+                   mat-flat-button
+                   color="primary"
+                   routerLink="/login">
                     Zaloguj
-                </button>
+                </a>
                 <button *ngIf="isAuth$ | async"
                         mat-flat-button
                         (click)="logout()">

@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainModule } from './basic/basic.module';
 import { MaterialModule } from './material.module';
+import { SpinnerModule } from './shared/components/spinner/spinner.module';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { MaterialModule } from './material.module';
         BrowserAnimationsModule,
         MainModule,
         MaterialModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
+        SpinnerModule
     ],
     providers: [
         { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } }

@@ -11,6 +11,11 @@ const routes: Routes = [
                 //canActivate: [NotAuthGuard]
             },
             {
+                path: "register",
+                loadChildren: () => import('./register/register.module').then(m => m.RegisterModule),
+                //canActivate: [NotAuthGuard]
+            },
+            {
                 path: "account",
                 loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
                 //canActivate: [AuthGuard]

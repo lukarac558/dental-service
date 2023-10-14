@@ -27,10 +27,6 @@ export class NavbarComponent implements OnInit {
         this.menuToggled.next();
     }
 
-    login(): void {
-        this._authService.login();
-    }
-
     logout(): void {
         this._authService.logout();
     }

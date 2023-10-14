@@ -6,16 +6,16 @@ import { ErrorMessageModule } from 'src/app/shared/components/error-message/erro
 import { SpinnerButtonModule } from 'src/app/shared/components/spinner-button/spinner-button.module';
 import { SpinnerModule } from 'src/app/shared/components/spinner/spinner.module';
 
-import { LoginRoutingModule } from './login-routing.module';
-import { LoginComponent } from './login.component';
+import { RegisterComponent } from '../register/register.component';
+import { RegisterRoutingModule } from './register-routing.module';
 
 @NgModule({
     declarations: [
-        LoginComponent
+        RegisterComponent
     ],
     imports: [
         CommonModule,
-        LoginRoutingModule,
+        RegisterRoutingModule,
         MaterialModule,
         SpinnerModule,
         SpinnerButtonModule,
@@ -23,4 +23,4 @@ import { LoginComponent } from './login.component';
         ReactiveFormsModule
     ]
 })
-export class LoginModule { }
+export class RegisterModule { }

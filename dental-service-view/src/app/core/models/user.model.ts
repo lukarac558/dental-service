@@ -10,4 +10,6 @@ export type UserDetails = {
     role: number;
 };
 
-export type UserDetailsForm = Omit<UserDetails, 'role'>
+export type UserDetailsForm = Omit<UserDetails, 'role'>;
+
+export type InitUserDetailsForm = Omit<UserDetails, 'email'>;

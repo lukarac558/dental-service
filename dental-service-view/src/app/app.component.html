@@ -1,21 +1,28 @@
-<ds-navbar [isMobile]="isMobile$ | async"
-           [isMenuOpen]="isMenuOpen$ | async"
-           (menuToggled)="menuToggle()">
-</ds-navbar>
+<ng-container *ngIf="!!(isAuthLoading$ | async) === false else loading">
 
-<mat-sidenav-container>
-    <mat-sidenav *ngIf="isAuth$ | async"
-                 #sideNav="matSidenav"
-                 [fixedInViewport]="true"
-                 [fixedTopGap]="64"
-                 [mode]="(isMobile$ | async) ? 'over' : 'side'"
-                 [opened]="isMenuOpen$ | async"
-                 (closed)="onSidenavClose()">
-        <ds-menu></ds-menu>
-    </mat-sidenav>
-    <mat-sidenav-content>
-        <main class="container">
-            <router-outlet></router-outlet>
-        </main>
-    </mat-sidenav-content>
-</mat-sidenav-container>
+    <ds-navbar [isMobile]="isMobile$ | async"
+               [isMenuOpen]="isMenuOpen$ | async"
+               (menuToggled)="menuToggle()">
+    </ds-navbar>
+
+    <mat-sidenav-container>
+        <mat-sidenav *ngIf="isAuth$ | async"
+                     #sideNav="matSidenav"
+                     [fixedInViewport]="true"
+                     [fixedTopGap]="64"
+                     [mode]="(isMobile$ | async) ? 'over' : 'side'"
+                     [opened]="isMenuOpen$ | async"
+                     (closed)="onSidenavClose()">
+            <ds-menu></ds-menu>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <main class="container">
+                <router-outlet></router-outlet>
+            </main>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</ng-container>
+
+<ng-template #loading>
+    <ds-spinner></ds-spinner>
+</ng-template>

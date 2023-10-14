@@ -14,6 +14,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -34,7 +35,8 @@ const modules = [
     MatCheckboxModule,
     MatListModule,
     MatExpansionModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatStepperModule
 ];
 
 @NgModule({
