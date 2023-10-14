@@ -27,6 +27,19 @@
                 </div>
                 <div class="row">
                     <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
+                        <mat-label>Płeć</mat-label>
+                        <mat-select formControlName="gender">
+                            <mat-option [value]="gender.Male">
+                                Mężczyzna
+                            </mat-option>
+                            <mat-option [value]="gender.Female">
+                                Kobieta
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
                         <mat-label>E-mail</mat-label>
                         <input formControlName="email"
                                matInput

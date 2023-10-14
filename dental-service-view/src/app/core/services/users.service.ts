@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, EMPTY, Observable, of, startWith } from 'rxjs';
 
-import { UserDetails } from '../models/user.model';
+import { UserDetails, UserDetailsForm } from '../models/user.model';
 
 @Injectable({
     providedIn: 'root'
@@ -19,11 +19,13 @@ export class UsersService {
             phoneNumber: '543321567',
             zipCode: '44-100',
             city: 'Gliwice',
-            address: 'Kujawska 4/1'
+            address: 'Kujawska 4/1',
+            gender: 1,
+            role: 2
         }).pipe(delay(500));
     }
 
-    updateUserDetails(userDetails: UserDetails): Observable<void> {
+    updateUserDetails(userDetails: UserDetailsForm): Observable<void> {
         return EMPTY.pipe(startWith(undefined), delay(500));
     }
 }

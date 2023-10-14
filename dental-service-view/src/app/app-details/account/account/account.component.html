@@ -3,62 +3,77 @@
         <mat-card-title>Twoje informacje</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <div *ngIf="userDetails$ | async as userDetails else loading"
-             class="row">
-            <div class="col-lg-6 account-info">
-                <div class="account-info__label">
-                    Imię:
-                </div>
-                <div class="account-info__value">
-                    {{userDetails.firstName}}
-                </div>
+        <div *ngIf="userDetails$ | async as userDetails else loading">
+            <div class="avatar">
+                <ds-avatar [avatarSizePx]="225"
+                           [gender]="userDetails.gender"
+                           [role]="userDetails.role">
+                </ds-avatar>
             </div>
-            <div class="col-lg-6 account-info">
-                <div class="account-info__label">
-                    Nazwisko:
+            <div class="row">
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        Imię:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.firstName}}
+                    </div>
                 </div>
-                <div class="account-info__value">
-                    {{userDetails.lastName}}
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        Nazwisko:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.lastName}}
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6 account-info">
-                <div class="account-info__label">
-                    E-mail:
+                <div class="col-12 account-info">
+                    <div class="account-info__label">
+                        Płeć:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.gender == gender.Male ? 'Mężczyzna' : 'Kobieta'}}
+                    </div>
                 </div>
-                <div class="account-info__value">
-                    {{userDetails.email}}
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        E-mail:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.email}}
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6 account-info">
-                <div class="account-info__label">
-                    Nr telefonu:
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        Nr telefonu:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.phoneNumber}}
+                    </div>
                 </div>
-                <div class="account-info__value">
-                    {{userDetails.phoneNumber}}
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        Kod pocztowy:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.zipCode}}
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-6 account-info">
-                <div class="account-info__label">
-                    Kod pocztowy:
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        Miasto:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.city}}
+                    </div>
                 </div>
-                <div class="account-info__value">
-                    {{userDetails.zipCode}}
-                </div>
-            </div>
-            <div class="col-lg-6 account-info">
-                <div class="account-info__label">
-                    Miasto:
-                </div>
-                <div class="account-info__value">
-                    {{userDetails.city}}
-                </div>
-            </div>
-            <div class="col-lg-6 account-info">
-                <div class="account-info__label">
-                    Adres:
-                </div>
-                <div class="account-info__value">
-                    {{userDetails.address}}
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        Adres:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.address}}
+                    </div>
                 </div>
             </div>
         </div>
