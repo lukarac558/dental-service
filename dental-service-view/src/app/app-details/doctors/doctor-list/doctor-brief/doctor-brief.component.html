@@ -1,8 +1,8 @@
 <a class="doctor"
-   [routerLink]="'/doctors'">
+   [routerLink]="'/doctors/' + doctor.id">
     <mat-card>
         <mat-card-content>
-            <div class="doctor__info row">
+            <div class="row">
                 <div class="col-md-7 d-flex">
                     <div class="doctor__avatar">
                         <ds-avatar [avatarSizePx]="80"
@@ -15,7 +15,7 @@
                             {{doctor.firstName}}
                             {{doctor.lastName}}
                         </div>
-                        <div class="doctor__specialization">
+                        <div>
                             {{doctor.specialization}}
                         </div>
                     </div>

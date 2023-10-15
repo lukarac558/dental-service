@@ -7,7 +7,7 @@ import { Role } from 'src/app/core/models/role.model';
     templateUrl: './doctor-brief.component.html',
     styleUrls: ['./doctor-brief.component.scss']
 })
-export class DoctorComponent {
+export class DoctorBriefComponent {
     @Input() doctor: DoctorShort;
 
     role = Role;

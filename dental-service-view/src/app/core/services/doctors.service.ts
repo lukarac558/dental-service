@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
 
-import { DoctorSearch, DoctorShort } from '../models/doctor.model';
+import { Doctor, DoctorSearch, DoctorShort } from '../models/doctor.model';
 import { Gender } from '../models/gender.model';
 import { CustomPageCriteria, Page } from '../models/page.model';
 
@@ -94,4 +94,30 @@ export class DoctorsService {
         }).pipe(delay(500));
     }
 
+    getDoctor(id: number): Observable<Doctor> {
+        return of({
+            id: 1,
+            firstName: 'Alan',
+            lastName: 'Kwieciński',
+            gender: Gender.Male,
+            specialization: 'Stomatolog',
+            aboutMe: 'Absolwent Śląskiego Uniwersytetu Medycznego w Katowicach. Specjalizuje się w leczeniu zachowawczym i protetycznym, ale wykonuje również zabiegi z zakresu endodoncji, chirurgii stomatologicznej oraz stomatologii dziecięcej. Poza gabinetem miłośnik gór i pływania.',
+            services: [{
+                id: 1,
+                name: 'Konsultacja stomatologiczna'
+            }, {
+                id: 2,
+                name: 'Wybielanie zębów'
+            }, {
+                id: 3,
+                name: 'Ekstrakcja zęba'
+            }, {
+                id: 4,
+                name: 'Leczenie próchnicy'
+            }, {
+                id: 5,
+                name: 'Pakiet higienizacyjny'
+            }]
+        }).pipe(delay(500));
+    }
 }

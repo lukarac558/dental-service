@@ -14,3 +14,5 @@ export type DoctorSearch = {
     name: string;
     serviceId: number | null;
 };
+
+export type Doctor = DoctorShort & {};
