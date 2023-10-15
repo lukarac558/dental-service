@@ -1,0 +1,39 @@
+<a class="doctor"
+   [routerLink]="'/doctors'">
+    <mat-card>
+        <mat-card-content>
+            <div class="doctor__info row">
+                <div class="col-md-7 d-flex">
+                    <div class="doctor__avatar">
+                        <ds-avatar [avatarSizePx]="80"
+                                   [gender]="doctor.gender"
+                                   [role]="role.Dentist">
+                        </ds-avatar>
+                    </div>
+                    <div>
+                        <div class="doctor__name">
+                            {{doctor.firstName}}
+                            {{doctor.lastName}}
+                        </div>
+                        <div class="doctor__specialization">
+                            {{doctor.specialization}}
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="doctor.services.length"
+                     class="doctor__services col-md-5 mt-3 mt-md-0">
+                    <div *ngFor="let service of doctor.services">
+                        {{service.name}}
+                    </div>
+                    <div *ngIf="doctor.services.length === 3"
+                         class="doctor__more-services">
+                        Sprawdź więcej usług
+                    </div>
+                </div>
+                <div class="doctor__about-me col-12 mt-3">
+                    {{doctor.aboutMe}}
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</a>

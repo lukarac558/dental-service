@@ -1,0 +1,34 @@
+<mat-card class="doctor-search">
+    <mat-card-content>
+        <form [formGroup]="searchForm">
+            <div class="row">
+                <mat-form-field class="col-md-6 col-lg">
+                    <mat-label>Nazwa lekarza</mat-label>
+                    <input formControlName="name"
+                           matInput>
+                </mat-form-field>
+                <mat-form-field class="col-md-6 col-lg">
+                    <mat-label>Oferowana usługa</mat-label>
+                    <mat-select formControlName="serviceId">
+                        <mat-option *ngFor="let service of services$ | async"
+                                    [value]="service.id">
+                            {{ service.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="col-lg-auto d-flex justify-content-end align-items-center mt-2 mt-lg-0">
+                    <button (click)="clear()"
+                            mat-flat-button
+                            class="me-2">
+                        Wyczyść
+                    </button>
+                    <button (click)="search()"
+                            mat-flat-button
+                            color="primary">
+                        Szukaj
+                    </button>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

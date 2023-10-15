@@ -1,0 +1,13 @@
+@use "breakpoints";
+
+.doctor-search {
+    @media(min-width: breakpoints.$breakpoint-lg) {
+        &::ng-deep .mat-mdc-form-field-subscript-wrapper {
+            display: none;
+        }
+
+        .mat-mdc-form-field {
+            margin-bottom: 0px;
+        }
+    }
+}

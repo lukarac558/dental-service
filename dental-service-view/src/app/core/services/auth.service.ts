@@ -10,7 +10,7 @@ import { InitUserDetailsForm } from '../models/user.model';
     providedIn: 'root'
 })
 export class AuthService {
-    private _isAuth$ = new BehaviorSubject<boolean>(false);
+    private _isAuth$ = new BehaviorSubject<boolean>(true);
     private _isLoading$ = new BehaviorSubject<boolean>(false);
 
     constructor(private _router: Router) { }

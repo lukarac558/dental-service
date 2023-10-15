@@ -1,0 +1,45 @@
+@use "variables" as var;
+@use '@angular/material' as mat;
+
+.doctor {
+    $self: &;
+    text-decoration: none;
+    color: var.$font-color;
+
+    mat-card {
+        margin-bottom: 25px;
+
+        &:hover {
+            @include mat.elevation(4);
+        }
+
+        #{$self}__avatar {
+            margin-right: 15px;
+        }
+
+        #{$self}__name {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        #{$self}__services {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            #{$self}__more-services {
+                color: var.$font-grey-color;
+                text-decoration: underline;
+            }
+        }
+
+        #{$self}__about-me {
+            font-size: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+}

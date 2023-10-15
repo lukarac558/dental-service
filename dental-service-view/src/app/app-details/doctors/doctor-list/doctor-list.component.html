@@ -1,0 +1,22 @@
+<div class="my-4">
+    <ds-doctor-search (searched)="onSearch($event)"></ds-doctor-search>
+    <ng-container *ngIf="doctors$ | async as doctors else loading">
+        <div class="row mt-4">
+            <div *ngFor="let doctor of doctors.items"
+                 class="col-xxl-6">
+                <ds-doctor-brief [doctor]="doctor"></ds-doctor-brief>
+            </div>
+        </div>
+        <mat-paginator *ngIf="searchCriteria$ | async as pageCriteria"
+                       [length]="doctors.itemsCount"
+                       [pageSize]="pageCriteria.pageSize"
+                       [pageIndex]="pageCriteria.pageIndex"
+                       [pageSizeOptions]="[6]"
+                       (page)="onPageChange($event)">
+        </mat-paginator>
+    </ng-container>
+</div>
+
+<ng-template #loading>
+    <ds-spinner></ds-spinner>
+</ng-template>

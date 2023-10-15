@@ -8,7 +8,6 @@ import { UserDetails, UserDetailsForm } from '../models/user.model';
     providedIn: 'root'
 })
 export class UsersService {
-
     constructor(private _http: HttpClient) { }
 
     getUserDetails(): Observable<UserDetails> {
