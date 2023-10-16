@@ -10,7 +10,7 @@ services:
     image: postgres:16
     container_name: db
     volumes:
-      - ./db/*:/docker-entrypoint-initdb.d/*
+      - ./db/init-auth-server-schema.sql:/docker-entrypoint-initdb.d/init-auth-server-schema.sql
       - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: dental-clinic
