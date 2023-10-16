@@ -10,7 +10,7 @@ services:
     image: postgres:16
     container_name: db
     volumes:
-      - ./auth-server/db/init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
+      - ./db/*:/docker-entrypoint-initdb.d/*
       - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: dental-clinic
@@ -21,19 +21,11 @@ services:
     networks:
       - local
   dental-service-keycloak:
-    image: custom-keycloak
-    container_name: auth-server
-    build:
-      context: ./auth-server
-      dockerfile: Dockerfile
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: on-failure
+    extends:
+      file: ./auth-server/docker-compose.yml
+      service: auth-server
     depends_on:
       - postgres
-    ports:
-      - "8181:8080"
     networks:
       - local
     environment:
@@ -43,6 +35,3 @@ services:
       KC_DB_SCHEMA: keycloak
       KC_DB_USERNAME: admin
       KC_DB_PASSWORD: admin
-      
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
