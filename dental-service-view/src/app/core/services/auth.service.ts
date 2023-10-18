@@ -4,7 +4,7 @@ import { BehaviorSubject, delay, EMPTY, Observable, startWith } from 'rxjs';
 import { indicate } from 'src/app/shared/operators/indicate';
 
 import { LoginForm, RegisterForm } from '../models/login-register.model';
-import { InitUserDetailsForm } from '../models/user.model';
+import { InitUserDetailsForm } from '../models/applicationUser.model';
 
 @Injectable({
     providedIn: 'root'

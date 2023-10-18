@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.1.1_INSERT_EXAMPLE_VISITS" author="lraczka">
+        <!--Add example service types -->
+        <sql>insert into service_type(id,name,duration_time,user_id,description) values(1,'Plombowanie','01:00',1,'Opis uslugi plombowania zeba.')</sql>
+        <sql>insert into service_type(id,name,duration_time,user_id,description) values(2,'Wyrywanie','0:30',1,'Opis uslugi wyrywania zeba.')</sql>
+
+        <!--Add example visit -->
+        <sql>insert into visit(id,start_date,user_id,reservation_date,description)
+            values(1,'2023-10-18 08:00:00',2,'2023-10-17 19:30:08','Protokol z wizyty.')</sql>
+
+        <!--Add example visit positions-->
+        <sql>insert into visit_position(id,visit_id,service_type_id)
+            values(1,1,1)</sql>
+        <sql>insert into visit_position(id,visit_id,service_type_id)
+            values(2,1,2)</sql>
+    </changeSet>
+</databaseChangeLog>
