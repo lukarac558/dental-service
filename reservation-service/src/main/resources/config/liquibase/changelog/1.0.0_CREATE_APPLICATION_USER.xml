@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.0.0_CREATE_APPLICATION_USER" author="lraczka">
+        <createTable tableName="voivodeship">
+            <column name="id" type="smallint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="city">
+            <column name="code" type="varchar(6)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="voivodeship_id" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <sql>CREATE TYPE role AS ENUM ('doctor','patient');</sql>
+
+        <createTable tableName="application_user">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="role">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pesel" type="numeric(11, 0)">-->
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="varchar(12)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city_code" type="varchar(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" type="varchar(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="building_number" type="varchar(8)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

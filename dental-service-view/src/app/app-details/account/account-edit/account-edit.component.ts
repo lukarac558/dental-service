@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
 import { Gender } from 'src/app/core/models/gender.model';
-import { UserDetails, UserDetailsForm } from 'src/app/core/models/user.model';
+import { UserDetails, UserDetailsForm } from 'src/app/core/models/applicationUser.model';
 import { UsersService } from 'src/app/core/services/users.service';
 import { indicate } from 'src/app/shared/operators/indicate';
 import { ControlsOf } from 'src/main';
