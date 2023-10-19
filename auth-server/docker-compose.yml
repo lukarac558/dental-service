@@ -1,0 +1,17 @@
+version: "3"
+services:
+  auth-server:
+    image: custom-keycloak
+    container_name: auth-server
+    build:
+      context: ../auth-server
+      dockerfile: Dockerfile
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8181:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin

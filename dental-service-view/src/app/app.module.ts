@@ -12,6 +12,7 @@ import { MainModule } from './basic/basic.module';
 import { MaterialModule } from './material.module';
 import { Paginator } from './shared/components/paginator/paginator.component';
 import { SpinnerModule } from './shared/components/spinner/spinner.module';
+import {OAuthModule} from "angular-oauth2-oidc";
 
 @NgModule({
     declarations: [
@@ -25,7 +26,13 @@ import { SpinnerModule } from './shared/components/spinner/spinner.module';
         MainModule,
         MaterialModule,
         ToastrModule.forRoot(),
-        SpinnerModule
+        SpinnerModule,
+        OAuthModule.forRoot({
+            resourceServer: {
+                allowedUrls: ['http://localhost:8080/api'],
+                sendAccessToken: true
+            }
+        }),
     ],
     providers: [
         { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },

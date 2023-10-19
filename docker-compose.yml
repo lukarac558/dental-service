@@ -22,7 +22,7 @@ services:
       - local
   dental-service-keycloak:
     extends:
-      file: ./auth-server/docker-compose.yml
+      file: auth-server/docker-compose.yml
       service: auth-server
     depends_on:
       - postgres
