@@ -21,7 +21,7 @@
                 <a *ngIf="!(isAuth$ | async)"
                    mat-flat-button
                    color="primary"
-                   routerLink="/login">
+                   (click)="login()">
                     Zaloguj
                 </a>
                 <button *ngIf="isAuth$ | async"
