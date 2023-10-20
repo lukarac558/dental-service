@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Gender } from 'src/app/core/models/gender.model';
 import { RegisterForm } from 'src/app/core/models/login-register.model';
 import { Role } from 'src/app/core/models/role.model';
-import { InitUserDetailsForm } from 'src/app/core/models/applicationUser.model';
+import { InitUserDetailsForm } from 'src/app/core/models/user.model';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ControlsOf } from 'src/main';
 

@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, EMPTY, Observable, of, startWith } from 'rxjs';
 
-import { UserDetails, UserDetailsForm } from '../models/applicationUser.model';
+import { UserDetails, UserDetailsForm } from '../models/user.model';
 
 @Injectable({
     providedIn: 'root'
