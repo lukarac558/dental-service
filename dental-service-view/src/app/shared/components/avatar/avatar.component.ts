@@ -15,9 +15,9 @@ export class AvatarComponent implements OnInit {
     imagePath: string;
 
     ngOnInit(): void {
-        if (this.gender == Gender.Male && this.role == Role.Dentist) {
+        if (this.gender == Gender.Male && this.role == Role.Doctor) {
             this.imagePath = '/assets/images/account/dentist-m.png';
-        } else if (this.gender == Gender.Female && this.role == Role.Dentist) {
+        } else if (this.gender == Gender.Female && this.role == Role.Doctor) {
             this.imagePath = '/assets/images/account/dentist-w.png';
         } else if (this.gender == Gender.Male && this.role == Role.Patient) {
             this.imagePath = '/assets/images/account/patient-m.png';

@@ -7,7 +7,6 @@ export type DoctorShort = {
     gender: number;
     specialization: string;
     aboutMe: string;
-    services: Lookup[]
 };
 
 export type DoctorSearch = {
@@ -15,4 +14,6 @@ export type DoctorSearch = {
     serviceId: number | null;
 };
 
-export type Doctor = DoctorShort & {};
+export type Doctor = DoctorShort & {
+    services: Lookup[]
+};

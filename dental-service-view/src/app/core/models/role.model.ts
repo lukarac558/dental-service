@@ -1,4 +1,4 @@
 export enum Role {
-    Dentist = 1,
+    Doctor = 1,
     Patient = 2
 }

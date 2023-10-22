@@ -1,0 +1,66 @@
+@use "variables" as var;
+@use "palette";
+@use "breakpoints";
+
+.visit {
+    $self: &;
+    margin-bottom: 25px;
+
+    &__details {
+        display: grid;
+        grid-template-columns: auto 180px;
+        row-gap: 15px;
+
+        @media(max-width: breakpoints.$breakpoint-md) {
+            grid-template-columns: auto;
+        }
+
+        #{$self}__avatar {
+            margin-right: 15px;
+        }
+
+        #{$self}__doctor-name {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        #{$self}__dates {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            @media(max-width: breakpoints.$breakpoint-md) {
+                grid-row-start: 1;
+                grid-row-end: 2;
+                text-align: center;
+            }
+
+            #{$self}__status--finished {
+                color: var.$font-grey-color;
+            }
+
+            #{$self}__status--in-future {
+                font-weight: 500;
+            }
+        }
+
+        #{$self}__display-services {
+            display: inline-block;
+            cursor: pointer;
+            color: palette.$primary;
+
+            &:hover {
+                background-color: var.$hover-background-color;
+            }
+        }
+
+        #{$self}__service-list {
+            margin-top: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+    }
+}

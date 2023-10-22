@@ -2,36 +2,24 @@
    [routerLink]="'/doctors/' + doctor.id">
     <mat-card>
         <mat-card-content>
-            <div class="row">
-                <div class="col-md-7 d-flex">
-                    <div class="doctor__avatar">
-                        <ds-avatar [avatarSizePx]="80"
-                                   [gender]="doctor.gender"
-                                   [role]="role.Dentist">
-                        </ds-avatar>
+            <div class="d-flex">
+                <div class="doctor__avatar">
+                    <ds-avatar [avatarSizePx]="100"
+                               [gender]="doctor.gender"
+                               [role]="role.Doctor">
+                    </ds-avatar>
+                </div>
+                <div>
+                    <div class="doctor__name">
+                        {{doctor.firstName}}
+                        {{doctor.lastName}}
                     </div>
                     <div>
-                        <div class="doctor__name">
-                            {{doctor.firstName}}
-                            {{doctor.lastName}}
-                        </div>
-                        <div>
-                            {{doctor.specialization}}
-                        </div>
+                        {{doctor.specialization}}
                     </div>
-                </div>
-                <div *ngIf="doctor.services.length"
-                     class="doctor__services col-md-5 mt-3 mt-md-0">
-                    <div *ngFor="let service of doctor.services">
-                        {{service.name}}
+                    <div class="doctor__about-me">
+                        {{doctor.aboutMe}}
                     </div>
-                    <div *ngIf="doctor.services.length === 3"
-                         class="doctor__more-services">
-                        Sprawdź więcej usług
-                    </div>
-                </div>
-                <div class="doctor__about-me col-12 mt-3">
-                    {{doctor.aboutMe}}
                 </div>
             </div>
         </mat-card-content>

@@ -26,6 +26,7 @@
                 </a>
                 <button *ngIf="isAuth$ | async"
                         mat-flat-button
+                        color="primary"
                         (click)="logout()">
                     Wyloguj
                 </button>

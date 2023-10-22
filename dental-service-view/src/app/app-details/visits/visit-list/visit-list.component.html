@@ -1,0 +1,21 @@
+<div class="my-4">
+    <ng-container *ngIf="visits$ | async as visits else loading">
+        <div class="row mt-4">
+            <div *ngFor="let visit of visits.items"
+                 class="col-xl-6">
+                <ds-visit-item [visit]=visit></ds-visit-item>
+            </div>
+        </div>
+        <mat-paginator *ngIf="searchCriteria$ | async as pageCriteria"
+                       [length]="visits.itemsCount"
+                       [pageSize]="pageCriteria.pageSize"
+                       [pageIndex]="pageCriteria.pageIndex"
+                       [pageSizeOptions]="[6]"
+                       (page)="onPageChange($event)">
+        </mat-paginator>
+    </ng-container>
+</div>
+
+<ng-template #loading>
+    <ds-spinner></ds-spinner>
+</ng-template>

@@ -1,0 +1,47 @@
+<mat-card class="visit">
+    <mat-card-content>
+        <div class="visit__details">
+            <div class="d-flex justify-content-center justify-content-md-start">
+                <div class="visit__avatar">
+                    <ds-avatar [avatarSizePx]="90"
+                               [gender]="visit.doctorGender"
+                               [role]="role.Doctor">
+                    </ds-avatar>
+                </div>
+                <div>
+                    <div class="visit__doctor-name">
+                        {{visit.doctorName}}
+                    </div>
+                    <div>
+                        {{visit.doctorSpecialization}}
+                    </div>
+                </div>
+            </div>
+            <div class="visit__dates">
+                <div [class.visit__status--finished]="visit.endDate <= now"
+                     [class.visit__status--in-future]="visit.endDate > now">
+                    {{visit.endDate > now ? 'Nadchodząca wizyta' : 'Zakończona wizyta'}}
+                </div>
+                <div>{{visit.startDate | date:'dd MMMM yyyy'}}</div>
+                <div>
+                    {{visit.startDate | date:'HH:mm'}}
+                    -
+                    {{visit.endDate | date:'HH:mm'}}
+                </div>
+                <div>{{visit.startDate | date:'EEEE'}}</div>
+            </div>
+            <div class="text-center text-md-start">
+                <div (click)="displayServices = !displayServices"
+                     class="visit__display-services">
+                    {{displayServices ? 'Ukryj usługi' : 'Pokaż usługi'}}
+                </div>
+                <div *ngIf="displayServices"
+                     class="visit__service-list">
+                    <div *ngFor="let service of visit.services">
+                        {{service.name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

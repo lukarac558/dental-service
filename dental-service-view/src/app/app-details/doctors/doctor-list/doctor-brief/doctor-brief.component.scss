@@ -23,18 +23,8 @@
             margin-bottom: 5px;
         }
 
-        #{$self}__services {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-
-            #{$self}__more-services {
-                color: var.$font-grey-color;
-                text-decoration: underline;
-            }
-        }
-
         #{$self}__about-me {
+            margin-top: 10px;
             font-size: 15px;
             display: -webkit-box;
             -webkit-line-clamp: 2;

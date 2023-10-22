@@ -22,16 +22,6 @@ export class DoctorsService {
                 gender: Gender.Male,
                 specialization: 'Stomatolog',
                 aboutMe: 'Absolwent Śląskiego Uniwersytetu Medycznego w Katowicach. Specjalizuje się w leczeniu zachowawczym i protetycznym, ale wykonuje również zabiegi z zakresu endodoncji, chirurgii stomatologicznej oraz stomatologii dziecięcej. Poza gabinetem miłośnik gór i pływania.',
-                services: [{
-                    id: 1,
-                    name: 'Konsultacja stomatologiczna'
-                }, {
-                    id: 2,
-                    name: 'Wybielanie zębów'
-                }, {
-                    id: 3,
-                    name: 'Ekstrakcja zęba'
-                }]
             }, {
                 id: 2,
                 firstName: 'Agata',
@@ -39,16 +29,6 @@ export class DoctorsService {
                 gender: Gender.Female,
                 specialization: 'Stomatolog',
                 aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-                services: [{
-                    id: 1,
-                    name: 'Konsultacja stomatologiczna'
-                }, {
-                    id: 4,
-                    name: 'Leczenie próchnicy'
-                }, {
-                    id: 5,
-                    name: 'Pakiet higienizacyjny'
-                }]
             }, {
                 id: 3,
                 firstName: 'Michał',
@@ -56,10 +36,6 @@ export class DoctorsService {
                 gender: Gender.Male,
                 specialization: 'Ortodonta',
                 aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-                services: [{
-                    id: 6,
-                    name: 'Konsultacja ortodontyczna'
-                }]
             }, {
                 id: 4,
                 firstName: 'Agnieszka',
@@ -67,13 +43,6 @@ export class DoctorsService {
                 gender: Gender.Female,
                 specialization: 'Stomatolog',
                 aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-                services: [{
-                    id: 1,
-                    name: 'Konsultacja stomatologiczna'
-                }, {
-                    id: 4,
-                    name: 'Leczenie próchnicy'
-                }]
             }, {
                 id: 5,
                 firstName: 'Maciek',
@@ -81,15 +50,13 @@ export class DoctorsService {
                 gender: Gender.Male,
                 specialization: 'Stomatolog',
                 aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-                services: []
             }, {
                 id: 6,
                 firstName: 'Katarzyna',
                 lastName: 'Szczecińska',
                 gender: Gender.Female,
                 specialization: 'Stomatolog',
-                aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-                services: []
+                aboutMe: '',
             }]
         }).pipe(delay(500));
     }
