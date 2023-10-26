@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.2.1_INSERT_EXAMPLE_CALENDAR_DAY" author="lraczka">
+        <!--Add example calendar days -->
+        <sql>insert into calendar_day(id,start_date,work_duration,start_break_time,break_duration,user_id)
+            values(1,'2023-10-19 09:00:00','7:00',null,null,1)</sql>
+        <sql>insert into calendar_day(id,start_date,work_duration,start_break_time,break_duration,user_id)
+            values(2,'2023-10-20 08:00:00','8:00','12:00','1:00',1)</sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1.2.0_CREATE_CALENDAR_DAYS" author="lraczka">
+        <createTable tableName="calendar_day">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="start_date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="work_duration" type="time">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_break_time" type="time"/>
+            <column name="break_duration" type="time"/>
+            <!--doctor identifier -->
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="calendar_day"
+                                 constraintName="fk_calendar_day_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="application_user"/>
+    </changeSet>
+</databaseChangeLog>

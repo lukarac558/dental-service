@@ -5,7 +5,7 @@
 
     <changeSet id="1.0.0_CREATE_APPLICATION_USER" author="lraczka">
         <createTable tableName="voivodeship">
-            <column name="id" type="smallint" autoIncrement="${autoIncrement}">
+            <column name="id" type="smallint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(20)">
@@ -25,19 +25,38 @@
             </column>
         </createTable>
 
-        <sql>CREATE TYPE role AS ENUM ('doctor','patient');</sql>
+        <addForeignKeyConstraint baseColumnNames="voivodeship_id"
+                                 baseTableName="city"
+                                 constraintName="fk_city_voivodeship_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="voivodeship"/>
+
+
+        <createTable tableName="competency_information">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+<!--        <sql>CREATE TYPE role AS ENUM ('doctor','patient');</sql>-->
 
         <createTable tableName="application_user">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="email" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password" type="varchar(50)">
+            <column name="password" type="varchar(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="role" type="role">
+            <column name="role" type="varchar(7)" defaultValue="PATIENT">
                 <constraints nullable="false"/>
             </column>
             <column name="pesel" type="numeric(11, 0)">-->
@@ -60,6 +79,8 @@
             </column>
             <column name="building_number" type="varchar(8)">
                 <constraints nullable="false"/>
+            </column>
+            <column name="competency_information_id" type="bigint">
             </column>
         </createTable>
     </changeSet>
