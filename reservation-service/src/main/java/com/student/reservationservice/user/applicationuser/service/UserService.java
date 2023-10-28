@@ -1,10 +1,9 @@
 package com.student.reservationservice.user.applicationuser.service;
 
+import com.student.reservationservice.common.exception.entity.IncorrectFormatException;
+import com.student.reservationservice.common.exception.entity.IncorrectValueException;
+import com.student.reservationservice.common.exception.entity.ObjectAlreadyExistsException;
 import com.student.reservationservice.user.applicationuser.entity.ApplicationUser;
-import com.student.reservationservice.user.applicationuser.exception.EmailExistsException;
-import com.student.reservationservice.user.applicationuser.exception.EmailIncorrectFormatException;
-import com.student.reservationservice.user.applicationuser.exception.IncorrectEmailOrPasswordException;
-import com.student.reservationservice.user.applicationuser.exception.PeselIncorrectFormatException;
 import com.student.reservationservice.user.applicationuser.repository.UserRepository;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.hibernate.validator.internal.constraintvalidators.hv.pl.PESELValidator;
@@ -15,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+
+import static com.student.reservationservice.common.exception.entity.ErrorConstants.*;
 
 @Service
 public class UserService {
@@ -32,14 +33,14 @@ public class UserService {
 
     public ApplicationUser register(ApplicationUser user) {
         validate(user);
-       // encodePassword(user);
+        // encodePassword(user);
         return userRepository.save(user);
     }
 
     public ApplicationUser login(String email, String password) {
-       // String encodedPassword = getEncodedPassword(password);
+        // String encodedPassword = getEncodedPassword(password);
         return userRepository.findApplicationUserByEmailAndPassword(email, password)
-                .orElseThrow(IncorrectEmailOrPasswordException::new);
+                .orElseThrow(() -> new IncorrectValueException(INCORRECT_LOGIN_DATA_MESSAGE));
     }
 
     public ApplicationUser assignCompetencyInformation(ApplicationUser user) {
@@ -77,19 +78,19 @@ public class UserService {
     private void validateEmailUniqueness(String email) {
         Optional<ApplicationUser> user = userRepository.findApplicationUserByEmail(email);
         user.ifPresent(u -> {
-            throw new EmailExistsException(email);
+            throw new ObjectAlreadyExistsException(String.format(EMAIL_ALREADY_EXISTS_MESSAGE, email));
         });
     }
 
     private void validateEmailFormat(String email) {
         if (!emailValidator.isValid(email, null)) {
-            throw new EmailIncorrectFormatException(email);
+            throw new IncorrectFormatException(String.format(INCORRECT_EMAIL_FORMAT_MESSAGE, email));
         }
     }
 
     private void validatePesel(Long pesel) {
         if (!peselValidator.isValid(pesel.toString(), null)) {
-            throw new PeselIncorrectFormatException(pesel);
+            throw new IncorrectValueException(String.format(INCORRECT_PESEL_MESSAGE, pesel));
         }
     }
 }

@@ -30,4 +30,9 @@ public class VisitLock implements Serializable {
     private Timestamp startDate;
 
     private Long userId;
+
+    public VisitLock(Timestamp startDate, Long userId) {
+        this.startDate = startDate;
+        this.userId = userId;
+    }
 }

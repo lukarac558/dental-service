@@ -1,25 +1,26 @@
 package com.student.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.sql.Time;
-import java.sql.Timestamp;
 
 @Data
 public class CalendarDayCreationDTO {
     @NotNull
-    private Timestamp startDate;
+    @Schema(required = true, example = "2023-10-27 08:00:00")
+    private String startDate;
 
     @NotNull
-    private Time workDuration;
+    @Schema(required = true, example = "08:00:00")
+    private String workDuration;
+
+    @Schema(example = "12:00:00")
+    private String startBreakTime;
+
+    @Schema(example = "00:30:00")
+    private String breakDuration;
 
     @NotNull
-    private Time startBreakTime;
-
-    @NotNull
-    private Time breakDuration;
-
-    @NotNull
+    @Schema(required = true)
     private Long userId;
 }

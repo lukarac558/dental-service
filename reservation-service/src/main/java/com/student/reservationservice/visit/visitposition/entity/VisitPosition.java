@@ -37,4 +37,9 @@ public class VisitPosition implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "service_type_id", foreignKey = @ForeignKey(name = FK_VISIT_POSITION_SERVICE_TYPE_ID), nullable = false)
     private ServiceType serviceType;
+
+    public VisitPosition(Visit visit, ServiceType serviceType) {
+        this.visit = visit;
+        this.serviceType = serviceType;
+    }
 }

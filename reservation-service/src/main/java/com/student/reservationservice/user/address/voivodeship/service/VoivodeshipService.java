@@ -1,7 +1,7 @@
 package com.student.reservationservice.user.address.voivodeship.service;
 
+import com.student.reservationservice.common.exception.entity.ObjectAlreadyExistsException;
 import com.student.reservationservice.user.address.voivodeship.entity.Voivodeship;
-import com.student.reservationservice.user.address.voivodeship.exception.VoivodeshipNameExistsException;
 import com.student.reservationservice.user.address.voivodeship.repository.VoivodeshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.student.reservationservice.common.exception.entity.ErrorConstants.VOIVODESHIP_ALREADY_EXISTS_MESSAGE;
 
 @Service
 public class VoivodeshipService {
@@ -44,7 +46,7 @@ public class VoivodeshipService {
     private void validateVoivodeshipNameUniqueness(String name) {
         Optional<Voivodeship> voivodeship = findVoivodeshipByName(name);
         voivodeship.ifPresent(v -> {
-            throw new VoivodeshipNameExistsException(name);
+            throw new ObjectAlreadyExistsException(String.format(VOIVODESHIP_ALREADY_EXISTS_MESSAGE, name));
         });
     }
 }

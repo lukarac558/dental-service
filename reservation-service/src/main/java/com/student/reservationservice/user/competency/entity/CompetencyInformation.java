@@ -32,4 +32,9 @@ public class CompetencyInformation implements Serializable {
 
     @OneToOne(mappedBy = "competencyInformation")
     private ApplicationUser applicationUser;
+
+    public CompetencyInformation(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }

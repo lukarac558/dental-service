@@ -1,11 +1,13 @@
 package com.student.reservationservice.visit.visit.entity;
 
 import com.student.reservationservice.user.applicationuser.entity.ApplicationUser;
+import com.student.reservationservice.visit.visitposition.entity.VisitPosition;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Getter
@@ -39,5 +41,8 @@ public class Visit implements Serializable {
     private Timestamp reservationDate;
 
     private String description;
+
+    @OneToMany(mappedBy = "visit", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VisitPosition> visitPositions;
 }
 

@@ -3,11 +3,15 @@ package com.student.reservationservice.visit.visit.service;
 import com.student.api.ApplicationUserInfoDTO;
 import com.student.api.VisitCreationDTO;
 import com.student.api.VisitDTO;
+import com.student.reservationservice.common.exception.entity.NotFoundException;
+import com.student.reservationservice.common.utils.TimestampFormatParser;
 import com.student.reservationservice.user.applicationuser.entity.ApplicationUser;
-import com.student.reservationservice.user.applicationuser.exception.UserNotFoundException;
 import com.student.reservationservice.user.applicationuser.service.UserService;
+import com.student.reservationservice.user.applicationuser.utils.ApplicationUserMapper;
 import com.student.reservationservice.visit.visit.entity.Visit;
-import com.student.reservationservice.visit.visit.exception.VisitNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +20,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.student.reservationservice.common.exception.entity.ErrorConstants.USER_NOT_FOUND_MESSAGE;
+import static com.student.reservationservice.common.exception.entity.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
+
 @RestController
 @RequestMapping("/visit")
+@Tag(name = "Visit")
 public class VisitResource {
     private final ModelMapper modelMapper;
     private final VisitService visitService;
@@ -30,25 +38,31 @@ public class VisitResource {
         this.userService = userService;
     }
 
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
+    @ApiResponse(responseCode = "404", description = "Visit not found")
+    @Operation(summary = "Find visit by id")
     public ResponseEntity<VisitDTO> getVisitById(@PathVariable("id") Long id) {
         Visit visit = visitService.findVisitById(id)
-                .orElseThrow(() -> new VisitNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException(String.format(VISIT_NOT_FOUND_MESSAGE, id)));
         return new ResponseEntity<>(modelMapper.map(visit, VisitDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/find-by/{user_id}")
+    @Operation(summary = "Find all patient visits by his id.")
     public ResponseEntity<List<VisitDTO>> getVisitsByUserId(@PathVariable("user_id") Long userId) {
         List<Visit> visits = visitService.findVisitsByUserId(userId);
-        List<VisitDTO> visitsResponse = visits.stream().map(day -> modelMapper.map(day, VisitDTO.class)).toList();
+        List<VisitDTO> visitsResponse = visits.stream().map(v -> modelMapper.map(v, VisitDTO.class)).toList();
         return new ResponseEntity<>(visitsResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @ApiResponse(responseCode = "422", description = "Incorrect timestamp format is given")
+    @Operation(summary = "Add new visit for the patient.")
     public ResponseEntity<VisitDTO> addVisit(@RequestBody VisitCreationDTO visitCreationDTO) {
         Long userId = visitCreationDTO.getUserId();
         ApplicationUser user = userService.findUserById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_FOUND_MESSAGE, userId)));
 
         Visit visit = visitService.addOrUpdateVisit(mapToVisit(visitCreationDTO, user));
 
@@ -56,8 +70,9 @@ public class VisitResource {
         return new ResponseEntity<>(visitDTO, HttpStatus.CREATED);
     }
 
-
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
+    @ApiResponse(responseCode = "404", description = "Visit not found")
+    @Operation(summary = "Update visit description by id.")
     public ResponseEntity<VisitDTO> updateVisit(@PathVariable("id") Long id,
                                                 @RequestParam String description) {
         Visit visit = visitService.findVisitById(id)
@@ -65,36 +80,37 @@ public class VisitResource {
                     v.setDescription(description);
                     return v;
                 })
-                .orElseThrow(() -> new VisitNotFoundException(id));
+                .orElseThrow(() -> new NotFoundException(String.format(VISIT_NOT_FOUND_MESSAGE, id)));
 
         Visit updatedVisit = visitService.addOrUpdateVisit(visit);
         return new ResponseEntity<>(modelMapper.map(updatedVisit, VisitDTO.class), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
+    @ApiResponse(responseCode = "404", description = "Visit not found")
+    @ApiResponse(responseCode = "422", description = "Visit cancellation is forbidden")
+    @Operation(summary = "Delete visit by id.")
     public ResponseEntity<?> deleteVisit(@PathVariable("id") Long id) {
         visitService.deleteVisit(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     private Visit mapToVisit(VisitCreationDTO visitCreationDTO, ApplicationUser user) {
-        Visit visit = modelMapper.map(visitCreationDTO, Visit.class);
-        visit.setId(null);
+        Visit visit = new Visit();
+        setDatesOrThrow(visit, visitCreationDTO.getStartDate(), visitCreationDTO.getReservationDate());
         visit.setUser(user);
         return visit;
     }
 
-    private VisitDTO mapToVisitDTO(Visit visit, ApplicationUser applicationUser) {
-        VisitDTO calendarDayDTO = modelMapper.map(visit, VisitDTO.class);
-        ApplicationUserInfoDTO applicationUserInfoDTO = new ApplicationUserInfoDTO(
-                applicationUser.getId(),
-                applicationUser.getEmail(),
-                applicationUser.getName(),
-                applicationUser.getSurname(),
-                applicationUser.getPhoneNumber()
-        );
+    private void setDatesOrThrow(Visit visit, String startDate, String reservationDate) {
+        visit.setStartDate(TimestampFormatParser.parse(startDate));
+        visit.setReservationDate(TimestampFormatParser.parse(reservationDate));
+    }
 
-        calendarDayDTO.setUser(applicationUserInfoDTO);
-        return calendarDayDTO;
+    private VisitDTO mapToVisitDTO(Visit visit, ApplicationUser applicationUser) {
+        VisitDTO visitDTO = modelMapper.map(visit, VisitDTO.class);
+        ApplicationUserInfoDTO applicationUserInfoDTO = ApplicationUserMapper.map(applicationUser);
+        visitDTO.setUser(applicationUserInfoDTO);
+        return visitDTO;
     }
 }

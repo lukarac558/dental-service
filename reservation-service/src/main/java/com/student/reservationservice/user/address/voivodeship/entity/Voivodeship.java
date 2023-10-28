@@ -21,8 +21,12 @@ public class Voivodeship {
             generator = "voivodeship_sequence"
     )
     @Id
-    private int id;
+    private Integer id;
 
     @Column(unique = true)
     private String name;
+
+    public Voivodeship(String name) {
+        this.name = name;
+    }
 }
