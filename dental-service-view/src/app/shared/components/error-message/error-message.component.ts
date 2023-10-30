@@ -10,7 +10,7 @@ export class ErrorMessageComponent {
     private _errorText = '';
 
     getError() {
-        if (!!this.control) {
+        if (this.control) {
             if (this.control.hasError("required")) {
                 this._errorText = 'Pole jest wymagane.';
             } else if (this.control.hasError("maxlength")) {

@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div>
-                <a *ngIf="!(isAuth$ | async)"
+                <a *ngIf="(isAuth$ | async) === false"
                    mat-flat-button
                    color="primary"
                    (click)="login()">
