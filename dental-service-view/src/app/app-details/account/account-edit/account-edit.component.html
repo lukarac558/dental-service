@@ -1,96 +1,100 @@
-<mat-card class="mt-4">
+<mat-card class="mt-4"
+          *ngIf="userDetails$ | async as userDetails else loading">
     <mat-card-header>
         <mat-card-title>Zaktualizuj swoje informacje</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <ng-container *ngIf="userDetails$ | async as userDetails else loading">
-            <form [formGroup]="form">
-                <div class="row">
-                    <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
-                        <mat-label>Imię</mat-label>
-                        <input formControlName="firstName"
-                               matInput
-                               placeholder="Imię">
-                        <mat-error>
-                            <ds-error-message [control]="form.controls.firstName"></ds-error-message>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
-                        <mat-label>Nazwisko</mat-label>
-                        <input formControlName="lastName"
-                               matInput
-                               placeholder="Nazwisko">
-                        <mat-error>
-                            <ds-error-message [control]="form.controls.lastName"></ds-error-message>
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="row">
-                    <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
-                        <mat-label>Płeć</mat-label>
-                        <mat-select formControlName="gender">
-                            <mat-option [value]="gender.Male">
-                                Mężczyzna
-                            </mat-option>
-                            <mat-option [value]="gender.Female">
-                                Kobieta
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-                <div class="row">
-                    <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
-                        <mat-label>E-mail</mat-label>
-                        <input formControlName="email"
-                               matInput
-                               placeholder="E-mail">
-                        <mat-error>
-                            <ds-error-message [control]="form.controls.email"></ds-error-message>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
-                        <mat-label>Nr telefonu</mat-label>
-                        <input formControlName="phoneNumber"
-                               matInput
-                               placeholder="Nr telefonu">
-                        <mat-error>
-                            <ds-error-message [control]="form.controls.phoneNumber"></ds-error-message>
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="row">
-                    <mat-form-field class="col-md-3 col-lg-2">
-                        <mat-label>Kod pocztowy</mat-label>
-                        <input formControlName="zipCode"
-                               matInput
-                               placeholder="Kod pocztowy">
-                        <mat-error>
-                            <ds-error-message [control]="form.controls.zipCode"></ds-error-message>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="col-md-4 col-lg-5 col-xl-4">
-                        <mat-label>Miasto</mat-label>
-                        <input formControlName="city"
-                               matInput
-                               placeholder="Miasto">
-                        <mat-error>
-                            <ds-error-message [control]="form.controls.city"></ds-error-message>
-                        </mat-error>
-                    </mat-form-field>
-                    <mat-form-field class="col-md-5 col-lg-5 col-xl-4">
-                        <mat-label>Adres</mat-label>
-                        <input formControlName="address"
-                               matInput
-                               placeholder="Adres">
-                        <mat-error>
-                            <ds-error-message [control]="form.controls.address"></ds-error-message>
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-            </form>
-        </ng-container>
+        <form [formGroup]="form">
+            <div class="row">
+                <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
+                    <mat-label>Imię</mat-label>
+                    <input formControlName="firstName"
+                           matInput
+                           placeholder="Imię">
+                    <mat-error>
+                        <ds-error-message [control]="form.controls.firstName"></ds-error-message>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
+                    <mat-label>Nazwisko</mat-label>
+                    <input formControlName="lastName"
+                           matInput
+                           placeholder="Nazwisko">
+                    <mat-error>
+                        <ds-error-message [control]="form.controls.lastName"></ds-error-message>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
+                    <mat-label>Płeć</mat-label>
+                    <mat-select formControlName="gender">
+                        <mat-option [value]="gender.Male">
+                            Mężczyzna
+                        </mat-option>
+                        <mat-option [value]="gender.Female">
+                            Kobieta
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
+                    <mat-label>E-mail</mat-label>
+                    <input formControlName="email"
+                           matInput
+                           placeholder="E-mail">
+                    <mat-error>
+                        <ds-error-message [control]="form.controls.email"></ds-error-message>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
+                    <mat-label>Nr telefonu</mat-label>
+                    <input formControlName="phoneNumber"
+                           matInput
+                           placeholder="Nr telefonu">
+                    <mat-error>
+                        <ds-error-message [control]="form.controls.phoneNumber"></ds-error-message>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field class="col-md-3 col-lg-2">
+                    <mat-label>Kod pocztowy</mat-label>
+                    <input formControlName="zipCode"
+                           matInput
+                           placeholder="Kod pocztowy">
+                    <mat-error>
+                        <ds-error-message [control]="form.controls.zipCode"></ds-error-message>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-md-4 col-lg-5 col-xl-4">
+                    <mat-label>Miasto</mat-label>
+                    <input formControlName="city"
+                           matInput
+                           placeholder="Miasto">
+                    <mat-error>
+                        <ds-error-message [control]="form.controls.city"></ds-error-message>
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-md-5 col-lg-5 col-xl-4">
+                    <mat-label>Adres</mat-label>
+                    <input formControlName="address"
+                           matInput
+                           placeholder="Adres">
+                    <mat-error>
+                        <ds-error-message [control]="form.controls.address"></ds-error-message>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </form>
     </mat-card-content>
     <mat-card-actions align="end">
+        <button mat-flat-button
+                [routerLink]="'/account'"
+                class="me-2">
+            Anuluj
+        </button>
         <ds-spinner-button (clicked)="save()"
                            [isLoading]="isSaving$ | async">
             Zapisz

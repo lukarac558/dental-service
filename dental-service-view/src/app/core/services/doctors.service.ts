@@ -13,6 +13,7 @@ import {
 } from '../models/doctor.model';
 import { Gender } from '../models/gender.model';
 import { CustomPageCriteria, Page } from '../models/page.model';
+import { VisitAvailableDate } from '../models/visits.model';
 
 @Injectable({
     providedIn: 'root'
@@ -144,5 +145,21 @@ export class DoctorsService {
                 name: 'Pakiet higienizacyjny'
             }]
         }).pipe(delay(500));
+    }
+
+    getDoctorAvailableDays(id: number, serviceIds: number[]): Observable<VisitAvailableDate[]> {
+        return of([{
+            date: new Date(Date.UTC(2023, 10, 21)),
+            hours: ["12:00", "12:30",]
+        }, {
+            date: new Date(Date.UTC(2023, 10, 22)),
+            hours: ["12:00", "12:30", "13:00", "13:30", "14:00"]
+        }, {
+            date: new Date(Date.UTC(2023, 10, 23)),
+            hours: ["12:00", "12:30", "13:00", "13:30", "14:00"]
+        }, {
+            date: new Date(Date.UTC(2023, 10, 24)),
+            hours: ["13:00", "13:30", "14:00"]
+        }]).pipe(delay(500));
     }
 }
