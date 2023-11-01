@@ -40,8 +40,9 @@
             <mat-card-title>Oferowane usługi</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <div class="doctor__services">
-                <div *ngFor="let service of doctor.services">
+            <div class="doctor__services row">
+                <div *ngFor="let service of doctor.services"
+                     class="col-md-6">
                     {{service.name}}
                 </div>
             </div>

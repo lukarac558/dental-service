@@ -1,9 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { DoctorSearch } from 'src/app/core/models/doctor.model';
-import { Lookup } from 'src/app/core/models/lookup.model';
-import { DoctorServicesService } from 'src/app/core/services/doctor-services.service';
 import { ControlsOf } from 'src/main';
 
 @Component({
@@ -15,20 +12,16 @@ export class DoctorSearchComponent implements OnInit {
     @Output() searched = new EventEmitter<DoctorSearch>();
 
     searchForm: FormGroup;
-    services$: Observable<Lookup[]>;
 
     constructor(
-        private _fb: FormBuilder,
-        private _doctorServices: DoctorServicesService
+        private _fb: FormBuilder
     ) { }
 
     ngOnInit(): void {
         this.searchForm = this._fb.group<ControlsOf<DoctorSearch>>({
             name: this._fb.nonNullable.control(''),
-            serviceId: this._fb.control(null)
+            serviceName: this._fb.nonNullable.control('')
         });
-
-        this.services$ = this._doctorServices.getDoctorServices();
     }
 
     search(): void {

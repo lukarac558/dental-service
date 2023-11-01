@@ -11,7 +11,7 @@ export type DoctorShort = {
 
 export type DoctorSearch = {
     name: string;
-    serviceId: number | null;
+    serviceName: string;
 };
 
 export type Doctor = DoctorShort & {

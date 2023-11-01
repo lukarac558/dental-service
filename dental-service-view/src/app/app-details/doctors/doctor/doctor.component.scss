@@ -27,8 +27,6 @@
     }
 
     &__services {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
+        row-gap: 5px;
     }
 }
