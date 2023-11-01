@@ -4,28 +4,6 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="1.0.0_CREATE_VISIT" author="lraczka">
-        <createTable tableName="service_type">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-            <column name="name" type="varchar(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="duration_time" type="time">
-                <constraints nullable="false"/>
-            </column>
-            <!--doctor identifier -->
-            <column name="user_id" type="bigint">
-            </column>
-            <column name="description" type="varchar(200)"/>
-        </createTable>
-
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="service_type"
-                                 constraintName="fk_service_type_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="application_user"/>
-
 
         <createTable tableName="visit">
             <column name="id" type="bigint">
@@ -35,7 +13,7 @@
                 <constraints nullable="false"/>
             </column>
             <!--patient identifier -->
-            <column name="user_id" type="bigint">
+            <column name="patient_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="reservation_date" type="timestamp">
@@ -44,13 +22,6 @@
             <column name="description" type="varchar(500)">
             </column>
         </createTable>
-
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="visit"
-                                 constraintName="fk_visit_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="application_user"/>
-
 
         <createTable tableName="visit_position">
             <column name="id" type="bigint" autoIncrement="true">
@@ -70,10 +41,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="visit"/>
 
-        <addForeignKeyConstraint baseColumnNames="service_type_id"
-                                 baseTableName="visit_position"
-                                 constraintName="fk_service_type_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="service_type"/>
     </changeSet>
 </databaseChangeLog>

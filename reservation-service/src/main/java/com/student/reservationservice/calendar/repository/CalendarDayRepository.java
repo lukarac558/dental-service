@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface CalendarDayRepository extends JpaRepository<CalendarDay, Long> {
     Optional<CalendarDay> findCalendarDayById(Long id);
 
-    List<CalendarDay> findCalendarDaysByUserId(Long userId);
+    List<CalendarDay> findCalendarDaysByDoctorId(Long userId);
 
     void deleteCalendarDayById(Long id);
 }

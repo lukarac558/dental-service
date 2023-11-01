@@ -1,6 +1,5 @@
 package com.student.reservationservice.calendar.entity;
 
-import com.student.reservationservice.user.applicationuser.entity.ApplicationUser;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,7 +41,6 @@ public class CalendarDay implements Serializable {
     @Column(name = "break_duration")
     private Time breakDuration;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = FK_CALENDAR_DAY_USER_ID), nullable = false)
-    private ApplicationUser user;
+    @Column(name = "doctor_id", nullable = false)
+    private Long doctorId;
 }

@@ -1,0 +1,8 @@
+version: "3"
+services:
+  user-service:
+    image: user-service
+    container_name: user-service
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile

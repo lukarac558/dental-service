@@ -1,6 +1,6 @@
 package com.student.reservationservice.lock.service;
 
-import com.student.reservationservice.common.exception.entity.ObjectAlreadyExistsException;
+import com.student.api.exception.ObjectAlreadyExistsException;
 import com.student.reservationservice.lock.entity.VisitLock;
 import com.student.reservationservice.lock.repository.VisitLockRepository;
 import jakarta.transaction.Transactional;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.DATE_IS_LOCKED_MESSAGE;
+import static com.student.api.exception.ErrorConstants.DATE_IS_LOCKED_MESSAGE;
 
 @Service
 public class VisitLockService {
@@ -23,7 +23,7 @@ public class VisitLockService {
 
 
     public VisitLock lock(VisitLock visitLock) {
-        if (ifExistsVisitLockWithGivenUserIdAndStartDate(visitLock.getUserId(), visitLock.getStartDate())) {
+        if (ifExistsVisitLockWithGivenUserIdAndStartDate(visitLock.getDoctorId(), visitLock.getStartDate())) {
             throw new ObjectAlreadyExistsException(DATE_IS_LOCKED_MESSAGE);
         }
         return visitLockRepository.save(visitLock);
@@ -31,7 +31,7 @@ public class VisitLockService {
 
     public boolean ifExistsVisitLockWithGivenUserIdAndStartDate(Long doctorId, Timestamp start) {
         Timestamp before = getTwoHoursBefore(start);
-        return visitLockRepository.findVisitLocksByUserIdAndStartDateBetween(doctorId, before, start).stream().findAny().isPresent();
+        return visitLockRepository.findVisitLocksByDoctorIdAndStartDateBetween(doctorId, before, start).stream().findAny().isPresent();
     }
 
     @Transactional

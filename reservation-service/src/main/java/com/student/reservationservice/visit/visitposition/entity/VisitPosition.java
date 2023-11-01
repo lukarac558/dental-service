@@ -1,6 +1,5 @@
 package com.student.reservationservice.visit.visitposition.entity;
 
-import com.student.reservationservice.servicetype.entity.ServiceType;
 import com.student.reservationservice.visit.visit.entity.Visit;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,12 +33,11 @@ public class VisitPosition implements Serializable {
     @JoinColumn(name = "visit_id", foreignKey = @ForeignKey(name = FK_VISIT_POSITION_VISIT_ID), nullable = false)
     private Visit visit;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "service_type_id", foreignKey = @ForeignKey(name = FK_VISIT_POSITION_SERVICE_TYPE_ID), nullable = false)
-    private ServiceType serviceType;
+    @Column(name = "service_type_id", nullable = false)
+    private Long serviceTypeId;
 
-    public VisitPosition(Visit visit, ServiceType serviceType) {
+    public VisitPosition(Visit visit, Long serviceTypeId) {
         this.visit = visit;
-        this.serviceType = serviceType;
+        this.serviceTypeId = serviceTypeId;
     }
 }

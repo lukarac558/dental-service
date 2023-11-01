@@ -1,42 +1,34 @@
 package com.student.reservationservice.visit.visitposition.service;
 
-import com.student.api.VisitPositionDTO;
-import com.student.reservationservice.common.exception.entity.NotFoundException;
-import com.student.reservationservice.servicetype.entity.ServiceType;
-import com.student.reservationservice.servicetype.service.TypeService;
+import com.student.api.dto.reservation.VisitPositionDTO;
+import com.student.api.dto.user.ServiceTypeDto;
+import com.student.api.exception.NotFoundException;
+import com.student.reservationservice.user.UserClient;
 import com.student.reservationservice.visit.visit.entity.Visit;
 import com.student.reservationservice.visit.visit.service.VisitService;
 import com.student.reservationservice.visit.visitposition.entity.VisitPosition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.SERVICE_TYPE_NOT_FOUND_MESSAGE;
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.VISIT_POSITION_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.ErrorConstants.VISIT_POSITION_NOT_FOUND_MESSAGE;
 
 @RestController
 @RequestMapping("/visit-position")
 @Tag(name = "Visit position")
+@RequiredArgsConstructor
 public class VisitPositionResource {
     private final ModelMapper modelMapper;
     private final VisitPositionService visitPositionService;
     private final VisitService visitService;
-    private final TypeService typeService;
-
-    @Autowired
-    public VisitPositionResource(ModelMapper modelMapper, VisitPositionService visitPositionService, VisitService visitService, TypeService typeService) {
-        this.modelMapper = modelMapper;
-        this.visitPositionService = visitPositionService;
-        this.visitService = visitService;
-        this.typeService = typeService;
-    }
+    private final UserClient userClient;
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "404", description = "Visit position not found")
@@ -63,10 +55,9 @@ public class VisitPositionResource {
         Visit visit = visitService.findVisitById(visitId)
                 .orElseThrow(() -> new NotFoundException(String.format(VISIT_POSITION_NOT_FOUND_MESSAGE, visitId)));
 
-        ServiceType serviceType = typeService.findTypeById(serviceTypeId)
-                .orElseThrow(() -> new NotFoundException(String.format(SERVICE_TYPE_NOT_FOUND_MESSAGE, serviceTypeId)));
+        ServiceTypeDto serviceTypeDto = userClient.getServiceTypeById(serviceTypeId);
 
-        VisitPosition visitPosition = visitPositionService.addVisitPosition(new VisitPosition(visit, serviceType));
+        VisitPosition visitPosition = visitPositionService.addVisitPosition(new VisitPosition(visit, serviceTypeDto.getId()));
 
         VisitPositionDTO visitPositionDTO = modelMapper.map(visitPosition, VisitPositionDTO.class);
         return new ResponseEntity<>(visitPositionDTO, HttpStatus.CREATED);
@@ -74,7 +65,7 @@ public class VisitPositionResource {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete visit position by id.")
-    public ResponseEntity<?> deleteVisitPosition(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteVisitPosition(@PathVariable("id") Long id) {
         visitPositionService.deleteVisitPosition(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

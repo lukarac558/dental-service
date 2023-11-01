@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST:localhost:5432}/${DATABASE_NAME:dental-clinic}
+    username: ${DATABASE_USER:admin}
+    password: ${DATABASE_PASSWORD:admin}
+  liquibase:
+    change-log: classpath:config/liquibase/liquibase-changeLog.xml
+    default-schema: ${spring.jpa.properties.hibernate.default_schema}
+  jpa:
+    properties:
+      hibernate:
+        default_schema: reservationservice
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+server:
+  port: 0
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+springdoc:
+  cache:
+    disabled: true
+  swagger-ui:
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      client-id: dental-service
+      authorizationUrl: ${AUTH_SERVER_HOST:http://localhost:8181/realms/dental-client}/protocol/openid-connect/auth
+      tokenUrl: ${AUTH_SERVER_HOST:http://localhost:8181/realms/dental-client}/protocol/openid-connect/token

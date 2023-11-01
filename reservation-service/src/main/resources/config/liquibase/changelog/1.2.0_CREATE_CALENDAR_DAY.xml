@@ -17,15 +17,10 @@
             <column name="start_break_time" type="time"/>
             <column name="break_duration" type="time"/>
             <!--doctor identifier -->
-            <column name="user_id" type="bigint">
+            <column name="doctor_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="calendar_day"
-                                 constraintName="fk_calendar_day_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="application_user"/>
     </changeSet>
 </databaseChangeLog>

@@ -29,10 +29,11 @@ public class VisitLock implements Serializable {
     @Column(name = "start_date")
     private Timestamp startDate;
 
-    private Long userId;
+    @Column(name = "doctor_id", nullable = false)
+    private Long doctorId;
 
-    public VisitLock(Timestamp startDate, Long userId) {
+    public VisitLock(Timestamp startDate, Long doctorId) {
         this.startDate = startDate;
-        this.userId = userId;
+        this.doctorId = doctorId;
     }
 }

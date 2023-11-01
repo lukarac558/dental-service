@@ -1,42 +1,33 @@
 package com.student.reservationservice.visit.visit.service;
 
-import com.student.api.ApplicationUserInfoDTO;
-import com.student.api.VisitCreationDTO;
-import com.student.api.VisitDTO;
-import com.student.reservationservice.common.exception.entity.NotFoundException;
-import com.student.reservationservice.common.utils.TimestampFormatParser;
-import com.student.reservationservice.user.applicationuser.entity.ApplicationUser;
-import com.student.reservationservice.user.applicationuser.service.UserService;
-import com.student.reservationservice.user.applicationuser.utils.ApplicationUserMapper;
+import com.student.api.dto.reservation.VisitCreationDTO;
+import com.student.api.dto.reservation.VisitDTO;
+import com.student.api.dto.user.UserPersonalDetailsDto;
+import com.student.api.exception.NotFoundException;
+import com.student.api.util.TimestampFormatParser;
+import com.student.reservationservice.user.UserClient;
 import com.student.reservationservice.visit.visit.entity.Visit;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.USER_NOT_FOUND_MESSAGE;
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
 
 @RestController
 @RequestMapping("/visit")
 @Tag(name = "Visit")
+@RequiredArgsConstructor
 public class VisitResource {
     private final ModelMapper modelMapper;
     private final VisitService visitService;
-    private final UserService userService;
-
-    @Autowired
-    public VisitResource(ModelMapper modelMapper, VisitService visitService, UserService userService) {
-        this.modelMapper = modelMapper;
-        this.visitService = visitService;
-        this.userService = userService;
-    }
+    private final UserClient userClient;
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "404", description = "Visit not found")
@@ -60,13 +51,12 @@ public class VisitResource {
     @ApiResponse(responseCode = "422", description = "Incorrect timestamp format is given")
     @Operation(summary = "Add new visit for the patient.")
     public ResponseEntity<VisitDTO> addVisit(@RequestBody VisitCreationDTO visitCreationDTO) {
-        Long userId = visitCreationDTO.getUserId();
-        ApplicationUser user = userService.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_FOUND_MESSAGE, userId)));
+        Long userId = visitCreationDTO.getPatientId();
+        UserPersonalDetailsDto user = userClient.getUserById(userId);
 
-        Visit visit = visitService.addOrUpdateVisit(mapToVisit(visitCreationDTO, user));
+        Visit visit = visitService.addOrUpdateVisit(mapToVisit(visitCreationDTO, user.getId()));
 
-        VisitDTO visitDTO = mapToVisitDTO(visit, user);
+        VisitDTO visitDTO = mapToVisitDTO(visit, user.getId());
         return new ResponseEntity<>(visitDTO, HttpStatus.CREATED);
     }
 
@@ -90,15 +80,15 @@ public class VisitResource {
     @ApiResponse(responseCode = "404", description = "Visit not found")
     @ApiResponse(responseCode = "422", description = "Visit cancellation is forbidden")
     @Operation(summary = "Delete visit by id.")
-    public ResponseEntity<?> deleteVisit(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteVisit(@PathVariable("id") Long id) {
         visitService.deleteVisit(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private Visit mapToVisit(VisitCreationDTO visitCreationDTO, ApplicationUser user) {
+    private Visit mapToVisit(VisitCreationDTO visitCreationDTO, Long patientId) {
         Visit visit = new Visit();
         setDatesOrThrow(visit, visitCreationDTO.getStartDate(), visitCreationDTO.getReservationDate());
-        visit.setUser(user);
+        visit.setPatientId(patientId);
         return visit;
     }
 
@@ -107,10 +97,9 @@ public class VisitResource {
         visit.setReservationDate(TimestampFormatParser.parse(reservationDate));
     }
 
-    private VisitDTO mapToVisitDTO(Visit visit, ApplicationUser applicationUser) {
+    private VisitDTO mapToVisitDTO(Visit visit, Long patientId) {
         VisitDTO visitDTO = modelMapper.map(visit, VisitDTO.class);
-        ApplicationUserInfoDTO applicationUserInfoDTO = ApplicationUserMapper.map(applicationUser);
-        visitDTO.setUser(applicationUserInfoDTO);
+        visitDTO.setPatientId(patientId);
         return visitDTO;
     }
 }

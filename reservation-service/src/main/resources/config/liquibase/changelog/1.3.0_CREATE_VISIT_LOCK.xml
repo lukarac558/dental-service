@@ -12,7 +12,7 @@
                 <constraints nullable="false"/>
             </column>
             <!--doctor identifier -->
-            <column name="user_id" type="bigint">
+            <column name="doctor_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>

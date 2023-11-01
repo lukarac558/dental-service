@@ -27,7 +27,7 @@ public class CalendarDayService {
     }
 
     public List<CalendarDay> findCalendarDaysByUserId(Long userId) {
-        return calendarDayRepository.findCalendarDaysByUserId(userId);
+        return calendarDayRepository.findCalendarDaysByDoctorId(userId);
     }
 
     @Transactional

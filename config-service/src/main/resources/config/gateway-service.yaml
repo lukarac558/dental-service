@@ -1,0 +1,81 @@
+server:
+  port: 8080
+  forward-headers-strategy: framework
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
+  instance:
+    preferIpAddress: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: TRACE
+    org.springframework.http.server.reactive: TRACE
+
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          useInsecureTrustManager: true
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: reservation-service
+          uri: lb://reservation-service
+          predicates:
+            - Path=/api/reservation/**
+          filters:
+            - RewritePath=/api/reservation/(?<path>.*), /$\{path}
+
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - RewritePath=/api/user/(?<path>.*), /$\{path}
+
+        - id: location-service
+          uri: lb://location-service
+          predicates:
+            - Path=/api/location/**
+          filters:
+            - RewritePath=/api/location/(?<path>.*), /$\{path}
+
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${AUTH_SERVER_ISSUER:http://localhost:8181/realms/dental-client}
+
+springdoc:
+  swagger-ui:
+    use-root-path: true
+    urls:
+      - name: user
+        url: /api/user/v3/api-docs
+      - name: reservation
+        url: /api/reservation/v3/api-docs
+      - name: location
+        url: /api/location/v3/api-docs
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      client-id: dental-service
+      authorizationUrl: ${AUTH_SERVER_HOST:http://localhost:8181/realms/dental-client}/protocol/openid-connect/auth
+      tokenUrl: ${AUTH_SERVER_HOST:http://localhost:8181/realms/dental-client}/protocol/openid-connect/token
+  cache:
+    disabled: true
+
+

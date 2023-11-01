@@ -16,22 +16,36 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>api-gateway</module>
-		<module>discovery-server</module>
+		<module>gateway-service</module>
+		<module>discovery-service</module>
 		<module>reservation-service</module>
-        <module>reservation-api</module>
-    </modules>
+        <module>api</module>
+        <module>user-service</module>
+		<module>config-service</module>
+		<module>location-service</module>
+	</modules>
 
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2022.0.4</spring-cloud.version>
+		<springdoc.version>2.2.0</springdoc.version>
+
+		<lombok.version>1.18.30</lombok.version>
+		<modelmapper.version>3.2.0</modelmapper.version>
+		<nimbus-jwt.version>9.37</nimbus-jwt.version>
+		<dockerfile-plugin.version>1.4.13</dockerfile-plugin.version>
+
+		<api.version>0.0.1-SNAPSHOT</api.version>
+
 		<snakeyaml.version>2.2</snakeyaml.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -43,20 +57,73 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi</artifactId>
+				<version>${springdoc.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.modelmapper</groupId>
+				<artifactId>modelmapper</artifactId>
+				<version>${modelmapper.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.student</groupId>
+				<artifactId>api</artifactId>
+				<version>${api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.nimbusds</groupId>
+				<artifactId>nimbus-jose-jwt</artifactId>
+				<version>${nimbus-jwt.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>${dockerfile-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<tag>${project.version}</tag>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

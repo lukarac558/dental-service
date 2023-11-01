@@ -12,7 +12,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     Optional<Visit> findVisitsByStartDate(Timestamp startDate);
 
-    List<Visit> findVisitsByUserId(Long userId);
+    List<Visit> findVisitsByPatientId(Long userId);
 
     void deleteVisitById(Long id);
 }

@@ -1,7 +1,7 @@
 package com.student.reservationservice.lock.service;
 
-import com.student.api.VisitLockDTO;
-import com.student.reservationservice.common.utils.TimestampFormatParser;
+import com.student.api.dto.reservation.VisitLockDTO;
+import com.student.api.util.TimestampFormatParser;
 import com.student.reservationservice.lock.entity.VisitLock;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -54,7 +54,7 @@ public class VisitLockResource {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Release the lock for a doctor's visit.")
-    public ResponseEntity<?> deleteVisitLock(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteVisitLock(@PathVariable("id") Long id) {
         visitLockService.unlock(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

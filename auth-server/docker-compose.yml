@@ -8,8 +8,6 @@ services:
       dockerfile: Dockerfile
     deploy:
       replicas: 1
-      restart_policy:
-        condition: on-failure
     ports:
       - "8181:8080"
     environment:

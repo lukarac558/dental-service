@@ -1,12 +1,13 @@
 package com.student.reservationservice.common.utils;
 
-import com.student.reservationservice.common.exception.entity.IncorrectFormatException;
+import com.student.api.exception.IncorrectFormatException;
+import com.student.api.util.TimeFormatParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Time;
 
-public class TimeFormatParserTest {
+class TimeFormatParserTest {
     private static final String CORRECT_TIME_WITH_SECONDS = "08:00:00";
     private static final String CORRECT_TIME_WITHOUT_SECONDS = "8:00";
     private static final String INCORRECT_TIME = "8a:00";

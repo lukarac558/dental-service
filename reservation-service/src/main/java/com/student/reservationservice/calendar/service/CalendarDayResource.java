@@ -1,19 +1,18 @@
 package com.student.reservationservice.calendar.service;
 
-import com.student.api.ApplicationUserInfoDTO;
-import com.student.api.CalendarDayCreationDTO;
-import com.student.api.CalendarDayDTO;
+import com.student.api.dto.reservation.CalendarDayCreationDTO;
+import com.student.api.dto.reservation.CalendarDayDTO;
+import com.student.api.dto.user.UserPersonalDetailsDto;
 import com.student.reservationservice.calendar.entity.CalendarDay;
-import com.student.reservationservice.common.exception.entity.NotFoundException;
-import com.student.reservationservice.common.utils.TimeFormatParser;
-import com.student.reservationservice.common.utils.TimestampFormatParser;
-import com.student.reservationservice.user.applicationuser.entity.ApplicationUser;
-import com.student.reservationservice.user.applicationuser.service.UserService;
-import com.student.reservationservice.user.applicationuser.utils.ApplicationUserMapper;
+import com.student.api.exception.NotFoundException;
+import com.student.api.util.TimeFormatParser;
+import com.student.api.util.TimestampFormatParser;
+import com.student.reservationservice.user.UserClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,23 +21,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.CALENDAR_DAY_NOT_FOUND_MESSAGE;
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.USER_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.ErrorConstants.CALENDAR_DAY_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.ErrorConstants.USER_NOT_FOUND_MESSAGE;
 
 @RestController
 @RequestMapping("/calendar-day")
 @Tag(name = "Calendar day")
+@RequiredArgsConstructor
 public class CalendarDayResource {
     private final ModelMapper modelMapper;
     private final CalendarDayService calendarDayService;
-    private final UserService userService;
+    private final UserClient userClient;
 
-    @Autowired
-    public CalendarDayResource(ModelMapper modelMapper, CalendarDayService calendarDayService, UserService userService) {
-        this.modelMapper = modelMapper;
-        this.calendarDayService = calendarDayService;
-        this.userService = userService;
-    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Find calendar day by id")
@@ -62,13 +56,12 @@ public class CalendarDayResource {
     @ApiResponse(responseCode = "422", description = "Incorrect time or timestamp format is given")
     @Operation(summary = "Add new calendar day for given doctor.")
     public ResponseEntity<CalendarDayDTO> addCalendarDay(@RequestBody CalendarDayCreationDTO calendarDayCreationDTO) {
-        Long userId = calendarDayCreationDTO.getUserId();
-        ApplicationUser user = userService.findUserById(userId)
-                .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_FOUND_MESSAGE, userId)));
+        Long userId = calendarDayCreationDTO.getDoctorId();
+        UserPersonalDetailsDto user = userClient.getUserById(userId);
 
-        CalendarDay calendarDay = calendarDayService.addOrUpdateCalendarDay(mapToCalendarDay(calendarDayCreationDTO, user));
+        CalendarDay calendarDay = calendarDayService.addOrUpdateCalendarDay(mapToCalendarDay(calendarDayCreationDTO, user.getId()));
 
-        CalendarDayDTO calendarDayDTO = mapToCalendarDayDTO(calendarDay, user);
+        CalendarDayDTO calendarDayDTO = mapToCalendarDayDTO(calendarDay, user.getId());
         return new ResponseEntity<>(calendarDayDTO, HttpStatus.CREATED);
     }
 
@@ -103,11 +96,11 @@ public class CalendarDayResource {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private CalendarDay mapToCalendarDay(CalendarDayCreationDTO calendarDayCreationDTO, ApplicationUser user) {
+    private CalendarDay mapToCalendarDay(CalendarDayCreationDTO calendarDayCreationDTO, Long doctorId) {
         CalendarDay calendarDay = new CalendarDay();
         setTimesOrThrow(calendarDay, calendarDayCreationDTO.getStartDate(), calendarDayCreationDTO.getWorkDuration(),
                 calendarDayCreationDTO.getStartBreakTime(), calendarDayCreationDTO.getBreakDuration());
-        calendarDay.setUser(user);
+        calendarDay.setDoctorId(doctorId);
         return calendarDay;
     }
 
@@ -128,10 +121,9 @@ public class CalendarDayResource {
         }
     }
 
-    private CalendarDayDTO mapToCalendarDayDTO(CalendarDay calendarDay, ApplicationUser applicationUser) {
+    private CalendarDayDTO mapToCalendarDayDTO(CalendarDay calendarDay, Long doctorId) {
         CalendarDayDTO calendarDayDTO = modelMapper.map(calendarDay, CalendarDayDTO.class);
-        ApplicationUserInfoDTO applicationUserInfoDTO = ApplicationUserMapper.map(applicationUser);
-        calendarDayDTO.setUser(applicationUserInfoDTO);
+        calendarDayDTO.setDoctorId(doctorId);
         return calendarDayDTO;
     }
 }

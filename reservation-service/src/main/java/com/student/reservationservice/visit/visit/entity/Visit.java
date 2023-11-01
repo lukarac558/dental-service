@@ -1,6 +1,5 @@
 package com.student.reservationservice.visit.visit.entity;
 
-import com.student.reservationservice.user.applicationuser.entity.ApplicationUser;
 import com.student.reservationservice.visit.visitposition.entity.VisitPosition;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,9 +32,8 @@ public class Visit implements Serializable {
 
     private Timestamp startDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = FK_VISIT_USER_ID), nullable = false)
-    private ApplicationUser user;
+    @Column(name = "patient_id", nullable = false)
+    private Long patientId;
 
     @Column(name = "reservation_date")
     private Timestamp reservationDate;

@@ -1,3 +1,0 @@
-[submodule "auth-server"]
-	path = auth-server
-	url = https://github.com/JhonyLemon/auth-server

@@ -35,3 +35,71 @@ services:
       KC_DB_SCHEMA: keycloak
       KC_DB_USERNAME: admin
       KC_DB_PASSWORD: admin
+#  dental-service-config:
+#    extends:
+#      file: config-service/docker-compose.yml
+#      service: config-service
+#    networks:
+#      - local
+#  dental-service-discovery:
+#    extends:
+#      file: discovery-service/docker-compose.yml
+#      service: discovery-service
+#    networks:
+#      - local
+#    depends_on:
+#      - dental-service-config
+#    environment:
+#      CONFIG_SERVER: dental-service-config
+#      EUREKA_SERVER: dental-service-discovery
+#  dental-service-gateway:
+#    extends:
+#      file: gateway-service/docker-compose.yml
+#      service: gateway-service
+#    depends_on:
+#      - dental-service-config
+#      - dental-service-discovery
+#    networks:
+#      - local
+#    environment:
+#      CONFIG_SERVER: dental-service-config
+#      EUREKA_SERVER: dental-service-discovery
+#  dental-service-user:
+#    extends:
+#      file: user-service/docker-compose.yml
+#      service: user-service
+#    depends_on:
+#      - dental-service-config
+#      - dental-service-discovery
+#      - postgres
+#    networks:
+#      - local
+#    environment:
+#      CONFIG_SERVER: dental-service-config
+#      EUREKA_SERVER: dental-service-discovery
+#  dental-service-reservation:
+#    extends:
+#      file: reservation-service/docker-compose.yml
+#      service: reservation-service
+#    depends_on:
+#      - dental-service-config
+#      - dental-service-discovery
+#      - postgres
+#    networks:
+#      - local
+#    environment:
+#      CONFIG_SERVER: dental-service-config
+#      EUREKA_SERVER: dental-service-discovery
+#  dental-service-location:
+#    extends:
+#      file: location-service/docker-compose.yml
+#      service: location-service
+#    depends_on:
+#      - dental-service-config
+#      - dental-service-discovery
+#      - postgres
+#    networks:
+#      - local
+#    environment:
+#      CONFIG_SERVER: dental-service-config
+#      EUREKA_SERVER: dental-service-discovery

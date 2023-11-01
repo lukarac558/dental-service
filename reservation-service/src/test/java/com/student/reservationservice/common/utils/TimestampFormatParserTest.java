@@ -1,14 +1,13 @@
 package com.student.reservationservice.common.utils;
 
-import com.student.reservationservice.common.exception.entity.IncorrectFormatException;
+import com.student.api.exception.IncorrectFormatException;
+import com.student.api.util.TimestampFormatParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 
-public class TimestampFormatParserTest {
+class TimestampFormatParserTest {
     private static final String CORRECT_TIMESTAMP = "2023-10-27 08:00:00.0";
     private static final String CORRECT_TIMESTAMP_WITH_MS = "2023-10-27 08:00:00.000";
     private static final String CORRECT_TIMESTAMP_WITHOUT_MS = "2023-10-27 08:00:00";

@@ -1,7 +1,7 @@
 package com.student.reservationservice.visit.visit.service;
 
-import com.student.reservationservice.common.exception.entity.CancellationForbiddenException;
-import com.student.reservationservice.common.exception.entity.NotFoundException;
+import com.student.api.exception.CancellationForbiddenException;
+import com.student.api.exception.NotFoundException;
 import com.student.reservationservice.visit.visit.entity.Visit;
 import com.student.reservationservice.visit.visit.repository.VisitRepository;
 import jakarta.transaction.Transactional;
@@ -14,8 +14,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.VISIT_CANCELLATION_FORBIDDEN_MESSAGE;
-import static com.student.reservationservice.common.exception.entity.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.ErrorConstants.VISIT_CANCELLATION_FORBIDDEN_MESSAGE;
+import static com.student.api.exception.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
 
 @Service
 public class VisitService {
@@ -36,7 +36,7 @@ public class VisitService {
     }
 
     public List<Visit> findVisitsByUserId(Long userId) {
-        return visitRepository.findVisitsByUserId(userId);
+        return visitRepository.findVisitsByPatientId(userId);
     }
 
     @Transactional

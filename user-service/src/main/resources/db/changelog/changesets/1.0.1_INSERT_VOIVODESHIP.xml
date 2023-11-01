@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.0.1_INSERT_VOIVODESHIP" author="lraczka">
+        <insert tableName="voivodeship">
+            <column name="name"  value="Dolnośląskie"/>
+        </insert>
+
+<!--        <insert tableName="city">-->
+<!--            <column name="id" value="currval('voivodeship_id_seq')"/>-->
+<!--            <column name="name" value="Bolesławiec"/>-->
+<!--            <column name="code" value="59-703"/>-->
+<!--        </insert>-->
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Dolnośląskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Kujawsko-Pomorskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Lubelskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Lubuskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Łódzkie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Małopolskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Mazowieckie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Opolskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Podkarpackie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Podlaskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Pomorskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Śląskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Świętokrzyskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Warmińsko-mMazurskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Wielkopolskie"/>
+        </insert>
+
+        <insert tableName="voivodeship">
+            <column name="name"  value="Zachodniopomorskie"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
