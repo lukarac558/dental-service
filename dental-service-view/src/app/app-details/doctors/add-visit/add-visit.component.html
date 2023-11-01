@@ -1,0 +1,90 @@
+<div class="my-4"
+     *ngIf="doctor$ | async as doctor else loading">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Umów wizytę</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="doctor d-flex">
+                <div class="doctor__avatar">
+                    <ds-avatar [avatarSizePx]="80"
+                               [gender]="doctor.gender"
+                               [role]="role.Doctor">
+                    </ds-avatar>
+                </div>
+                <div>
+                    <div class="doctor__name">
+                        {{doctor.firstName}}
+                        {{doctor.lastName}}
+                    </div>
+                    <div>
+                        {{doctor.specialization}}
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]="form">
+                <div class="row mt-4">
+                    <mat-form-field class="col-lg-8 col-xl-6">
+                        <mat-label>Usługi</mat-label>
+                        <mat-select formControlName="serviceIds"
+                                    multiple>
+                            <mat-option *ngFor="let service of doctor.services"
+                                        [value]="service.id">
+                                {{service.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            <ds-error-message [control]="form.controls.serviceIds"></ds-error-message>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <mat-form-field class="col-md-6 col-lg-4 col-xl-3">
+                        <mat-label>Data</mat-label>
+                        <input formControlName="date"
+                               matInput
+                               [matDatepicker]="picker"
+                               [matDatepickerFilter]="dateFilter"
+                               [min]="minDate">
+                        <mat-datepicker-toggle matIconSuffix
+                                               [for]="picker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error>
+                            <ds-error-message [control]="form.controls.date"></ds-error-message>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="col-md-6 col-lg-4 col-xl-3">
+                        <mat-label>Godzina</mat-label>
+                        <mat-select formControlName="startHour">
+                            <ng-container *ngIf="availableHours$ | async as hours">
+                                <mat-option *ngFor="let hour of hours"
+                                            [value]="hour">
+                                    {{hour}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error>
+                            <ds-error-message [control]="form.controls.startHour"></ds-error-message>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </form>
+        </mat-card-content>
+        <mat-card-actions align="end">
+            <button mat-flat-button
+                    [routerLink]="'/doctors/' + doctorId"
+                    class="me-2">
+                Anuluj
+            </button>
+            <ds-spinner-button (clicked)="save()"
+                               [isLoading]="isSaving$ | async">
+                Rezerwuj
+            </ds-spinner-button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+<ng-template #loading>
+    <ds-spinner></ds-spinner>
+</ng-template>

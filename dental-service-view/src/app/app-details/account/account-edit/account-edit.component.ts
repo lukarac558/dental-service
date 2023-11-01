@@ -63,8 +63,6 @@ export class AccountEditComponent implements OnInit, OnDestroy {
             })
         } else {
             this.form.markAllAsTouched();
-            console.log('test');
-
         }
     }
 }

@@ -19,10 +19,11 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button mat-flat-button
-                            color="primary">
+                    <a mat-flat-button
+                       color="primary"
+                       [routerLink]="'add-visit'">
                         Umów wizytę
-                    </button>
+                    </a>
                 </div>
             </mat-card-content>
         </mat-card>
@@ -40,8 +41,9 @@
             <mat-card-title>Oferowane usługi</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            <div class="doctor__services">
-                <div *ngFor="let service of doctor.services">
+            <div class="doctor__services row">
+                <div *ngFor="let service of doctor.services"
+                     class="col-md-6">
                     {{service.name}}
                 </div>
             </div>

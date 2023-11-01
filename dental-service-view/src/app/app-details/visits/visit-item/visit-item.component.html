@@ -19,8 +19,9 @@
             </div>
             <div class="visit__dates">
                 <div [class.visit__status--finished]="visit.endDate <= now"
-                     [class.visit__status--in-future]="visit.endDate > now">
-                    {{visit.endDate > now ? 'Nadchodząca wizyta' : 'Zakończona wizyta'}}
+                     [class.visit__status--in-future]="!!reservationEndDate || visit.endDate > now">
+                    {{!!reservationEndDate ? 'Rezerwacja do ' + (reservationEndDate | date: 'HH:mm') :
+                    (visit.endDate > now ? 'Nadchodząca wizyta' : 'Zakończona wizyta')}}
                 </div>
                 <div>{{visit.startDate | date:'dd MMMM yyyy'}}</div>
                 <div>
@@ -44,4 +45,13 @@
             </div>
         </div>
     </mat-card-content>
+    <mat-card-actions *ngIf="!!reservationEndDate"
+                      class="justify-content-center justify-content-md-end">
+        <button mat-flat-button
+                color="primary"
+                (click)="confirmVisit()"
+                [disabled]="buttonDisabled">
+            Potwierdź wizytę
+        </button>
+    </mat-card-actions>
 </mat-card>

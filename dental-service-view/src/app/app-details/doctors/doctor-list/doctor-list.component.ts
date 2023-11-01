@@ -15,7 +15,7 @@ export class DoctorListComponent implements OnInit {
         pageIndex: 0,
         pageSize: 6,
         name: '',
-        serviceId: null
+        serviceName: ''
     });
 
     constructor(

@@ -1,16 +1,75 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { delay, EMPTY, Observable, of, startWith } from 'rxjs';
 
-import { Doctor, DoctorSearch, DoctorShort } from '../models/doctor.model';
+import {
+    Doctor,
+    DoctorAddScheduleForm,
+    DoctorInfo,
+    DoctorInfoForm,
+    DoctorSchedule,
+    DoctorSearch,
+    DoctorShort
+} from '../models/doctor.model';
 import { Gender } from '../models/gender.model';
 import { CustomPageCriteria, Page } from '../models/page.model';
+import { VisitAvailableDate } from '../models/visits.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DoctorsService {
     constructor(private _http: HttpClient) { }
+
+    getCurrentDoctorInfo(): Observable<DoctorInfo> {
+        return of({
+            specialization: 'Stomatolog',
+            aboutMe: 'Absolwent Śląskiego Uniwersytetu Medycznego w Katowicach. Specjalizuje się w leczeniu zachowawczym i protetycznym, ale wykonuje również zabiegi z zakresu endodoncji, chirurgii stomatologicznej oraz stomatologii dziecięcej. Poza gabinetem miłośnik gór i pływania.',
+            services: [{
+                id: 1,
+                name: 'Konsultacja stomatologiczna'
+            }, {
+                id: 2,
+                name: 'Wybielanie zębów'
+            }, {
+                id: 3,
+                name: 'Ekstrakcja zęba'
+            }, {
+                id: 4,
+                name: 'Leczenie próchnicy'
+            }, {
+                id: 5,
+                name: 'Pakiet higienizacyjny'
+            }]
+        }).pipe(delay(500));
+    }
+
+    getCurrentDoctorSchedule(month: number, year: number): Observable<DoctorSchedule[]> {
+        return of([{
+            startDate: new Date(2023, 9, 24, 8, 0),
+            workDuration: "8:00",
+            startBreakTime: "12:00",
+            breakDuration: "0:30"
+        }, {
+            startDate: new Date(2023, 9, 25, 8, 0),
+            workDuration: "7:00",
+            startBreakTime: "12:00",
+            breakDuration: "0:30"
+        }, {
+            startDate: new Date(2023, 9, 27, 8, 0),
+            workDuration: "6:00",
+            startBreakTime: "12:00",
+            breakDuration: "0:30"
+        }]).pipe(delay(500));
+    }
+
+    addCurrentDoctorSchedule(schedule: DoctorAddScheduleForm): Observable<void> {
+        return EMPTY.pipe(startWith(undefined), delay(500));
+    }
+
+    updateCurrentDoctorInfo(userDetails: DoctorInfoForm): Observable<void> {
+        return EMPTY.pipe(startWith(undefined), delay(500));
+    }
 
     getDoctors(searchCriteria: CustomPageCriteria<DoctorSearch>): Observable<Page<DoctorShort>> {
         return of({
@@ -86,5 +145,21 @@ export class DoctorsService {
                 name: 'Pakiet higienizacyjny'
             }]
         }).pipe(delay(500));
+    }
+
+    getDoctorAvailableDays(id: number, serviceIds: number[]): Observable<VisitAvailableDate[]> {
+        return of([{
+            date: new Date(Date.UTC(2023, 10, 21)),
+            hours: ["12:00", "12:30",]
+        }, {
+            date: new Date(Date.UTC(2023, 10, 22)),
+            hours: ["12:00", "12:30", "13:00", "13:30", "14:00"]
+        }, {
+            date: new Date(Date.UTC(2023, 10, 23)),
+            hours: ["12:00", "12:30", "13:00", "13:30", "14:00"]
+        }, {
+            date: new Date(Date.UTC(2023, 10, 24)),
+            hours: ["13:00", "13:30", "14:00"]
+        }]).pipe(delay(500));
     }
 }

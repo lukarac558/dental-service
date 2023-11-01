@@ -9,12 +9,8 @@
                 </mat-form-field>
                 <mat-form-field class="col-md-6 col-lg">
                     <mat-label>Oferowana usługa</mat-label>
-                    <mat-select formControlName="serviceId">
-                        <mat-option *ngFor="let service of services$ | async"
-                                    [value]="service.id">
-                            {{ service.name }}
-                        </mat-option>
-                    </mat-select>
+                    <input formControlName="serviceName"
+                           matInput>
                 </mat-form-field>
                 <div class="col-lg-auto d-flex justify-content-end align-items-center mt-2 mt-lg-0">
                     <button (click)="clear()"

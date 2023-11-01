@@ -9,3 +9,19 @@ export type Visit = {
     doctorSpecialization: string;
     services: Lookup[]
 };
+
+export type VisitForm = {
+    doctorId: number;
+    date: Date | null;
+    startHour: string;
+    serviceIds: number[] | null;
+};
+
+export type VisitAvailableDate = {
+    date: Date;
+    hours: string[];
+};
+
+export type ReservationVisit = Visit & {
+    reservationEndDate: Date;
+};

@@ -27,3 +27,7 @@ mat-card {
 .mat-mdc-paginator {
     background-color: var.$page-background-color;
 }
+
+.mdc-button {
+    padding: 0 16px 0 16px !important;
+}

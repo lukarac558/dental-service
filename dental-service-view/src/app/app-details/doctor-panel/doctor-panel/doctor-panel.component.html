@@ -1,0 +1,9 @@
+<ng-container *ngIf="doctorInfo$ | async as doctorInfo else loading">
+    <ds-doctor-info [doctorInfo]="doctorInfo"></ds-doctor-info>
+</ng-container>
+
+<ds-doctor-schedule></ds-doctor-schedule>
+
+<ng-template #loading>
+    <ds-spinner></ds-spinner>
+</ng-template>
