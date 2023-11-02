@@ -1,8 +1,0 @@
-version: "3"
-services:
-  config-service:
-    image: config-service
-    container_name: config-service
-    build:
-      context: ../config-service
-      dockerfile: Dockerfile

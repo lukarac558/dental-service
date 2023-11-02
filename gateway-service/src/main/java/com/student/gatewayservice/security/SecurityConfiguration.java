@@ -1,6 +1,7 @@
 package com.student.gatewayservice.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@RefreshScope
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
@@ -33,7 +35,7 @@ public class SecurityConfiguration {
                       .pathMatchers(HttpMethod.GET,"/api/reservation/v3/api-docs/**").permitAll()
                       .pathMatchers(HttpMethod.GET,"/api/user/v3/api-docs/**").permitAll()
                       .pathMatchers(HttpMethod.GET,"/api/location/v3/api-docs/**").permitAll()
-                      .anyExchange().permitAll()
+                      .anyExchange().authenticated()
               )
               .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(jwtSpec -> {}))
               .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())

@@ -6,12 +6,14 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.*;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
 @Configuration
+@RefreshScope
 public class OpenApiConfiguration {
 
     @Value("${springdoc.swagger-ui.oauth.authorizationUrl}")

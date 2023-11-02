@@ -1,8 +1,0 @@
-version: "3"
-services:
-  config-service:
-    image: reservation-service
-    container_name: reservation-service
-    build:
-      context: ../reservation-service
-      dockerfile: Dockerfile

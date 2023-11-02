@@ -1,7 +1,12 @@
 server:
-  port: 8088
+  port: ${CONFIG_PORT:8088}
 spring:
   application:
     name: config-service
   profiles:
     active: native
+management:
+  endpoints:
+    web:
+      exposure:
+        include=*:
