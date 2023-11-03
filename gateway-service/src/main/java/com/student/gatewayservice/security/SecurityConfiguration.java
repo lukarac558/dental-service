@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -26,6 +27,7 @@ public class SecurityConfiguration {
    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity serverHttpSecurity) {
       return serverHttpSecurity.cors(Customizer.withDefaults())
               .csrf(ServerHttpSecurity.CsrfSpec::disable)
+              .cors(cors -> cors.configurationSource(cors()))
               .authorizeExchange(exchange -> exchange
                       .pathMatchers(HttpMethod.GET,"/webjars/**").permitAll()
                       .pathMatchers(HttpMethod.GET,"/swagger-ui.html").permitAll()
@@ -34,24 +36,35 @@ public class SecurityConfiguration {
                       .pathMatchers(HttpMethod.GET,"/api/reservation/v3/api-docs/**").permitAll()
                       .pathMatchers(HttpMethod.GET,"/api/user/v3/api-docs/**").permitAll()
                       .pathMatchers(HttpMethod.GET,"/api/location/v3/api-docs/**").permitAll()
-                      .anyExchange().permitAll()
+                      .anyExchange().authenticated()
               )
               .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(jwtSpec -> {}))
               .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
               .build();
    }
 
-    @Bean
-    public CorsWebFilter corsWebFilter() {
+    public UrlBasedCorsConfigurationSource cors() {
         final CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("http://localhost:8181", "http://localhost:8080", "http://localhost:4200", "http://localhost:4200/*"));
-        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "HEAD", "PUT"));
-        corsConfig.addAllowedHeader(CorsConfiguration.ALL);
+        corsConfig.setAllowCredentials(true);
+        corsConfig.setAllowedMethods(Arrays.asList(
+                HttpMethod.GET.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.OPTIONS.name(),
+                HttpMethod.HEAD.name(),
+                HttpMethod.PUT.name()
+        ));
+        corsConfig.setAllowedOrigins(List.of(
+                "http://localhost:8181",
+                "http://localhost:8080",
+                "http://localhost:4200"
+        ));
+        corsConfig.setAllowedHeaders(List.of(
+                CorsConfiguration.ALL
+        ));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
-
-        return new CorsWebFilter(source);
+        return source;
     }
 
 }
