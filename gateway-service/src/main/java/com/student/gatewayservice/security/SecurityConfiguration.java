@@ -25,7 +25,6 @@ public class SecurityConfiguration {
    @Bean
    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity serverHttpSecurity) {
       return serverHttpSecurity.cors(Customizer.withDefaults())
-              .cors(ServerHttpSecurity.CorsSpec::disable)
               .csrf(ServerHttpSecurity.CsrfSpec::disable)
               .authorizeExchange(exchange -> exchange
                       .pathMatchers(HttpMethod.GET,"/webjars/**").permitAll()
@@ -35,7 +34,7 @@ public class SecurityConfiguration {
                       .pathMatchers(HttpMethod.GET,"/api/reservation/v3/api-docs/**").permitAll()
                       .pathMatchers(HttpMethod.GET,"/api/user/v3/api-docs/**").permitAll()
                       .pathMatchers(HttpMethod.GET,"/api/location/v3/api-docs/**").permitAll()
-                      .anyExchange().authenticated()
+                      .anyExchange().permitAll()
               )
               .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(jwtSpec -> {}))
               .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
@@ -45,9 +44,9 @@ public class SecurityConfiguration {
     @Bean
     public CorsWebFilter corsWebFilter() {
         final CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("http://localhost:8181", "http://localhost:8080", "http://localhost:4200"));
+        corsConfig.setAllowedOrigins(List.of("http://localhost:8181", "http://localhost:8080", "http://localhost:4200", "http://localhost:4200/*"));
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "HEAD", "PUT"));
-        corsConfig.addAllowedHeader("Access-Control-Allow-Origin");
+        corsConfig.addAllowedHeader(CorsConfiguration.ALL);
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
