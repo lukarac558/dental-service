@@ -14,6 +14,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { appConfig } from './app.config';
 import { MainModule } from './basic/basic.module';
 import { MaterialModule } from './material.module';
 import { Paginator } from './shared/components/paginator/paginator.component';
@@ -47,7 +48,7 @@ moment.updateLocale('pl', {
         SpinnerModule,
         OAuthModule.forRoot({
             resourceServer: {
-                allowedUrls: ['http://localhost:8080/api'],
+                allowedUrls: [appConfig.apiUrl],
                 sendAccessToken: true
             }
         }),

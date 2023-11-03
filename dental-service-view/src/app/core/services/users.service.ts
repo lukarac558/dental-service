@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, EMPTY, Observable, of, startWith } from 'rxjs';
+import { appConfig } from 'src/app/app.config';
 
 import { UserDetails, UserDetailsForm } from '../models/user.model';
 
@@ -26,5 +27,9 @@ export class UsersService {
 
     updateUserDetails(userDetails: UserDetailsForm): Observable<void> {
         return EMPTY.pipe(startWith(undefined), delay(500));
+    }
+
+    getCurrentUserDetails(): Observable<any> {
+        return this._http.get(`${appConfig.apiUrl}/user/user`);
     }
 }
