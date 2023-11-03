@@ -51,18 +51,12 @@
             <column name="name"  value="Śląskie"/>
         </insert>
 
-                <insert tableName="city">
-                    <column name="voivodeship_id" valueComputed="(select id from locationservice.voivodeship WHERE name = 'Śląskie')"/>
-                    <column name="name" value="Gliwice"/>
-                    <column name="code" value="44-100"/>
-                </insert>
-
         <insert tableName="voivodeship">
             <column name="name"  value="Świętokrzyskie"/>
         </insert>
 
         <insert tableName="voivodeship">
-            <column name="name"  value="Warmińsko-mMazurskie"/>
+            <column name="name"  value="Warmińsko-Mazurskie"/>
         </insert>
 
         <insert tableName="voivodeship">

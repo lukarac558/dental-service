@@ -19,7 +19,7 @@ public class CityEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_id_seq")
     private Long id;
 
-    @Column(name = "code", unique = true, nullable = false)
+    @Column(name = "code", nullable = false)
     private String postalCode;
 
     @Column(name = "name", nullable = false)
