@@ -1,7 +1,7 @@
 package com.student.userservice.service.type;
 
 import com.student.api.annotation.extractor.auth.Info;
-import com.student.api.dto.common.Role;
+import com.student.api.dto.common.enums.Role;
 import com.student.api.dto.user.ServiceTypeSearchRequestDto;
 import com.student.userservice.entity.ServiceTypeEntity;
 import jakarta.persistence.criteria.CriteriaBuilder;

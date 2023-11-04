@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-import static com.student.api.exception.ErrorConstants.DATE_IS_LOCKED_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.DATE_IS_LOCKED_MESSAGE;
 
 @Service
 public class VisitLockService {

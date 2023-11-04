@@ -1,6 +1,7 @@
 package com.student.api.dto.user;
 
 import com.student.api.annotation.validator.phone.Phone;
+import com.student.api.dto.common.enums.Sex;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -35,6 +36,9 @@ public class UserPersonalDetailsDto {
     @NotBlank
     @Size(min = 2, max = 50)
     private String surname;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private Sex sex;
 
     @NotNull
     @NotBlank

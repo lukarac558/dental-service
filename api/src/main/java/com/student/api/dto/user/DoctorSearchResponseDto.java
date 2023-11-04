@@ -1,6 +1,7 @@
 package com.student.api.dto.user;
 
 import com.student.api.annotation.validator.phone.Phone;
+import com.student.api.dto.common.enums.Sex;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -42,6 +43,10 @@ public class DoctorSearchResponseDto {
     @Phone
     @Size(min = 8, max = 12)
     private String phoneNumber;
+
+    @NotNull
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private Sex sex;
 
     @NotNull
     private CompetencyInformationDto competencyInformation;

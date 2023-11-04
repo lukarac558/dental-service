@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.student.api.exception.ErrorConstants.VOIVODESHIP_ID_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.VOIVODESHIP_ID_NOT_FOUND_MESSAGE;
 
 @Service
 @RequiredArgsConstructor

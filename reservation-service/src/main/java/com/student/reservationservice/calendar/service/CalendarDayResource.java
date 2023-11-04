@@ -14,15 +14,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.student.api.exception.ErrorConstants.CALENDAR_DAY_NOT_FOUND_MESSAGE;
-import static com.student.api.exception.ErrorConstants.USER_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.CALENDAR_DAY_NOT_FOUND_MESSAGE;
 
 @RestController
 @RequestMapping("/calendar-day")

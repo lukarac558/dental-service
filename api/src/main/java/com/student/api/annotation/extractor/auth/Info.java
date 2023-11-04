@@ -1,6 +1,6 @@
 package com.student.api.annotation.extractor.auth;
 
-import com.student.api.dto.common.Role;
+import com.student.api.dto.common.enums.Role;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

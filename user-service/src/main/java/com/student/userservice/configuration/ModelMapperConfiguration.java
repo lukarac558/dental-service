@@ -1,9 +1,8 @@
 package com.student.userservice.configuration;
 
-import com.student.api.dto.user.AddressDto;
-import com.student.api.dto.user.CompetencyInformationDto;
-import com.student.api.dto.user.ServiceTypeDto;
-import com.student.api.dto.user.UserPersonalDetailsDto;
+import com.student.api.dto.common.enums.Sex;
+import com.student.api.dto.user.*;
+import com.student.api.util.PersonalIdDataExtractor;
 import com.student.api.util.TimeFormatParser;
 import com.student.userservice.entity.*;
 import org.modelmapper.*;
@@ -51,6 +50,15 @@ public class ModelMapperConfiguration {
                     .map(Enum::name)
                     .collect(Collectors.toSet())
             ).map(UserEntity::getRoles, UserPersonalDetailsDto::setRoles);
+            mapper.using((Converter<String, Sex>) mappingContext -> PersonalIdDataExtractor
+                    .sexFromPersonalId(mappingContext.getSource())
+            ).map(UserEntity::getPersonalId, UserPersonalDetailsDto::setSex);
+        });
+
+        mm.typeMap(UserEntity.class, DoctorSearchResponseDto.class).addMappings(mapper -> {
+            mapper.using((Converter<String, Sex>) mappingContext -> PersonalIdDataExtractor
+                    .sexFromPersonalId(mappingContext.getSource())
+            ).map(UserEntity::getPersonalId, DoctorSearchResponseDto::setSex);
         });
 
         mm.typeMap(ServiceTypeEntity.class, ServiceTypeDto.class).addMappings(mapper -> {

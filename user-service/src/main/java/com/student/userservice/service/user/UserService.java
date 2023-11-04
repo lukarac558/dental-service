@@ -13,7 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.student.api.exception.ErrorConstants.*;
+import static com.student.api.exception.handler.ErrorConstants.*;
 
 @Service
 @RequiredArgsConstructor

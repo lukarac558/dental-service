@@ -12,8 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.student.api.exception.ErrorConstants.SERVICE_TYPE_NOT_FOUND_MESSAGE;
-import static com.student.api.exception.ErrorConstants.USER_BY_EMAIL_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.SERVICE_TYPE_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.USER_BY_EMAIL_NOT_FOUND_MESSAGE;
 
 @Service
 @RequiredArgsConstructor

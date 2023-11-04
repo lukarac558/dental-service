@@ -1,4 +1,4 @@
-package com.student.api.exception;
+package com.student.api.exception.handler;
 
 public class ErrorConstants {
     private ErrorConstants(){}

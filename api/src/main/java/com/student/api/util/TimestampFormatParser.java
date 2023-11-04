@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static com.student.api.exception.ErrorConstants.INCORRECT_TIMESTAMP_FORMAT_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.INCORRECT_TIMESTAMP_FORMAT_MESSAGE;
 
 public class TimestampFormatParser {
     private TimestampFormatParser(){}

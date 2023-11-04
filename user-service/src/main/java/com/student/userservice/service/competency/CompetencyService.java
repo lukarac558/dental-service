@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static com.student.api.exception.ErrorConstants.*;
+import static com.student.api.exception.handler.ErrorConstants.*;
 
 @Service
 @RequiredArgsConstructor

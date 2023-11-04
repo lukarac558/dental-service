@@ -1,6 +1,6 @@
 package com.student.api.annotation.extractor.auth;
 
-import com.student.api.dto.common.Role;
+import com.student.api.dto.common.enums.Role;
 import com.student.api.exception.TokenInfoExtractionException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;

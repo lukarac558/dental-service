@@ -1,7 +1,7 @@
 package com.student.userservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.student.api.dto.common.Role;
+import com.student.api.dto.common.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 

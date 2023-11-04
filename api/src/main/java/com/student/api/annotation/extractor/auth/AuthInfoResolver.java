@@ -1,7 +1,7 @@
 package com.student.api.annotation.extractor.auth;
 
 import com.nimbusds.jwt.SignedJWT;
-import com.student.api.dto.common.Role;
+import com.student.api.dto.common.enums.Role;
 import com.student.api.exception.TokenInfoExtractionException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.student.api.exception.ErrorConstants.FAILED_TO_AUTHENTICATE;
+import static com.student.api.exception.handler.ErrorConstants.FAILED_TO_AUTHENTICATE;
 
 public class AuthInfoResolver implements HandlerMethodArgumentResolver {
 

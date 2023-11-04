@@ -1,6 +1,6 @@
 package com.student.userservice.service.user;
 
-import com.student.api.dto.common.Role;
+import com.student.api.dto.common.enums.Role;
 import com.student.api.dto.user.DoctorSearchRequestDto;
 import com.student.userservice.entity.UserEntity;
 import jakarta.persistence.criteria.*;

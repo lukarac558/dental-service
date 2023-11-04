@@ -14,8 +14,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.student.api.exception.ErrorConstants.VISIT_CANCELLATION_FORBIDDEN_MESSAGE;
-import static com.student.api.exception.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.VISIT_CANCELLATION_FORBIDDEN_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
 
 @Service
 public class VisitService {

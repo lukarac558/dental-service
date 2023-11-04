@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.student.api.exception.ErrorConstants.VISIT_POSITION_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.VISIT_POSITION_NOT_FOUND_MESSAGE;
 
 @RestController
 @RequestMapping("/visit-position")
