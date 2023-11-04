@@ -34,6 +34,8 @@
 		<modelmapper.version>3.2.0</modelmapper.version>
 		<nimbus-jwt.version>9.37</nimbus-jwt.version>
 		<jib.version>3.4.0</jib.version>
+		<mutation-test.version>1.15.3</mutation-test.version>
+		<mutation-test-junit.version>1.2.1</mutation-test-junit.version>
 
 		<api.version>0.0.1-SNAPSHOT</api.version>
 
@@ -120,6 +122,30 @@
 						<to>
 							<image>registry.hub.docker.com/adamn2000/${project.artifactId}</image>
 						</to>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.pitest</groupId>
+					<artifactId>pitest-maven</artifactId>
+					<version>${mutation-test.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.pitest</groupId>
+							<artifactId>pitest-junit5-plugin</artifactId>
+							<version>${mutation-test-junit.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>org.pitest</groupId>
+							<artifactId>pitest-html-report</artifactId>
+							<version>${mutation-test.version}</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+						<outputFormats>
+							<outputFormat>XML</outputFormat>
+							<outputFormat>HTML</outputFormat>
+						</outputFormats>
+						<withHistory>true</withHistory>
 					</configuration>
 				</plugin>
 			</plugins>
