@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { BehaviorSubject, from, Observable } from 'rxjs';
+import { BehaviorSubject, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { authConfig } from 'src/app/app.config';
-import { indicate } from 'src/app/shared/operators/indicate';
 
+import { Role } from '../models/role.model';
 import { UsersService } from './users.service';
 
 @Injectable({
@@ -15,17 +16,29 @@ export class AuthService {
 
     constructor(
         private _oauthService: OAuthService,
-        private _usersService: UsersService
+        private _usersService: UsersService,
+        private _router: Router
     ) {
         this._oauthService.configure(authConfig);
         this._oauthService.setupAutomaticSilentRefresh();
 
+        this._isLoading$.next(true);
         from(this._oauthService.loadDiscoveryDocumentAndTryLogin()).pipe(
-            indicate(this._isLoading$)
-        ).subscribe(_ => {
-            this._isAuth$.next(this._oauthService.hasValidAccessToken());
-
-            this._usersService.getCurrentUserDetails().subscribe(v => console.log(v))
+            tap(_ => this._isAuth$.next(this._oauthService.hasValidAccessToken())),
+            switchMap(_ => {
+                if (this._isAuth$.value) {
+                    return this._usersService.getCurrentUserDetails().pipe(
+                        map(result => !!result.id)
+                    );
+                } else {
+                    return of(true);
+                }
+            })
+        ).subscribe(result => {
+            if (!result) {
+                this._router.navigateByUrl('/account/edit');
+            }
+            this._isLoading$.next(false);
         });
     }
 
@@ -43,5 +56,22 @@ export class AuthService {
 
     logout(): void {
         this._oauthService.logOut();
+    }
+
+    hasUserRequiredRole(roles: Role[]): Observable<boolean> {
+        if (this._isAuth$.value) {
+            return this._usersService.getCurrentUserDetails().pipe(
+                map(details => {
+                    for (let role of roles) {
+                        const hasRole = details.roles.includes(role);
+                        if (hasRole) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+            );
+        }
+        return of(false);
     }
 }

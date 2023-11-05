@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CanDeactivateAsUnregisteredGuard } from 'src/app/core/guards/can-deactivate-as-unregistered.guard';
 
 import { AccountEditComponent } from './account-edit/account-edit.component';
 import { AccountComponent } from './account/account.component';
@@ -11,7 +12,8 @@ const routes: Routes = [
     },
     {
         path: 'edit',
-        component: AccountEditComponent
+        component: AccountEditComponent,
+        canDeactivate: [CanDeactivateAsUnregisteredGuard]
     }
 ];
 

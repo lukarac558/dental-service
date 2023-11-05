@@ -6,8 +6,8 @@
         <mat-card-content>
             <div class="avatar">
                 <ds-avatar [avatarSizePx]="225"
-                           [gender]="userDetails.gender"
-                           [role]="userDetails.role">
+                           [gender]="gender.Male"
+                           [role]="(userDetails.roles | hasRole:role.Doctor) ? role.Doctor : role.Patient">
                 </ds-avatar>
             </div>
             <div class="row">
@@ -16,7 +16,7 @@
                         Imię:
                     </div>
                     <div class="account-info__value">
-                        {{userDetails.firstName}}
+                        {{userDetails.name}}
                     </div>
                 </div>
                 <div class="col-lg-6 account-info">
@@ -24,15 +24,23 @@
                         Nazwisko:
                     </div>
                     <div class="account-info__value">
-                        {{userDetails.lastName}}
+                        {{userDetails.surname}}
                     </div>
                 </div>
-                <div class="col-12 account-info">
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        PESEL:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.personalId}}
+                    </div>
+                </div>
+                <div class="col-lg-6 account-info">
                     <div class="account-info__label">
                         Płeć:
                     </div>
                     <div class="account-info__value">
-                        {{userDetails.gender === gender.Male ? 'Mężczyzna' : 'Kobieta'}}
+                        {{gender.Male === gender.Male ? 'Mężczyzna' : 'Kobieta'}}
                     </div>
                 </div>
                 <div class="col-lg-6 account-info">
@@ -51,12 +59,20 @@
                         {{userDetails.phoneNumber}}
                     </div>
                 </div>
+                <div class="col-12 account-info">
+                    <div class="account-info__label">
+                        Województwo:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.address.voivodeshipId | voivodeship : (voivodeships$|async)}}
+                    </div>
+                </div>
                 <div class="col-lg-6 account-info">
                     <div class="account-info__label">
                         Kod pocztowy:
                     </div>
                     <div class="account-info__value">
-                        {{userDetails.zipCode}}
+                        {{userDetails.address.postalCode}}
                     </div>
                 </div>
                 <div class="col-lg-6 account-info">
@@ -64,15 +80,23 @@
                         Miasto:
                     </div>
                     <div class="account-info__value">
-                        {{userDetails.city}}
+                        {{userDetails.address.city}}
                     </div>
                 </div>
                 <div class="col-lg-6 account-info">
                     <div class="account-info__label">
-                        Adres:
+                        Ulica:
                     </div>
                     <div class="account-info__value">
-                        {{userDetails.address}}
+                        {{userDetails.address.street}}
+                    </div>
+                </div>
+                <div class="col-lg-6 account-info">
+                    <div class="account-info__label">
+                        Nr domu:
+                    </div>
+                    <div class="account-info__value">
+                        {{userDetails.address.buildingNumber}}
                     </div>
                 </div>
             </div>
