@@ -1,4 +1,4 @@
-package com.student.api.dto.common;
+package com.student.api.exception.handler;
 
 import lombok.*;
 

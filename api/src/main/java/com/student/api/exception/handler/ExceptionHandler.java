@@ -1,6 +1,5 @@
 package com.student.api.exception.handler;
 
-import com.student.api.dto.common.ErrorDTO;
 import com.student.api.exception.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.MethodParameter;

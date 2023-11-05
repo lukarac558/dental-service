@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.pl.PESEL;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -39,6 +40,9 @@ public class UserPersonalDetailsDto {
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Sex sex;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private String birthDate;
 
     @NotNull
     @NotBlank

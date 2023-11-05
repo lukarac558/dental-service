@@ -28,6 +28,6 @@ public class PagingDto {
 
     @JsonIgnore
     public Pageable pageable() {
-        return new PageRequest(page, pageSize, sortMap, enabled);
+        return new PageRequestDto(page, pageSize, sortMap, enabled);
     }
 }

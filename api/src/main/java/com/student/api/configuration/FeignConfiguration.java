@@ -49,16 +49,11 @@ public class FeignConfiguration {
     public ErrorDecoder errorDecoder(Decoder decoder) {
         return (methodKey, response) -> {
             HttpStatus status = HttpStatus.resolve(response.status());
-            DentalClinicException dentalClinicException;
             try {
                 Exception exception = (Exception) decoder.decode(response, Exception.class);
-                dentalClinicException = new DentalClinicException(exception.getMessage(), exception);
-                dentalClinicException.setStatus(status);
-                return dentalClinicException;
+                return new DentalClinicException(exception.getMessage(), exception, status);
             } catch (Exception e) {
-                DentalClinicException exception = new DentalClinicException("Unknown exception", e);
-                exception.setStatus(status);
-                return exception;
+                return new DentalClinicException("Unknown exception", e, status);
             }
         };
     }

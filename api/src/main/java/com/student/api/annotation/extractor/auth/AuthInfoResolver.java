@@ -6,7 +6,6 @@ import com.student.api.exception.TokenInfoExtractionException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -50,7 +49,7 @@ public class AuthInfoResolver implements HandlerMethodArgumentResolver {
                     .toList();
             return new Info(email, applicationRoles);
         } catch (Exception e) {
-            throw new TokenInfoExtractionException(FAILED_TO_AUTHENTICATE, HttpStatus.UNAUTHORIZED);
+            throw new TokenInfoExtractionException(FAILED_TO_AUTHENTICATE);
         }
     }
 
