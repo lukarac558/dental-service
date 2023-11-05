@@ -11,18 +11,18 @@ import java.util.Map;
 
 @Getter
 @EqualsAndHashCode(callSuper = false)
-public class PageRequest extends AbstractPageRequest {
+public class PageRequestDto extends AbstractPageRequest {
     private final Map<String, Sort.Direction> sortMap;
     @Accessors(fluent = true)
     private final Boolean isEnabled;
 
-    public PageRequest(Long page, Long size, Map<String, Sort.Direction> sort, Boolean isEnabled) {
+    public PageRequestDto(Long page, Long size, Map<String, Sort.Direction> sort, Boolean isEnabled) {
         super(Math.toIntExact(page), Math.toIntExact(size));
         this.sortMap = sort;
         this.isEnabled = isEnabled;
     }
 
-    public PageRequest(int page, PageRequest pageRequest) {
+    public PageRequestDto(int page, PageRequestDto pageRequest) {
         super(page, pageRequest.getPageNumber());
         this.sortMap = pageRequest.getSortMap();
         this.isEnabled = pageRequest.isEnabled();
@@ -30,7 +30,6 @@ public class PageRequest extends AbstractPageRequest {
 
     @Override
     public boolean isPaged() {
-
         return isEnabled;
     }
 
@@ -48,7 +47,7 @@ public class PageRequest extends AbstractPageRequest {
 
     @Override
     public Pageable next() {
-        return new PageRequest(
+        return new PageRequestDto(
                 getPageNumber()+1,
                 this
         );
@@ -59,7 +58,7 @@ public class PageRequest extends AbstractPageRequest {
         if(getPageNumber() == 0) {
             return this;
         } else {
-            return new PageRequest(
+            return new PageRequestDto(
                     getPageNumber()-1,
                     this
             );
@@ -68,7 +67,7 @@ public class PageRequest extends AbstractPageRequest {
 
     @Override
     public Pageable first() {
-        return new PageRequest(
+        return new PageRequestDto(
                 0,
                 this
         );
@@ -76,7 +75,7 @@ public class PageRequest extends AbstractPageRequest {
 
     @Override
     public Pageable withPage(int pageNumber) {
-        return new PageRequest(
+        return new PageRequestDto(
                 pageNumber,
                 this
         );

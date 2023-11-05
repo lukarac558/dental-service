@@ -7,10 +7,11 @@ import org.springframework.http.HttpStatus;
 @Setter
 @Getter
 public class DentalClinicException extends RuntimeException {
-    private HttpStatus status;
+    protected final HttpStatus status;
 
     public DentalClinicException(String message) {
         super(message);
+        this.status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     public DentalClinicException(String message, HttpStatus status) {
@@ -20,6 +21,7 @@ public class DentalClinicException extends RuntimeException {
 
     public DentalClinicException(String message, Throwable cause) {
         super(message, cause);
+        this.status = HttpStatus.INTERNAL_SERVER_ERROR;
     }
 
     public DentalClinicException(String message, Throwable cause, HttpStatus status) {

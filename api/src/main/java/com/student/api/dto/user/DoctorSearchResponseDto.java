@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -47,6 +48,10 @@ public class DoctorSearchResponseDto {
     @NotNull
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Sex sex;
+
+    @NotNull
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private Integer age;
 
     @NotNull
     private CompetencyInformationDto competencyInformation;

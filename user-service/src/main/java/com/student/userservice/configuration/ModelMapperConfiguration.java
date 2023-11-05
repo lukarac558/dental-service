@@ -51,14 +51,20 @@ public class ModelMapperConfiguration {
                     .collect(Collectors.toSet())
             ).map(UserEntity::getRoles, UserPersonalDetailsDto::setRoles);
             mapper.using((Converter<String, Sex>) mappingContext -> PersonalIdDataExtractor
-                    .sexFromPersonalId(mappingContext.getSource())
+                    .getSex(mappingContext.getSource())
             ).map(UserEntity::getPersonalId, UserPersonalDetailsDto::setSex);
+            mapper.using((Converter<String, String>) mappingContext -> PersonalIdDataExtractor
+                    .getBirthDate(mappingContext.getSource(), PersonalIdDataExtractor.FORMATTER)
+            ).map(UserEntity::getPersonalId, UserPersonalDetailsDto::setBirthDate);
         });
 
         mm.typeMap(UserEntity.class, DoctorSearchResponseDto.class).addMappings(mapper -> {
             mapper.using((Converter<String, Sex>) mappingContext -> PersonalIdDataExtractor
-                    .sexFromPersonalId(mappingContext.getSource())
+                    .getSex(mappingContext.getSource())
             ).map(UserEntity::getPersonalId, DoctorSearchResponseDto::setSex);
+            mapper.using((Converter<String, Integer>) mappingContext -> PersonalIdDataExtractor
+                    .getAge(mappingContext.getSource())
+            ).map(UserEntity::getPersonalId, DoctorSearchResponseDto::setAge);
         });
 
         mm.typeMap(ServiceTypeEntity.class, ServiceTypeDto.class).addMappings(mapper -> {

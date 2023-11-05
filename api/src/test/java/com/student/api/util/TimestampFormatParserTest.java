@@ -1,4 +1,4 @@
-package com.student.reservationservice.common.utils;
+package com.student.api.util;
 
 import com.student.api.exception.IncorrectFormatException;
 import com.student.api.util.TimestampFormatParser;
