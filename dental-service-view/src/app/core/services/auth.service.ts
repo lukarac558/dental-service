@@ -4,6 +4,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { BehaviorSubject, from, map, Observable, of, switchMap, tap } from 'rxjs';
 import { authConfig } from 'src/app/app.config';
 
+import { Role } from '../models/role.model';
 import { UsersService } from './users.service';
 
 @Injectable({
@@ -55,5 +56,22 @@ export class AuthService {
 
     logout(): void {
         this._oauthService.logOut();
+    }
+
+    hasUserRequiredRole(roles: Role[]): Observable<boolean> {
+        if (this._isAuth$.value) {
+            return this._usersService.getCurrentUserDetails().pipe(
+                map(details => {
+                    for (let role of roles) {
+                        const hasRole = details.roles.includes(role);
+                        if (hasRole) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+            );
+        }
+        return of(false);
     }
 }

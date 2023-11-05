@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppDetailsRoutingModule } from '../app-details/app-details-routing.module';
 import { MaterialModule } from '../material.module';
+import { DirectivesModule } from '../shared/directives/directives.module';
 import { MainRoutingModule } from './basic-routing.module';
 import { HomePageComponent } from './home-page/home-page.component';
 import { MenuComponent } from './menu/menu.component';
@@ -14,7 +15,8 @@ import { NavbarComponent } from './navbar/navbar.component';
         CommonModule,
         MainRoutingModule,
         MaterialModule,
-        AppDetailsRoutingModule
+        AppDetailsRoutingModule,
+        DirectivesModule
     ],
     declarations: [
         HomePageComponent,

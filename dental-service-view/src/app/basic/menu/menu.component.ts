@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Role } from 'src/app/core/models/role.model';
 
 @Component({
     selector: 'ds-menu',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
     styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-
+    role = Role;
 }
