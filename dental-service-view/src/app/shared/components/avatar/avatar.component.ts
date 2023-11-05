@@ -9,19 +9,19 @@ import { Role } from 'src/app/core/models/role.model';
 })
 export class AvatarComponent implements OnInit {
     @Input() gender: number = Gender.Male;
-    @Input() role: number = Role.Patient;
+    @Input() role: string = Role.Patient;
     @Input() avatarSizePx = 50;
 
     imagePath: string;
 
     ngOnInit(): void {
-        if (this.gender == Gender.Male && this.role == Role.Doctor) {
+        if (this.gender === Gender.Male && this.role === Role.Doctor) {
             this.imagePath = '/assets/images/account/dentist-m.png';
-        } else if (this.gender == Gender.Female && this.role == Role.Doctor) {
+        } else if (this.gender === Gender.Female && this.role === Role.Doctor) {
             this.imagePath = '/assets/images/account/dentist-w.png';
-        } else if (this.gender == Gender.Male && this.role == Role.Patient) {
+        } else if (this.gender === Gender.Male && this.role === Role.Patient) {
             this.imagePath = '/assets/images/account/patient-m.png';
-        } else if (this.gender == Gender.Female && this.role == Role.Patient) {
+        } else if (this.gender === Gender.Female && this.role === Role.Patient) {
             this.imagePath = '/assets/images/account/patient-w.png';
         }
     }

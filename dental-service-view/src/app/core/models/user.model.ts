@@ -1,15 +1,20 @@
+export type UserDetailsForm = Omit<UserDetails, 'id' | 'roles' | 'email'>;
+
 export type UserDetails = {
-    firstName: string;
-    lastName: string;
-    email: string;
+    id: number | null;
+    personalId: string;
+    name: string;
+    surname: string;
     phoneNumber: string;
-    zipCode: string;
-    city: string;
-    address: string;
-    gender: number;
-    role: number;
+    email: string;
+    address: UserDetailsAddress;
+    roles: string[];
 };
 
-export type UserDetailsForm = Omit<UserDetails, 'role'>;
-
-export type InitUserDetailsForm = Omit<UserDetails, 'email'>;
+export type UserDetailsAddress = {
+    voivodeshipId: number | null;
+    city: string;
+    postalCode: string;
+    street: string;
+    buildingNumber: string;
+};
