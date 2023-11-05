@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.pl.PESEL;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Getter
@@ -26,28 +25,32 @@ public class UserPersonalDetailsDto {
     @NotNull
     @PESEL
     @Size(min = 11, max = 11)
+    @Schema(example = "08913128446")
     private String personalId;
 
     @NotNull
     @NotBlank
     @Size(min = 2, max = 50)
+    @Schema(example = "Jan")
     private String name;
 
     @NotNull
     @NotBlank
     @Size(min = 2, max = 50)
+    @Schema(example = "Nowak")
     private String surname;
 
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "MALE")
     private Sex sex;
 
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "2000-01-01")
     private String birthDate;
 
     @NotNull
     @NotBlank
     @Phone
     @Size(min = 8, max = 12)
+    @Schema(example = "111222333")
     private String phoneNumber;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)

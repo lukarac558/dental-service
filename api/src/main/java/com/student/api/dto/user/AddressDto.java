@@ -22,26 +22,41 @@ public class AddressDto {
     private Long id;
 
     @NotNull
+    @Schema(
+            example = "1"
+    )
     private Long voivodeshipId;
 
     @NotNull
     @NotBlank
+    @Schema(
+            example = "Gliwice"
+    )
     @Size(min = 2, max = 50)
     private String city;
 
     @NotNull
     @NotBlank
     @PostalCode
+    @Schema(
+            example = "44-100"
+    )
     @Size(min = 6, max = 6)
     private String postalCode;
 
     @NotNull
     @NotBlank
+    @Schema(
+            example = "Kaszubska"
+    )
     @Size(min = 2, max = 80)
     private String street;
 
     @NotNull
     @NotBlank
+    @Schema(
+            example = "23"
+    )
     @Size(min = 1, max = 8)
     private String buildingNumber;
 }

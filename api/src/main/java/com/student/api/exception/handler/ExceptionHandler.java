@@ -4,6 +4,7 @@ import com.student.api.exception.*;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.MethodParameter;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -26,16 +27,14 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String DELETION_FORBIDDEN_MESSAGE = "Deletion of given object is forbidden because is used by other related object(s).";
     @org.springframework.web.bind.annotation.ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorDTO> handleNotFoundException(NotFoundException ex) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        ErrorDTO error = buildErrorDTO(ex.getMessage(), status);
-        return new ResponseEntity<>(error, status);
+        ErrorDTO error = buildErrorDTO(ex.getMessage(), ex.getStatus());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ObjectAlreadyExistsException.class)
     public ResponseEntity<ErrorDTO> handleObjectAlreadyExistsException(ObjectAlreadyExistsException ex) {
-        HttpStatus status = HttpStatus.CONFLICT;
-        ErrorDTO error = buildErrorDTO(ex.getMessage(), status);
-        return new ResponseEntity<>(error, status);
+        ErrorDTO error = buildErrorDTO(ex.getMessage(), ex.getStatus());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(DataIntegrityViolationException.class)
@@ -47,23 +46,20 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(IncorrectFormatException.class)
     public ResponseEntity<ErrorDTO> handleIncorrectFormatExceptionException(IncorrectFormatException ex) {
-        HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-        ErrorDTO error = buildErrorDTO(ex.getMessage(), status);
-        return new ResponseEntity<>(error, status);
+        ErrorDTO error = buildErrorDTO(ex.getMessage(), ex.getStatus());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(IncorrectValueException.class)
     public ResponseEntity<ErrorDTO> handleIncorrectValueExceptionException(IncorrectValueException ex) {
-        HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-        ErrorDTO error = buildErrorDTO(ex.getMessage(), status);
-        return new ResponseEntity<>(error, status);
+        ErrorDTO error = buildErrorDTO(ex.getMessage(), ex.getStatus());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(CancellationForbiddenException.class)
     public ResponseEntity<ErrorDTO> handleCancellationForbiddenException(CancellationForbiddenException ex) {
-        HttpStatus status = HttpStatus.FORBIDDEN;
-        ErrorDTO error = buildErrorDTO(ex.getMessage(), status);
-        return new ResponseEntity<>(error, status);
+        ErrorDTO error = buildErrorDTO(ex.getMessage(), ex.getStatus());
+        return new ResponseEntity<>(error, ex.getStatus());
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(TokenInfoExtractionException.class)
@@ -76,6 +72,13 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorDTO> handleDentalClinicException(DentalClinicException ex) {
         ErrorDTO error = buildErrorDTO(ex.getMessage(), ex.getStatus());
         return new ResponseEntity<>(error, ex.getStatus());
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorDTO> handlePropertyReferenceException(PropertyReferenceException ex) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorDTO error = buildErrorDTO("Bad sort property", status);
+        return new ResponseEntity<>(error, status);
     }
 
     @Override

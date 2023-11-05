@@ -3,7 +3,7 @@ package com.student.userservice.controller;
 import com.student.api.annotation.extractor.auth.AuthInfo;
 import com.student.api.annotation.extractor.auth.Info;
 import com.student.api.dto.user.DoctorSearchRequestDto;
-import com.student.api.dto.user.DoctorSearchResponseDto;
+import com.student.api.dto.user.DoctorDto;
 import com.student.api.dto.user.UserPersonalDetailsDto;
 import com.student.userservice.entity.UserEntity;
 import com.student.userservice.service.user.UserService;
@@ -79,17 +79,29 @@ public class UserController {
         return new ResponseEntity<>(modelMapper.map(user, UserPersonalDetailsDto.class), HttpStatus.OK);
     }
 
+    @PostMapping("/doctor/{id}")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @Operation(summary = "Find doctors by provided search object")
+    public ResponseEntity<DoctorDto> getDoctorsById(
+            @PathVariable("id") Long id
+    ) {
+        return new ResponseEntity<>(
+                modelMapper.map(userService.findDoctorById(id), DoctorDto.class),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("/doctor/all")
     @ApiResponse(responseCode = "404", description = "User not found")
     @Operation(summary = "Find doctors by provided search object")
-    public ResponseEntity<Page<DoctorSearchResponseDto>> getDoctorsByRequest(
+    public ResponseEntity<Page<DoctorDto>> getDoctorsByRequest(
             @Validated
             @RequestBody
             DoctorSearchRequestDto doctorSearch
     ) {
         return new ResponseEntity<>(
                 userService.findDoctor(doctorSearch)
-                        .map(d -> modelMapper.map(d, DoctorSearchResponseDto.class)),
+                        .map(d -> modelMapper.map(d, DoctorDto.class)),
                 HttpStatus.OK
         );
     }

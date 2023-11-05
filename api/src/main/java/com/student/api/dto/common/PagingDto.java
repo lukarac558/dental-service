@@ -1,6 +1,7 @@
 package com.student.api.dto.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -18,12 +19,20 @@ import java.util.Map;
 @NoArgsConstructor
 public class PagingDto {
     @NotNull
+    @Schema(
+            description = "Allows sorting by provided name of field and direction(ASC,DESC)",
+            example = "{\"id\": \"ASC\"}",
+            defaultValue = "{}"
+    )
     private Map<String, Sort.Direction> sortMap = new HashMap<>();
     @NotNull
+    @Schema(defaultValue = "0", example = "0")
     private Long page = 0L;
     @NotNull
+    @Schema(defaultValue = "20", example = "20")
     private Long pageSize = 20L;
     @NotNull
+    @Schema(defaultValue = "true", example = "true")
     private Boolean enabled = true;
 
     @JsonIgnore

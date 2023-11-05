@@ -3,7 +3,6 @@ package com.student.locationservice.controller;
 import com.student.api.dto.location.CityDto;
 
 import com.student.api.dto.location.CitySearchRequestDto;
-import com.student.api.dto.location.CitySearchResponseDto;
 import com.student.locationservice.entity.CityEntity;
 import com.student.locationservice.service.city.CityService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,11 +28,11 @@ public class CityController {
     @PostMapping("")
     @ApiResponse(responseCode = "400", description = "Invalid request content")
     @Operation(summary = "Find all cities by provided search parameters")
-    public ResponseEntity<Page<CitySearchResponseDto>> getAll(
+    public ResponseEntity<Page<CityDto>> getAll(
             @Validated @RequestBody CitySearchRequestDto searchRequestDto
     ) {
         Page<CityEntity> cities = cityService.findAll(searchRequestDto);
-        return new ResponseEntity<>(cities.map(c -> modelMapper.map(c, CitySearchResponseDto.class)), HttpStatus.OK);
+        return new ResponseEntity<>(cities.map(c -> modelMapper.map(c, CityDto.class)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

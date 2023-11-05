@@ -58,13 +58,13 @@ public class ModelMapperConfiguration {
             ).map(UserEntity::getPersonalId, UserPersonalDetailsDto::setBirthDate);
         });
 
-        mm.typeMap(UserEntity.class, DoctorSearchResponseDto.class).addMappings(mapper -> {
+        mm.typeMap(UserEntity.class, DoctorDto.class).addMappings(mapper -> {
             mapper.using((Converter<String, Sex>) mappingContext -> PersonalIdDataExtractor
                     .getSex(mappingContext.getSource())
-            ).map(UserEntity::getPersonalId, DoctorSearchResponseDto::setSex);
+            ).map(UserEntity::getPersonalId, DoctorDto::setSex);
             mapper.using((Converter<String, Integer>) mappingContext -> PersonalIdDataExtractor
                     .getAge(mappingContext.getSource())
-            ).map(UserEntity::getPersonalId, DoctorSearchResponseDto::setAge);
+            ).map(UserEntity::getPersonalId, DoctorDto::setAge);
         });
 
         mm.typeMap(ServiceTypeEntity.class, ServiceTypeDto.class).addMappings(mapper -> {

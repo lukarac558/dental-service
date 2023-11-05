@@ -18,6 +18,9 @@ public class CompetencyInformationDto {
     )
     private Long id;
 
+    @Schema(
+            example = "Inż"
+    )
     @NotNull
     private String title;
 

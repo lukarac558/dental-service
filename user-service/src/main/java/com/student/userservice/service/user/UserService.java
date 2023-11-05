@@ -1,6 +1,7 @@
 package com.student.userservice.service.user;
 
 import com.student.api.annotation.extractor.auth.Info;
+import com.student.api.dto.common.enums.Role;
 import com.student.api.exception.*;
 import com.student.api.dto.user.DoctorSearchRequestDto;
 import com.student.userservice.entity.UserEntity;
@@ -76,5 +77,10 @@ public class UserService {
         userEntity.getAddress().setBuildingNumber(user.getAddress().getBuildingNumber());
         userEntity.getAddress().setPostalCode(user.getAddress().getPostalCode());
         return userRepository.save(userEntity);
+    }
+
+    public UserEntity findDoctorById(Long id) {
+        return userRepository.findByIdAndRoles_Role(id, Role.DOCTOR)
+                        .orElseThrow(() -> new NotFoundException(String.format(USER_NOT_FOUND_MESSAGE, id)));
     }
 }
