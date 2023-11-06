@@ -51,7 +51,8 @@ public class SecurityConfiguration {
                 HttpMethod.POST.name(),
                 HttpMethod.OPTIONS.name(),
                 HttpMethod.HEAD.name(),
-                HttpMethod.PUT.name()
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name()
         ));
         corsConfig.setAllowedOrigins(List.of(
                 "http://localhost:8181",

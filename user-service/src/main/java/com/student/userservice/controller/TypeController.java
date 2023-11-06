@@ -91,7 +91,7 @@ public class TypeController {
         return new ResponseEntity<>(
                 modelMapper.map(
                         serviceTypeService.updateType(
-                                modelMapper.map(serviceType, ServiceTypeEntity.class),
+                                type,
                                 info
                         ),
                         ServiceTypeDto.class
