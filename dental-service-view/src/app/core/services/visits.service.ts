@@ -19,7 +19,7 @@ export class VisitsService {
                 startDate: new Date(2023, 10, 15, 12, 0, 0),
                 endDate: new Date(2023, 10, 15, 14, 0, 0),
                 doctorName: 'Alan Kwieciński',
-                doctorGender: 1,
+                doctorGender: 'MALE',
                 doctorSpecialization: 'Stomatolog',
                 services: [{
                     id: 1,
@@ -33,7 +33,7 @@ export class VisitsService {
                 startDate: new Date(2023, 9, 21, 8, 0, 0),
                 endDate: new Date(2023, 9, 21, 9, 0, 0),
                 doctorName: 'Agata Fąk',
-                doctorGender: 2,
+                doctorGender: 'MALE',
                 doctorSpecialization: 'Stomatolog',
                 services: [{
                     id: 5,
@@ -53,7 +53,7 @@ export class VisitsService {
             startDate: new Date(2023, 10, 28, 12, 0, 0),
             endDate: new Date(2023, 10, 28, 14, 0, 0),
             doctorName: 'Alan Kwieciński',
-            doctorGender: 1,
+            doctorGender: 'MALE',
             doctorSpecialization: 'Stomatolog',
             reservationEndDate: new Date(2023, 10, 1, 20, 0, 0),
             services: [{

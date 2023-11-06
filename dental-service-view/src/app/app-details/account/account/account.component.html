@@ -6,7 +6,7 @@
         <mat-card-content>
             <div class="avatar">
                 <ds-avatar [avatarSizePx]="225"
-                           [gender]="gender.Male"
+                           [gender]="userDetails.sex"
                            [role]="(userDetails.roles | hasRole:role.Doctor) ? role.Doctor : role.Patient">
                 </ds-avatar>
             </div>
@@ -40,7 +40,7 @@
                         Płeć:
                     </div>
                     <div class="account-info__value">
-                        {{gender.Male === gender.Male ? 'Mężczyzna' : 'Kobieta'}}
+                        {{userDetails.sex === gender.Male ? 'Mężczyzna' : 'Kobieta'}}
                     </div>
                 </div>
                 <div class="col-lg-6 account-info">

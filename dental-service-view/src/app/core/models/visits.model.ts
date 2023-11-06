@@ -5,7 +5,7 @@ export type Visit = {
     startDate: Date;
     endDate: Date;
     doctorName: string;
-    doctorGender: number;
+    doctorGender: string;
     doctorSpecialization: string;
     services: Lookup[]
 };

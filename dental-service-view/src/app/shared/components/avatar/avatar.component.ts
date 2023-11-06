@@ -8,7 +8,7 @@ import { Role } from 'src/app/core/models/role.model';
     styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnInit {
-    @Input() gender: number = Gender.Male;
+    @Input() gender: string = Gender.Male;
     @Input() role: string = Role.Patient;
     @Input() avatarSizePx = 50;
 

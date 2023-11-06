@@ -4,7 +4,7 @@ export type DoctorShort = {
     id: number;
     firstName: string;
     lastName: string;
-    gender: number;
+    gender: string;
     specialization: string;
     aboutMe: string;
 };

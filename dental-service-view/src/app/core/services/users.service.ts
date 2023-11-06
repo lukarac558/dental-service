@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { appConfig } from 'src/app/app.config';
 
+import { Gender } from '../models/gender.model';
 import { UserDetails, UserDetailsForm } from '../models/user.model';
 
 @Injectable({
@@ -44,7 +45,8 @@ export class UsersService {
                             street: '',
                             buildingNumber: ''
                         },
-                        roles: []
+                        roles: [],
+                        sex: Gender.Male
                     } as UserDetails);
                 }),
                 tap(userDetails => this._userDetails$.next(userDetails))

@@ -1,4 +1,6 @@
-export type UserDetailsForm = Omit<UserDetails, 'id' | 'roles' | 'email'>;
+import { Gender } from './gender.model';
+
+export type UserDetailsForm = Omit<UserDetails, 'id' | 'roles' | 'email' | 'sex'>;
 
 export type UserDetails = {
     id: number | null;
@@ -9,6 +11,7 @@ export type UserDetails = {
     email: string;
     address: UserDetailsAddress;
     roles: string[];
+    sex: Gender;
 };
 
 export type UserDetailsAddress = {

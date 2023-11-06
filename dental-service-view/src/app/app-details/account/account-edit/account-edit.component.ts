@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
-import { Gender } from 'src/app/core/models/gender.model';
 import { Lookup } from 'src/app/core/models/lookup.model';
 import { UserDetails, UserDetailsForm } from 'src/app/core/models/user.model';
 import { LocationsService } from 'src/app/core/services/locations.service';
@@ -21,7 +20,6 @@ import { ControlsOf } from 'src/main';
 export class AccountEditComponent implements OnInit, OnDestroy {
     form: FormGroup;
     isSaving$ = new Subject<boolean>();
-    gender = Gender;
     userDetails$: Observable<UserDetails>;
     voivodeships$: Observable<Lookup[]>;
 
