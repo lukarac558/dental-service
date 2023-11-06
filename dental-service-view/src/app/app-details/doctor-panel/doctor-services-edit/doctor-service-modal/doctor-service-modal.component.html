@@ -1,0 +1,59 @@
+<h1 mat-dialog-title>Usługa</h1>
+<div mat-dialog-content
+     class="service-modal">
+    <form [formGroup]="form">
+        <div class="row mt-2">
+            <mat-form-field class="col-12">
+                <mat-label>Nazwa usługi</mat-label>
+                <input formControlName="name"
+                       matInput
+                       placeholder="Nazwa usługi">
+                <mat-error>
+                    <ds-error-message [control]="form.controls.name"></ds-error-message>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-12"
+                            floatLabel="always">
+                <mat-label>Czas trwania</mat-label>
+                <input matInput
+                       class="d-none"
+                       formControlName="durationTime">
+                <ngx-timepicker-field [format]="24"
+                                      [controlOnly]="true"
+                                      [minutesGap]="30"
+                                      formControlName="durationTime"
+                                      [defaultTime]="defaultDurationTime">
+                </ngx-timepicker-field>
+                <mat-error>
+                    <ds-error-message [control]="form.controls.durationTime"></ds-error-message>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-12">
+                <mat-label>Opis</mat-label>
+                <textarea matInput
+                          formControlName="description"
+                          placeholder="Opis"
+                          cdkTextareaAutosize
+                          cdkAutosizeMinRows="5"
+                          cdkAutosizeMaxRows="10">
+                </textarea>
+                <mat-error>
+                    <ds-error-message [control]="form.controls.description"></ds-error-message>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions
+     align="end">
+    <button class="me-2"
+            mat-flat-button
+            [mat-dialog-close]="null"
+            cdkFocusInitial>
+        Anuluj
+    </button>
+    <ds-spinner-button (clicked)="save()"
+                       [isLoading]="isSaving$ | async">
+        Zapisz
+    </ds-spinner-button>
+</div>

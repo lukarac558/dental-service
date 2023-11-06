@@ -1,5 +1,5 @@
 <mat-card class="mt-4"
-          *ngIf="doctorInfo$ | async as doctorInfo else loading">
+          *ngIf="doctorCompetency$ | async as doctorCompetency else loading">
     <mat-card-header>
         <mat-card-title>Zaktualizuj informacje lekarskie</mat-card-title>
     </mat-card-header>
@@ -9,25 +9,25 @@
                 <mat-form-field class="col-12">
                     <mat-label>O Tobie</mat-label>
                     <textarea matInput
-                              formControlName="aboutMe"
+                              formControlName="description"
                               placeholder="O Tobie"
                               cdkTextareaAutosize
                               cdkAutosizeMinRows="5"
                               cdkAutosizeMaxRows="10">
                                 </textarea>
                     <mat-error>
-                        <ds-error-message [control]="form.controls.aboutMe"></ds-error-message>
+                        <ds-error-message [control]="form.controls.description"></ds-error-message>
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="row">
                 <mat-form-field class="col-md-6 col-lg-5 col-xl-4">
                     <mat-label>Specjalizacja</mat-label>
-                    <input formControlName="specialization"
+                    <input formControlName="title"
                            matInput
                            placeholder="Specjalizacja">
                     <mat-error>
-                        <ds-error-message [control]="form.controls.specialization"></ds-error-message>
+                        <ds-error-message [control]="form.controls.title"></ds-error-message>
                     </mat-error>
                 </mat-form-field>
             </div>

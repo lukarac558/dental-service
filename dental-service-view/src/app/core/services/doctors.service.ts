@@ -1,14 +1,17 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, EMPTY, Observable, of, startWith } from 'rxjs';
+import { catchError, delay, EMPTY, map, Observable, of, startWith, switchMap } from 'rxjs';
+import { appConfig } from 'src/app/app.config';
 
 import {
     Doctor,
     DoctorAddScheduleForm,
-    DoctorInfo,
-    DoctorInfoForm,
+    DoctorCompetency,
+    DoctorCompetencyForm,
     DoctorSchedule,
     DoctorSearch,
+    DoctorService,
+    DoctorServiceForm,
     DoctorShort
 } from '../models/doctor.model';
 import { Gender } from '../models/gender.model';
@@ -20,29 +23,6 @@ import { VisitAvailableDate } from '../models/visits.model';
 })
 export class DoctorsService {
     constructor(private _http: HttpClient) { }
-
-    getCurrentDoctorInfo(): Observable<DoctorInfo> {
-        return of({
-            specialization: 'Stomatolog',
-            aboutMe: 'Absolwent Śląskiego Uniwersytetu Medycznego w Katowicach. Specjalizuje się w leczeniu zachowawczym i protetycznym, ale wykonuje również zabiegi z zakresu endodoncji, chirurgii stomatologicznej oraz stomatologii dziecięcej. Poza gabinetem miłośnik gór i pływania.',
-            services: [{
-                id: 1,
-                name: 'Konsultacja stomatologiczna'
-            }, {
-                id: 2,
-                name: 'Wybielanie zębów'
-            }, {
-                id: 3,
-                name: 'Ekstrakcja zęba'
-            }, {
-                id: 4,
-                name: 'Leczenie próchnicy'
-            }, {
-                id: 5,
-                name: 'Pakiet higienizacyjny'
-            }]
-        }).pipe(delay(500));
-    }
 
     getCurrentDoctorSchedule(month: number, year: number): Observable<DoctorSchedule[]> {
         return of([{
@@ -67,8 +47,56 @@ export class DoctorsService {
         return EMPTY.pipe(startWith(undefined), delay(500));
     }
 
-    updateCurrentDoctorInfo(userDetails: DoctorInfoForm): Observable<void> {
-        return EMPTY.pipe(startWith(undefined), delay(500));
+    getCurrentDoctorCompetency(): Observable<DoctorCompetency> {
+        return this._http.get<DoctorCompetency>(`${appConfig.apiUrl}/user/competency-information`).pipe(
+            catchError((_error: HttpErrorResponse) => {
+                return of({
+                    id: null,
+                    title: '',
+                    description: '',
+                } as DoctorCompetency);
+            }),
+        );
+    }
+
+    updateCurrentDoctorCompetency(doctorCompetency: DoctorCompetencyForm): Observable<void> {
+        return of(doctorCompetency.id).pipe(
+            switchMap(id => {
+                if (!!id) {
+                    return this.updateDoctorCompetency(doctorCompetency);
+                } else {
+                    return this.addDoctorCompetency(doctorCompetency);
+                }
+            })
+        );
+    }
+
+    getCurrentDoctorServices(): Observable<DoctorService[]> {
+        return this._http.post<DoctorService[]>(`${appConfig.apiUrl}/user/service-type/all`, {
+            page: 0,
+            pageSize: 1,
+            enabled: false,
+            showOnlyYour: true,
+            name: ""
+        }).pipe(
+            map(result => (result as any).content)
+        );
+    }
+
+    addCurrentDoctorService(service: DoctorServiceForm): Observable<void> {
+        return this._http.post<void>(`${appConfig.apiUrl}/user/service-type`, {
+            ...service
+        });
+    }
+
+    updateCurrentDoctorService(id: number, service: DoctorServiceForm): Observable<void> {
+        return this._http.put<void>(`${appConfig.apiUrl}/user/service-type/${id}`, {
+            ...service
+        });
+    }
+
+    deleteCurrentDoctorService(id: number): Observable<void> {
+        return this._http.delete<void>(`${appConfig.apiUrl}/user/service-type/${id}`);
     }
 
     getDoctors(searchCriteria: CustomPageCriteria<DoctorSearch>): Observable<Page<DoctorShort>> {
@@ -161,5 +189,17 @@ export class DoctorsService {
             date: new Date(Date.UTC(2023, 10, 24)),
             hours: ["13:00", "13:30", "14:00"]
         }]).pipe(delay(500));
+    }
+
+    private addDoctorCompetency(doctorCompetency: DoctorCompetencyForm): Observable<void> {
+        return this._http.post<void>(`${appConfig.apiUrl}/user/competency-information`, {
+            ...doctorCompetency
+        });
+    }
+
+    private updateDoctorCompetency(doctorCompetency: DoctorCompetencyForm): Observable<void> {
+        return this._http.put<void>(`${appConfig.apiUrl}/user/competency-information`, {
+            ...doctorCompetency
+        });
     }
 }

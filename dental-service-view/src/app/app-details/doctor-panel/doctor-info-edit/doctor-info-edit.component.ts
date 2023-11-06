@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subject, takeUntil, tap } from 'rxjs';
-import { DoctorInfo, DoctorInfoForm } from 'src/app/core/models/doctor.model';
+import { DoctorCompetency, DoctorCompetencyForm } from 'src/app/core/models/doctor.model';
 import { DoctorsService } from 'src/app/core/services/doctors.service';
 import { indicate } from 'src/app/shared/operators/indicate';
 import { ControlsOf } from 'src/main';
@@ -13,7 +13,7 @@ import { ControlsOf } from 'src/main';
     templateUrl: './doctor-info-edit.component.html'
 })
 export class DoctorInfoEditComponent implements OnInit, OnDestroy {
-    doctorInfo$: Observable<DoctorInfo>;
+    doctorCompetency$: Observable<DoctorCompetency>;
     form: FormGroup;
     isSaving$ = new Subject<boolean>();
 
@@ -27,13 +27,14 @@ export class DoctorInfoEditComponent implements OnInit, OnDestroy {
     ) { }
 
     ngOnInit(): void {
-        this.form = this._fb.group<ControlsOf<DoctorInfoForm>>({
-            aboutMe: this._fb.nonNullable.control('', [Validators.required]),
-            specialization: this._fb.nonNullable.control('', [Validators.required])
+        this.form = this._fb.group<ControlsOf<DoctorCompetencyForm>>({
+            id: this._fb.control(null),
+            description: this._fb.nonNullable.control('', [Validators.required]),
+            title: this._fb.nonNullable.control('', [Validators.required])
         });
 
-        this.doctorInfo$ = this._doctorsService.getCurrentDoctorInfo().pipe(
-            tap(doctorInfo => this.form.patchValue(doctorInfo))
+        this.doctorCompetency$ = this._doctorsService.getCurrentDoctorCompetency().pipe(
+            tap(doctorCompetency => this.form.patchValue(doctorCompetency))
         );
     }
 
@@ -44,9 +45,9 @@ export class DoctorInfoEditComponent implements OnInit, OnDestroy {
 
     save(): void {
         if (this.form.valid) {
-            const doctorInfo = this.form.value as DoctorInfoForm;
+            const doctorCompetency = this.form.value as DoctorCompetencyForm;
 
-            this._doctorsService.updateCurrentDoctorInfo(doctorInfo).pipe(
+            this._doctorsService.updateCurrentDoctorCompetency(doctorCompetency).pipe(
                 takeUntil(this._destroy$),
                 indicate(this.isSaving$)
             ).subscribe(_ => {

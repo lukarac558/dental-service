@@ -8,7 +8,7 @@
                 O Tobie
             </div>
             <div class="doctor-info__value">
-                {{doctorInfo.aboutMe}}
+                {{doctorCompetency.description}}
             </div>
         </div>
         <div class="doctor-info">
@@ -16,30 +16,15 @@
                 Specjalizacja
             </div>
             <div class="doctor-info__value">
-                {{doctorInfo.specialization}}
-            </div>
-        </div>
-        <div class="doctor-info">
-            <div class="doctor-info__label">
-                Oferowane przez Ciebie usługi
-            </div>
-            <div class="doctor-info__value row">
-                <div *ngFor="let service of doctorInfo.services"
-                     class="col-md-6 col-xl-4 mb-2">
-                    {{service.name}}
-                </div>
+                {{doctorCompetency.title}}
             </div>
         </div>
     </mat-card-content>
     <mat-card-actions align="end">
-        <a routerLink="/doctor-panel/edit"
+        <a routerLink="/doctor-panel/edit-competency"
            mat-flat-button
            color="primary">
             Edytuj
         </a>
     </mat-card-actions>
 </mat-card>
-
-<ng-template #loading>
-    <ds-spinner></ds-spinner>
-</ng-template>

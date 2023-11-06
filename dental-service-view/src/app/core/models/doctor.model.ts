@@ -18,11 +18,22 @@ export type Doctor = DoctorShort & {
     services: Lookup[]
 };
 
-export type DoctorInfo = Pick<DoctorShort, 'specialization' | 'aboutMe'> & {
-    services: Lookup[]
+export type DoctorCompetency = {
+    id: number | null;
+    title: string;
+    description: string;
 };
 
-export type DoctorInfoForm = Pick<DoctorShort, 'specialization' | 'aboutMe'>;
+export type DoctorCompetencyForm = DoctorCompetency;
+
+export type DoctorService = {
+    id: number;
+    name: string;
+    durationTime: string;
+    description: string;
+};
+
+export type DoctorServiceForm = Pick<DoctorService, 'name' | 'durationTime' | 'description'>;
 
 export type DoctorSchedule = {
     startDate: Date | null;

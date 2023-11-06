@@ -2,16 +2,19 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { HasRolePipe } from './has-role.pipe';
+import { TimespanPipe } from './timespan.pipe';
 import { VoivodeshipPipe } from './voivodeship.pipe';
 
 @NgModule({
     declarations: [
         HasRolePipe,
-        VoivodeshipPipe
+        VoivodeshipPipe,
+        TimespanPipe
     ],
     exports: [
         HasRolePipe,
-        VoivodeshipPipe
+        VoivodeshipPipe,
+        TimespanPipe
     ],
     imports: [
         CommonModule

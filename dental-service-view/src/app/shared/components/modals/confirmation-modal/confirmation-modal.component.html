@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+    {{description}}
+</div>
+<div mat-dialog-actions
+     align="end">
+    <button class="me-2"
+            mat-flat-button
+            [mat-dialog-close]="null"
+            cdkFocusInitial>
+        Anuluj
+    </button>
+    <button (click)="confirm()"
+            mat-flat-button
+            color="primary">
+        Potwierdź
+    </button>
+</div>

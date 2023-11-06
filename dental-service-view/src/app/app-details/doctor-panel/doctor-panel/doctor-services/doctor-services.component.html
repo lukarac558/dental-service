@@ -1,0 +1,28 @@
+<mat-card class="mt-4">
+    <mat-card-header>
+        <mat-card-title>Usługi</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="services">
+            <div *ngFor="let service of doctorServices; last as isLast"
+                 class="service">
+                <div>
+                    {{service.name}} - {{service.durationTime | timespan}}
+                </div>
+                <div class="service__description">
+                    {{service.description}}
+                </div>
+                <mat-divider *ngIf="!isLast"
+                             class="my-2">
+                </mat-divider>
+            </div>
+        </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+        <a routerLink="/doctor-panel/edit-services"
+           mat-flat-button
+           color="primary">
+            Edytuj
+        </a>
+    </mat-card-actions>
+</mat-card>

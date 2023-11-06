@@ -1,0 +1,15 @@
+.service-modal {
+    &::ng-deep {
+        .ngx-timepicker-control__arrows {
+            line-height: normal;
+        }
+
+        .ngx-timepicker {
+            border-bottom: 0;
+
+            input {
+                pointer-events: none;
+            }
+        }
+    }
+}

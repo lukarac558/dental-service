@@ -1,0 +1,11 @@
+.services {
+    display: flex;
+    flex-direction: column;
+}
+
+.service {
+    &__description {
+        font-style: italic;
+        font-size: 14px;
+    }
+}

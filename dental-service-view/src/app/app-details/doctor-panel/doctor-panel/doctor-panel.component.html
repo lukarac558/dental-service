@@ -1,5 +1,6 @@
-<ng-container *ngIf="doctorInfo$ | async as doctorInfo else loading">
-    <ds-doctor-info [doctorInfo]="doctorInfo"></ds-doctor-info>
+<ng-container *ngIf="details$ | async as details else loading">
+    <ds-doctor-info [doctorCompetency]="details.doctorCompetency"></ds-doctor-info>
+    <ds-doctor-services [doctorServices]="details.doctorServices"></ds-doctor-services>
 </ng-container>
 
 <ds-doctor-schedule></ds-doctor-schedule>
