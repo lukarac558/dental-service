@@ -30,6 +30,6 @@ public class ServiceTypeDto {
     @Schema(required = true, example = "01:00:00")
     private String durationTime;
 
-    @NotNull
+    @Size(min = 1, max = 200)
     private String description;
 }
