@@ -3,6 +3,7 @@ package com.student.api.dto.user;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,8 +22,11 @@ public class CompetencyInformationDto {
     @Schema(
             example = "Inż"
     )
+    @Size(min = 1, max = 50)
     @NotNull
     private String title;
 
+    @NotNull
+    @Size(min = 1, max = 500)
     private String description;
 }
