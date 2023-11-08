@@ -10,7 +10,7 @@
         <mat-paginator *ngIf="searchCriteria$ | async as pageCriteria"
                        [length]="doctors.itemsCount"
                        [pageSize]="pageCriteria.pageSize"
-                       [pageIndex]="pageCriteria.pageIndex"
+                       [pageIndex]="pageCriteria.page"
                        [pageSizeOptions]="[6]"
                        (page)="onPageChange($event)">
         </mat-paginator>

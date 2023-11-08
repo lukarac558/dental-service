@@ -5,20 +5,20 @@
             <div class="d-flex">
                 <div class="doctor__avatar">
                     <ds-avatar [avatarSizePx]="100"
-                               [gender]="doctor.gender"
+                               [gender]="doctor.sex"
                                [role]="role.Doctor">
                     </ds-avatar>
                 </div>
                 <div>
                     <div class="doctor__name">
-                        {{doctor.firstName}}
-                        {{doctor.lastName}}
+                        {{doctor.name}}
+                        {{doctor.surname}}
                     </div>
                     <div>
-                        {{doctor.specialization}}
+                        {{doctor.competencyInformation.title}}
                     </div>
                     <div class="doctor__about-me">
-                        {{doctor.aboutMe}}
+                        {{doctor.competencyInformation.description}}
                     </div>
                 </div>
             </div>

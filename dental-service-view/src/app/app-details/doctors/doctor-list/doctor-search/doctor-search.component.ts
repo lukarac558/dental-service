@@ -20,7 +20,7 @@ export class DoctorSearchComponent implements OnInit {
     ngOnInit(): void {
         this.searchForm = this._fb.group<ControlsOf<DoctorSearch>>({
             name: this._fb.nonNullable.control(''),
-            serviceName: this._fb.nonNullable.control('')
+            service: this._fb.nonNullable.control('')
         });
     }
 

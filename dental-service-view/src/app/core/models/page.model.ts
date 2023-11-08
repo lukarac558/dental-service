@@ -1,5 +1,5 @@
 export type PageCriteria = {
-    pageIndex: number;
+    page: number;
     pageSize: number;
 };
 

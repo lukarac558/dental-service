@@ -16,11 +16,15 @@ const routes: Routes = [
             },
             {
                 path: "doctors",
-                loadChildren: () => import('./doctors/doctors.module').then(m => m.DoctorsModule)
+                loadChildren: () => import('./doctors/doctors.module').then(m => m.DoctorsModule),
+                canActivate: [HasRolesGuard],
+                data: [Role.Patient]
             },
             {
                 path: "visits",
-                loadChildren: () => import('./visits/visits.module').then(m => m.VisitsModule)
+                loadChildren: () => import('./visits/visits.module').then(m => m.VisitsModule),
+                canActivate: [HasRolesGuard],
+                data: [Role.Patient]
             },
             {
                 path: "doctor-panel",

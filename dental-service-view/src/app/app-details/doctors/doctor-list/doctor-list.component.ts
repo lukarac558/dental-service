@@ -12,10 +12,10 @@ import { DoctorsService } from 'src/app/core/services/doctors.service';
 export class DoctorListComponent implements OnInit {
     doctors$: Observable<Page<DoctorShort>>;
     searchCriteria$ = new BehaviorSubject<CustomPageCriteria<DoctorSearch>>({
-        pageIndex: 0,
+        page: 0,
         pageSize: 6,
         name: '',
-        serviceName: ''
+        service: ''
     });
 
     constructor(
@@ -31,7 +31,7 @@ export class DoctorListComponent implements OnInit {
     onPageChange(value: PageEvent): void {
         this.searchCriteria$.next({
             ...this.searchCriteria$.value,
-            pageIndex: value.pageIndex,
+            page: value.pageIndex,
             pageSize: value.pageSize
         });
     }
@@ -39,7 +39,7 @@ export class DoctorListComponent implements OnInit {
     onSearch(search: DoctorSearch): void {
         this.searchCriteria$.next({
             pageSize: this.searchCriteria$.value.pageSize,
-            pageIndex: 0,
+            page: 0,
             ...search
         });
     }

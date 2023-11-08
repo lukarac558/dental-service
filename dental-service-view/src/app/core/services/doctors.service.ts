@@ -14,7 +14,6 @@ import {
     DoctorServiceForm,
     DoctorShort
 } from '../models/doctor.model';
-import { Gender } from '../models/gender.model';
 import { CustomPageCriteria, Page } from '../models/page.model';
 import { VisitAvailableDate } from '../models/visits.model';
 
@@ -100,79 +99,20 @@ export class DoctorsService {
     }
 
     getDoctors(searchCriteria: CustomPageCriteria<DoctorSearch>): Observable<Page<DoctorShort>> {
-        return of({
-            itemsCount: 6,
-            items: [{
-                id: 1,
-                firstName: 'Alan',
-                lastName: 'Kwieciński',
-                gender: Gender.Male,
-                specialization: 'Stomatolog',
-                aboutMe: 'Absolwent Śląskiego Uniwersytetu Medycznego w Katowicach. Specjalizuje się w leczeniu zachowawczym i protetycznym, ale wykonuje również zabiegi z zakresu endodoncji, chirurgii stomatologicznej oraz stomatologii dziecięcej. Poza gabinetem miłośnik gór i pływania.',
-            }, {
-                id: 2,
-                firstName: 'Agata',
-                lastName: 'Fąk',
-                gender: Gender.Female,
-                specialization: 'Stomatolog',
-                aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-            }, {
-                id: 3,
-                firstName: 'Michał',
-                lastName: 'Baron',
-                gender: Gender.Male,
-                specialization: 'Ortodonta',
-                aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-            }, {
-                id: 4,
-                firstName: 'Agnieszka',
-                lastName: 'Podlaska',
-                gender: Gender.Female,
-                specialization: 'Stomatolog',
-                aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-            }, {
-                id: 5,
-                firstName: 'Maciek',
-                lastName: 'Macalski',
-                gender: Gender.Male,
-                specialization: 'Stomatolog',
-                aboutMe: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione, ipsum quia ea minima quidem sint tempore, nesciunt fugit optio voluptatum molestiae eum sit commodi, autem asperiores. Fugit laudantium voluptates quas.',
-            }, {
-                id: 6,
-                firstName: 'Katarzyna',
-                lastName: 'Szczecińska',
-                gender: Gender.Female,
-                specialization: 'Stomatolog',
-                aboutMe: '',
-            }]
-        }).pipe(delay(500));
+        return this._http.post<Page<DoctorShort>>(`${appConfig.apiUrl}/user/user/doctor/all`, {
+            ...searchCriteria
+        }).pipe(
+            map((result: any) => {
+                return {
+                    itemsCount: result.totalElements,
+                    items: result.content
+                }
+            })
+        );
     }
 
     getDoctor(id: number): Observable<Doctor> {
-        return of({
-            id: 1,
-            firstName: 'Alan',
-            lastName: 'Kwieciński',
-            gender: Gender.Male,
-            specialization: 'Stomatolog',
-            aboutMe: 'Absolwent Śląskiego Uniwersytetu Medycznego w Katowicach. Specjalizuje się w leczeniu zachowawczym i protetycznym, ale wykonuje również zabiegi z zakresu endodoncji, chirurgii stomatologicznej oraz stomatologii dziecięcej. Poza gabinetem miłośnik gór i pływania.',
-            services: [{
-                id: 1,
-                name: 'Konsultacja stomatologiczna'
-            }, {
-                id: 2,
-                name: 'Wybielanie zębów'
-            }, {
-                id: 3,
-                name: 'Ekstrakcja zęba'
-            }, {
-                id: 4,
-                name: 'Leczenie próchnicy'
-            }, {
-                id: 5,
-                name: 'Pakiet higienizacyjny'
-            }]
-        }).pipe(delay(500));
+        return this._http.post<Doctor>(`${appConfig.apiUrl}/user/user/doctor/${id}`, {});
     }
 
     getDoctorAvailableDays(id: number, serviceIds: number[]): Observable<VisitAvailableDate[]> {

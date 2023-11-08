@@ -8,17 +8,17 @@
             <div class="doctor d-flex">
                 <div class="doctor__avatar">
                     <ds-avatar [avatarSizePx]="80"
-                               [gender]="doctor.gender"
+                               [gender]="doctor.sex"
                                [role]="role.Doctor">
                     </ds-avatar>
                 </div>
                 <div>
                     <div class="doctor__name">
-                        {{doctor.firstName}}
-                        {{doctor.lastName}}
+                        {{doctor.name}}
+                        {{doctor.surname}}
                     </div>
                     <div>
-                        {{doctor.specialization}}
+                        {{doctor.competencyInformation.title}}
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                         <mat-label>Usługi</mat-label>
                         <mat-select formControlName="serviceIds"
                                     multiple>
-                            <mat-option *ngFor="let service of doctor.services"
+                            <mat-option *ngFor="let service of doctor.serviceTypes"
                                         [value]="service.id">
                                 {{service.name}}
                             </mat-option>

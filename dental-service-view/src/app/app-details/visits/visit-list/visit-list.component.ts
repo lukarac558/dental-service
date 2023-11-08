@@ -14,7 +14,7 @@ export class VisitListComponent implements OnInit {
     visits$: Observable<Page<Visit>>;
     reservedVisits$: Observable<ReservationVisit[]>;
     searchCriteria$ = new BehaviorSubject<PageCriteria>({
-        pageIndex: 0,
+        page: 0,
         pageSize: 6
     });
 
@@ -38,7 +38,7 @@ export class VisitListComponent implements OnInit {
     onPageChange(value: PageEvent): void {
         this.searchCriteria$.next({
             ...this.searchCriteria$.value,
-            pageIndex: value.pageIndex,
+            page: value.pageIndex,
             pageSize: value.pageSize
         });
     }

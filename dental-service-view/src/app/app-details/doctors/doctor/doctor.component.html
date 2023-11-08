@@ -5,17 +5,17 @@
             <mat-card-content>
                 <div class="d-flex justify-content-center">
                     <ds-avatar [avatarSizePx]="160"
-                               [gender]="doctor.gender"
+                               [gender]="doctor.sex"
                                [role]="role.Doctor">
                     </ds-avatar>
                 </div>
                 <div class="text-center">
                     <div class="doctor__name">
-                        {{doctor.firstName}}
-                        {{doctor.lastName}}
+                        {{doctor.name}}
+                        {{doctor.surname}}
                     </div>
                     <div class="doctor__specialization">
-                        {{doctor.specialization}}
+                        {{doctor.competencyInformation.title}}
                     </div>
                 </div>
                 <div class="d-flex justify-content-center">
@@ -33,7 +33,7 @@
             <mat-card-title>O mnie</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            {{doctor.aboutMe}}
+            {{doctor.competencyInformation.description}}
         </mat-card-content>
     </mat-card>
     <mat-card>
@@ -42,7 +42,7 @@
         </mat-card-header>
         <mat-card-content>
             <div class="doctor__services row">
-                <div *ngFor="let service of doctor.services"
+                <div *ngFor="let service of doctor.serviceTypes"
                      class="col-md-6">
                     {{service.name}}
                 </div>

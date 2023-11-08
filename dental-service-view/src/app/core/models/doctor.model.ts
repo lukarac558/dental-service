@@ -1,21 +1,18 @@
-import { Lookup } from './lookup.model';
-
 export type DoctorShort = {
     id: number;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    specialization: string;
-    aboutMe: string;
+    name: string;
+    surname: string;
+    sex: string;
+    competencyInformation: DoctorCompetency
 };
 
 export type DoctorSearch = {
     name: string;
-    serviceName: string;
+    service: string;
 };
 
 export type Doctor = DoctorShort & {
-    services: Lookup[]
+    serviceTypes: DoctorService[]
 };
 
 export type DoctorCompetency = {

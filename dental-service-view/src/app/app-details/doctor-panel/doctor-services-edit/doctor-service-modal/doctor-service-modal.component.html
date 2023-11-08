@@ -7,7 +7,8 @@
                 <mat-label>Nazwa usługi</mat-label>
                 <input formControlName="name"
                        matInput
-                       placeholder="Nazwa usługi">
+                       placeholder="Nazwa usługi"
+                       maxlength="100">
                 <mat-error>
                     <ds-error-message [control]="form.controls.name"></ds-error-message>
                 </mat-error>
@@ -35,7 +36,8 @@
                           placeholder="Opis"
                           cdkTextareaAutosize
                           cdkAutosizeMinRows="5"
-                          cdkAutosizeMaxRows="10">
+                          cdkAutosizeMaxRows="10"
+                          maxlength="200">
                 </textarea>
                 <mat-error>
                     <ds-error-message [control]="form.controls.description"></ds-error-message>
