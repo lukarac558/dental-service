@@ -5,7 +5,7 @@
 
     <changeSet id="1.0.0_CREATE_VISIT" author="lraczka">
 
-        <createTable tableName="visit">
+        <createTable tableName="visitEntity">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -20,6 +20,8 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="varchar(500)">
+            </column>
+            <column name="isApproved" type="boolean" defaultValue="false">
             </column>
         </createTable>
 
@@ -39,7 +41,7 @@
                                  baseTableName="visit_position"
                                  constraintName="fk_visit_position_visit_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="visit"/>
+                                 referencedTableName="visitEntity"/>
 
     </changeSet>
 </databaseChangeLog>

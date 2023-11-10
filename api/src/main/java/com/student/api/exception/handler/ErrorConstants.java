@@ -4,6 +4,7 @@ public class ErrorConstants {
     private ErrorConstants(){}
 
     public static final String USER_NOT_FOUND_MESSAGE = "User with id: %s was not found.";
+    public static final String DOCTOR_NOT_FOUND_MESSAGE = "Doctor associated with service type ids: %s was not found.";
     public static final String USER_BY_EMAIL_NOT_FOUND_MESSAGE = "User with email: %s was not found.";
     public static final String CALENDAR_DAY_NOT_FOUND_MESSAGE = "Calendar day with id: %s was not found.";
     public static final String SERVICE_TYPE_NOT_FOUND_MESSAGE = "Service type with id: %s was not found.";
@@ -24,7 +25,9 @@ public class ErrorConstants {
     public static final String INCORRECT_TIME_FORMAT_MESSAGE = "Provided time format is incorrect.";
     public static final String INCORRECT_TIMESTAMP_FORMAT_MESSAGE = "Provided timestamp format is incorrect.";
     public static final String INCORRECT_PESEL_MESSAGE = "Given PESEL: %s is incorrect. Valid PESEL should consist of 11 digits.";
+    public static final String INCORRECT_START_DATE_MESSAGE = "Given start date: %s is incorrect.";
     public static final String INCORRECT_LOGIN_DATA_MESSAGE = "Provided login or password is incorrect.";
     public static final String VISIT_CANCELLATION_FORBIDDEN_MESSAGE = "Visit with id: %s cannot be cancel, because it is too late. Limit before is %s and remaining hours is %s";
+    public static final String VISIT_APPROVAL_FORBIDDEN_MESSAGE = "Visit with id: %s cannot be approved, because it is too late. Time to approve visit is %s minutes";
     public static final String FAILED_TO_AUTHENTICATE = "Request didn't contain valid token";
 }

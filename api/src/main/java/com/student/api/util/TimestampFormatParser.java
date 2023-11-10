@@ -12,13 +12,20 @@ import java.util.Optional;
 import static com.student.api.exception.handler.ErrorConstants.INCORRECT_TIMESTAMP_FORMAT_MESSAGE;
 
 public class TimestampFormatParser {
-    private TimestampFormatParser(){}
+    private TimestampFormatParser() {
+    }
+
     private static final List<SimpleDateFormat> allowedTimestampFormats = List.of(
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS"),
             new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     );
 
-    public static Timestamp parse(String timeString) {
+    public static String parse(Timestamp timestamp) {
+        SimpleDateFormat sdf = allowedTimestampFormats.get(1);
+        return sdf.format(timestamp);
+    }
+
+    public static Timestamp parseOrThrow(String timeString) {
         for (SimpleDateFormat format : allowedTimestampFormats) {
             Optional<Timestamp> timestamp = parse(format, timeString);
             if (timestamp.isPresent()) {

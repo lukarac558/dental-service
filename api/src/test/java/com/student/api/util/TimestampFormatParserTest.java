@@ -1,7 +1,6 @@
 package com.student.api.util;
 
 import com.student.api.exception.IncorrectFormatException;
-import com.student.api.util.TimestampFormatParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -15,18 +14,18 @@ class TimestampFormatParserTest {
 
     @Test
     void shouldValidTime_correctTimeWithSeconds() {
-        Timestamp timestamp = TimestampFormatParser.parse(CORRECT_TIMESTAMP_WITH_MS);
+        Timestamp timestamp = TimestampFormatParser.parseOrThrow(CORRECT_TIMESTAMP_WITH_MS);
         Assertions.assertEquals(CORRECT_TIMESTAMP, timestamp.toString());
     }
 
     @Test
     void shouldValidTime_correctTimeWithoutSeconds() {
-        Timestamp timestamp = TimestampFormatParser.parse(CORRECT_TIMESTAMP_WITHOUT_MS);
+        Timestamp timestamp = TimestampFormatParser.parseOrThrow(CORRECT_TIMESTAMP_WITHOUT_MS);
         Assertions.assertEquals(CORRECT_TIMESTAMP, timestamp.toString());
     }
 
     @Test
     void shouldNotValidTimestamp_incorrectTime_letterInDay() {
-        Assertions.assertThrows(IncorrectFormatException.class, () -> TimestampFormatParser.parse(INCORRECT_TIMESTAMP));
+        Assertions.assertThrows(IncorrectFormatException.class, () -> TimestampFormatParser.parseOrThrow(INCORRECT_TIMESTAMP));
     }
 }

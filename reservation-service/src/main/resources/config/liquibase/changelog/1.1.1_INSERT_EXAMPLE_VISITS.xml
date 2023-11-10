@@ -7,11 +7,11 @@
         <sql>insert into service_type(id,name,duration_time,user_id,description) values(1,'Plombowanie','01:00',1,'Opis uslugi plombowania zeba.')</sql>
         <sql>insert into service_type(id,name,duration_time,user_id,description) values(2,'Wyrywanie','0:30',1,'Opis uslugi wyrywania zeba.')</sql>
 
-        <!--Add example visit -->
-        <sql>insert into visit(id,start_date,user_id,reservation_date,description)
-            values(1,'2023-10-18 08:00:00',2,'2023-10-17 19:30:08','Protokol z wizyty.')</sql>
+        <!--Add example visitEntity -->
+        <sql>insert into visitEntity(id,start_date,user_id,reservation_date,description,isApproved)
+            values(1,'2023-10-18 08:00:00',2,'2023-10-17 19:30:08','Protokol z wizyty.',true)</sql>
 
-        <!--Add example visit positions-->
+        <!--Add example visitEntity positions-->
         <sql>insert into visit_position(id,visit_id,service_type_id)
             values(1,1,1)</sql>
         <sql>insert into visit_position(id,visit_id,service_type_id)

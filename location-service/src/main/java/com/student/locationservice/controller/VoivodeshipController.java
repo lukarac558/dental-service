@@ -15,7 +15,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/voivodeship")
+@RequestMapping("/voivodeships")
 @Tag(name = "Voivodeship")
 @RequiredArgsConstructor
 public class VoivodeshipController {

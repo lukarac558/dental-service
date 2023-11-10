@@ -17,9 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping("/service-type")
-@Tag(name = "Service type")
+@RequestMapping("/service-types")
+@Tag(name = "Service types")
 @RequiredArgsConstructor
 public class TypeController {
     private final ModelMapper modelMapper;
@@ -33,6 +36,34 @@ public class TypeController {
     ) {
         return new ResponseEntity<>(
                 modelMapper.map(serviceTypeService.findTypeById(id), ServiceTypeDto.class),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/doctor/{doctor_id}")
+    @ApiResponse(responseCode = "404", description = "Service type not found")
+    @Operation(summary = "Find all service types by doctor id.")
+    public ResponseEntity<List<ServiceTypeDto>> getTypesByDoctorId(
+            @PathVariable("doctor_id") Long doctorId
+    ) {
+        return new ResponseEntity<>(
+                serviceTypeService.findTypeByDoctorId(doctorId).stream()
+                        .map(t -> modelMapper.map(t, ServiceTypeDto.class))
+                        .toList(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("")
+    @ApiResponse(responseCode = "404", description = "Service type not found")
+    @Operation(summary = "Find service types by ids.")
+    public ResponseEntity<List<ServiceTypeDto>> getTypesByIds(
+            @RequestParam("ids") List<Long> ids
+    ) {
+        return new ResponseEntity<>(
+                serviceTypeService.findTypesByIds(ids)
+                        .stream().map(t -> modelMapper.map(t, ServiceTypeDto.class))
+                        .collect(Collectors.toList()),
                 HttpStatus.OK
         );
     }
@@ -83,8 +114,8 @@ public class TypeController {
 
     ) {
         ServiceTypeEntity type = modelMapper.map(
-          serviceType,
-          ServiceTypeEntity.class
+                serviceType,
+                ServiceTypeEntity.class
         );
         type.setId(id);
 
@@ -110,5 +141,6 @@ public class TypeController {
         serviceTypeService.deleteType(info, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
 }

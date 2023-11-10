@@ -32,4 +32,8 @@ public class ServiceTypeDto {
 
     @NotNull
     private String description;
+
+    @NotNull
+    @Schema(required = true)
+    private Long doctorId;
 }

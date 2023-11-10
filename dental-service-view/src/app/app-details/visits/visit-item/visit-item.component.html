@@ -1,35 +1,35 @@
-<mat-card class="visit">
+<mat-card class="visitEntity">
     <mat-card-content>
         <div class="visit__details">
             <div class="d-flex justify-content-center justify-content-md-start">
                 <div class="visit__avatar">
                     <ds-avatar [avatarSizePx]="90"
-                               [gender]="visit.doctorGender"
+                               [gender]="visitEntity.doctorGender"
                                [role]="role.Doctor">
                     </ds-avatar>
                 </div>
                 <div>
                     <div class="visit__doctor-name">
-                        {{visit.doctorName}}
+                        {{visitEntity.doctorName}}
                     </div>
                     <div>
-                        {{visit.doctorSpecialization}}
+                        {{visitEntity.doctorSpecialization}}
                     </div>
                 </div>
             </div>
             <div class="visit__dates">
-                <div [class.visit__status--finished]="visit.endDate <= now"
-                     [class.visit__status--in-future]="!!reservationEndDate || visit.endDate > now">
+                <div [class.visit__status--finished]="visitEntity.endDate <= now"
+                     [class.visit__status--in-future]="!!reservationEndDate || visitEntity.endDate > now">
                     {{!!reservationEndDate ? 'Rezerwacja do ' + (reservationEndDate | date: 'HH:mm') :
-                    (visit.endDate > now ? 'Nadchodząca wizyta' : 'Zakończona wizyta')}}
+                    (visitEntity.endDate > now ? 'Nadchodząca wizyta' : 'Zakończona wizyta')}}
                 </div>
-                <div>{{visit.startDate | date:'dd MMMM yyyy'}}</div>
+                <div>{{visitEntity.startDate | date:'dd MMMM yyyy'}}</div>
                 <div>
-                    {{visit.startDate | date:'HH:mm'}}
+                    {{visitEntity.startDate | date:'HH:mm'}}
                     -
-                    {{visit.endDate | date:'HH:mm'}}
+                    {{visitEntity.endDate | date:'HH:mm'}}
                 </div>
-                <div>{{visit.startDate | date:'EEEE'}}</div>
+                <div>{{visitEntity.startDate | date:'EEEE'}}</div>
             </div>
             <div class="text-center text-md-start">
                 <div (click)="displayServices = !displayServices"
@@ -38,7 +38,7 @@
                 </div>
                 <div *ngIf="displayServices"
                      class="visit__service-list">
-                    <div *ngFor="let service of visit.services">
+                    <div *ngFor="let service of visitEntity.services">
                         {{service.name}}
                     </div>
                 </div>

@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/user")
-@Tag(name = "User")
+@RequestMapping("/users")
+@Tag(name = "Users")
 @RequiredArgsConstructor
 public class UserController {
     private final ModelMapper modelMapper;
@@ -82,7 +82,7 @@ public class UserController {
     @PostMapping("/doctor/{id}")
     @ApiResponse(responseCode = "404", description = "User not found")
     @Operation(summary = "Find doctors by provided search object")
-    public ResponseEntity<DoctorDto> getDoctorsById(
+    public ResponseEntity<DoctorDto> getDoctorById(
             @PathVariable("id") Long id
     ) {
         return new ResponseEntity<>(
@@ -91,7 +91,7 @@ public class UserController {
         );
     }
 
-    @PostMapping("/doctor/all")
+    @PostMapping("/doctors")
     @ApiResponse(responseCode = "404", description = "User not found")
     @Operation(summary = "Find doctors by provided search object")
     public ResponseEntity<Page<DoctorDto>> getDoctorsByRequest(
@@ -115,5 +115,4 @@ public class UserController {
         userService.deleteUser(info);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
