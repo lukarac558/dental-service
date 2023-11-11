@@ -2,12 +2,12 @@
     <ng-container *ngIf="reservedVisits$ | async as reservedVisits">
         <ng-container *ngIf="reservedVisits.length > 0">
             <div class="row mt-4">
-                <div *ngFor="let visitEntity of reservedVisits"
+                <div *ngFor="let visit of reservedVisits"
                      class="col-xl-6">
-                    <ds-visitEntity-item [visitEntity]=visitEntity
-                                   [reservationEndDate]="visitEntity.reservationEndDate"
+                    <ds-visit-item [visit]=visit
+                                   [reservationEndDate]="visit.reservationEndDate"
                                    (visitConfirmed)="onVisitConfirm($event)">
-                    </ds-visitEntity-item>
+                    </ds-visit-item>
                 </div>
             </div>
             <mat-divider></mat-divider>
@@ -15,9 +15,9 @@
     </ng-container>
     <ng-container *ngIf="visits$ | async as visits else loading">
         <div class="row mt-4">
-            <div *ngFor="let visitEntity of visits.items"
+            <div *ngFor="let visit of visits.items"
                  class="col-xl-6">
-                <ds-visitEntity-item [visitEntity]=visitEntity></ds-visitEntity-item>
+                <ds-visit-item [visit]=visit></ds-visit-item>
             </div>
         </div>
         <mat-paginator *ngIf="searchCriteria$ | async as pageCriteria"
