@@ -14,8 +14,6 @@
             <column name="work_duration" type="time">
                 <constraints nullable="false"/>
             </column>
-            <column name="start_break_time" type="time"/>
-            <column name="break_duration" type="time"/>
             <!--doctor identifier -->
             <column name="doctor_id" type="bigint">
                 <constraints nullable="false"/>

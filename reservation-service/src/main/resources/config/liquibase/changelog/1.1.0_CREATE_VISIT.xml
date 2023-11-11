@@ -21,6 +21,8 @@
             </column>
             <column name="description" type="varchar(500)">
             </column>
+            <column name="approved" type="boolean" defaultValue="false">
+            </column>
         </createTable>
 
         <createTable tableName="visit_position">

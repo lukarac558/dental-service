@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/competency-information")
-@Tag(name = "Competency information")
+@RequestMapping("/competency-informations")
+@Tag(name = "Competency informations")
 @RequiredArgsConstructor
 public class CompetencyController {
     private final ModelMapper modelMapper;

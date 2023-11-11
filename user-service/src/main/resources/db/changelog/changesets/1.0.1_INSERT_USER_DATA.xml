@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.0.1_INSERT_USER_DATA" author="lraczka">
+        <!--Add example address-->
+        <sql>insert into address(id,voivodeship_id,city,postal_code,street,building_number) values(1,1,'Marklowice','44-321','Goplany','54a')</sql>
+        <sql>insert into address(id,voivodeship_id,city,postal_code,street,building_number) values(2,1,'Marklowice','44-321','Goplany','54a')</sql>
+
+        <!--Add example user-->
+        <sql>insert into "dental-clinic".userservice.user(id,email,personal_id,name,surname,phone_number,address_id,competency_id)
+             values (1,'lukasz.raczka@gmail.com',00212008379,'Łukasz','Rączka','531090555',1,null)</sql>
+
+        <sql>insert into "dental-clinic".userservice.user(id,email,personal_id,name,surname,phone_number,address_id,competency_id)
+             values (2,'pum3xlr@gmail.com',77011779469,'Andrzej','Rączka','9465821132',2,null)</sql>
+
+        <!--Add example user role-->
+        <sql>insert into user_role(id,user_id,role) values(1,1,'DOCTOR')</sql>
+        <sql>insert into user_role(id,user_id,role) values(2,2,'PATIENT')</sql>
+
+        <!--Add example service types -->
+        <sql>insert into service_type(id,name,duration_time,doctor_id,description) values(1,'Plombowanie','01:00',1,'Opis uslugi plombowania zeba.')</sql>
+        <sql>insert into service_type(id,name,duration_time,doctor_id,description) values(2,'Wyrywanie','0:30',1,'Opis uslugi wyrywania zeba.')</sql>
+    </changeSet>
+</databaseChangeLog>

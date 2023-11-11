@@ -12,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.student.api.exception.handler.ErrorConstants.SERVICE_TYPE_NOT_FOUND_MESSAGE;
 import static com.student.api.exception.handler.ErrorConstants.USER_BY_EMAIL_NOT_FOUND_MESSAGE;
 
@@ -47,6 +50,16 @@ public class TypeService {
         return typeRepository.save(serviceType);
     }
 
+    public List<ServiceTypeEntity> findTypesByIds(List<Long> ids) {
+        return ids.stream()
+                .map(this::findTypeById)
+                .collect(Collectors.toList());
+    }
+
+    public List<ServiceTypeEntity> findTypeByDoctorId(Long doctorId) {
+        return typeRepository.findServiceTypeEntitiesByDoctor_Id(doctorId);
+    }
+
     public ServiceTypeEntity findTypeById(Long id) {
         return typeRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format(SERVICE_TYPE_NOT_FOUND_MESSAGE, id)));
@@ -54,7 +67,7 @@ public class TypeService {
 
     public Page<ServiceTypeEntity> findAll(Info info, ServiceTypeSearchRequestDto searchRequestDto) {
         return typeRepository.findAll(
-                new TypeSepcification(info, searchRequestDto),
+                new TypeSpecification(info, searchRequestDto),
                 searchRequestDto.pageable()
         );
     }

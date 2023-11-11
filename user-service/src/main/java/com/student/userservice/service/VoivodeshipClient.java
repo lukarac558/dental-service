@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient("location-service")
 public interface VoivodeshipClient {
-    @GetMapping(value = "/voivodeship/{id}")
+    @GetMapping(value = "/voivodeships/{id}")
     VoivodeshipDto getVoivodeship(@PathVariable("id") Long id);
-
 }

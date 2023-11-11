@@ -37,7 +37,7 @@ public class ModelMapperConfiguration {
 
         mm.typeMap(ServiceTypeDto.class, ServiceTypeEntity.class).addMappings(mapper -> {
             mapper.skip(ServiceTypeEntity::setId);
-            mapper.skip(ServiceTypeEntity::setDoctor);
+//            mapper.skip(ServiceTypeEntity::setDoctor);
             mapper.using((Converter<String, Time>) mappingContext -> TimeFormatParser
                     .parse(mappingContext.getSource())
             ).map(ServiceTypeDto::getDurationTime, ServiceTypeEntity::setDurationTime);
@@ -68,6 +68,7 @@ public class ModelMapperConfiguration {
         });
 
         mm.typeMap(ServiceTypeEntity.class, ServiceTypeDto.class).addMappings(mapper -> {
+//            mapper.map(t-> t.getDoctor().getId(), ServiceTypeDto::setDoctorId);
             mapper.using((Converter<Time, String>) mappingContext -> mappingContext.getSource().toString()
             ).map(ServiceTypeEntity::getDurationTime, ServiceTypeDto::setDurationTime);
         });
