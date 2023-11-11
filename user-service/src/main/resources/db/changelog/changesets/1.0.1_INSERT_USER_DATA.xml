@@ -9,7 +9,7 @@
 
         <!--Add example user-->
         <sql>insert into "dental-clinic".userservice.user(id,email,personal_id,name,surname,phone_number,address_id,competency_id)
-             values (1,'lukasz.raczka@gmail.com',00212008379,'Łukasz','Rączka','531090555',1,null)</sql>
+             values (1,'lukasz.raczka@gmail.com',78041259444,'Łukasz','Rączka','531090555',1,null)</sql>
 
         <sql>insert into "dental-clinic".userservice.user(id,email,personal_id,name,surname,phone_number,address_id,competency_id)
              values (2,'pum3xlr@gmail.com',77011779469,'Andrzej','Rączka','9465821132',2,null)</sql>

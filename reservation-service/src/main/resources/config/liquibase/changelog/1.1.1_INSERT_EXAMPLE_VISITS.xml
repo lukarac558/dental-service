@@ -5,12 +5,10 @@
     <changeSet id="1.1.1_INSERT_EXAMPLE_VISITS" author="lraczka">
         <!--Add example visit -->
         <sql>insert into visit(id,start_date,patient_id,reservation_date,description,approved)
-            values(1,'2023-10-18 08:00:00',2,'2023-10-17 19:30:08','Protokol z wizyty.',true)</sql>
+            values(1,'2024-03-18 08:00:00',2,'2023-11-11 12:00:00',null,true)</sql>
 
         <!--Add example visit positions-->
-        <sql>insert into visit_position(id,visit_id,service_type_id)
-            values(1,1,1)</sql>
-        <sql>insert into visit_position(id,visit_id,service_type_id)
-            values(2,1,2)</sql>
+        <sql>insert into visit_position(id,visit_id,service_type_id) values(1,1,1)</sql>
+        <sql>insert into visit_position(id,visit_id,service_type_id) values(2,1,2)</sql>
     </changeSet>
 </databaseChangeLog>

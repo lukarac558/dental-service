@@ -5,8 +5,8 @@
     <changeSet id="1.2.1_INSERT_EXAMPLE_CALENDAR_DAY" author="lraczka">
         <!--Add example calendar days -->
         <sql>insert into calendar_day(id,start_date,work_duration,doctor_id)
-            values(1,'2023-10-19 09:00:00','7:00',1)</sql>
+            values(1,'2024-03-18 07:00:00','7:00',1)</sql>
         <sql>insert into calendar_day(id,start_date,work_duration,doctor_id)
-            values(2,'2023-10-20 08:00:00','8:00',1)</sql>
+            values(2,'2024-03-19 08:00:00','8:00',1)</sql>
     </changeSet>
 </databaseChangeLog>
