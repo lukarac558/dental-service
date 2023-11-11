@@ -17,6 +17,7 @@ import com.student.reservationservice.user.UserClient;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -61,6 +62,7 @@ public class VisitService {
         }
     }
 
+    @Transactional
     public void deleteNotApprovedVisitsWithExpiredTime() {
         visitRepository.findByApproved(false).stream()
                 .filter(v -> !isApprovalPossible(v.getReservationDate()))
@@ -71,22 +73,23 @@ public class VisitService {
         return visitRepository.findVisitById(id);
     }
 
-    public Page<VisitEntity> findApprovedUpComingVisitsByUserId(VisitSearchRequestDto searchRequestDto) {
-        return visitRepository.findAll(
-                new VisitSpecification(searchRequestDto.getUserId(), true),
-                searchRequestDto.pageable()
-        );
+    public Page<VisitEntity> findApprovedUpcomingVisitsByRequest(VisitSearchRequestDto searchRequestDto) {
+        Page<VisitEntity> upcomingVisits = findUpcomingVisitsByRequest(searchRequestDto);
+        List<VisitEntity> filteredVisits = upcomingVisits.getContent().stream()
+                .filter(VisitEntity::isApproved)
+                .toList();
+        return new PageImpl<>(filteredVisits, upcomingVisits.getPageable(), filteredVisits.size());
     }
 
-    public Page<VisitEntity> findHistoricalVisitsByUserId(VisitSearchRequestDto searchRequestDto) {
+    public Page<VisitEntity> findHistoricalVisitsByPatientId(VisitSearchRequestDto searchRequestDto) {
         return visitRepository.findAll(
                 new VisitSpecification(searchRequestDto.getUserId(), false),
                 searchRequestDto.pageable()
         );
     }
 
-    public List<VisitEntity> findNotApprovedVisitsByUserId(Long userId) {
-        List<VisitEntity> notApprovedVisits = visitRepository.findVisitsByPatientIdAndApproved(userId, false);
+    public List<VisitEntity> findNotApprovedVisitsByPatientId(Long patientId) {
+        List<VisitEntity> notApprovedVisits = visitRepository.findVisitsByPatientIdAndApproved(patientId, false);
         return notApprovedVisits.stream().filter(v -> isApprovalPossible(v.getReservationDate())).toList();
     }
 
@@ -116,6 +119,12 @@ public class VisitService {
         } else {
             throw new ApprovalForbiddenException(String.format(VISIT_APPROVAL_FORBIDDEN_MESSAGE, visitEntity.getId(), VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MINUTES));
         }
+    }
+
+    private Page<VisitEntity> findUpcomingVisitsByRequest(VisitSearchRequestDto searchRequestDto) {
+        return visitRepository.findAll(
+                new VisitSpecification(searchRequestDto.getUserId(), true),
+                searchRequestDto.pageable());
     }
 
     private boolean isApprovalPossible(Timestamp reservationDate) {

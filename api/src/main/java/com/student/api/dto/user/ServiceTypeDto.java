@@ -23,17 +23,15 @@ public class ServiceTypeDto {
     @NotNull
     @NotBlank
     @Size(min = 1, max = 100)
-    @Schema(required = true)
     private String name;
 
     @NotNull
-    @Schema(required = true, example = "01:00:00")
+    @Schema(example = "01:00:00")
     private String durationTime;
 
     @Size(min = 1, max = 200)
     private String description;
 
     @NotNull
-    @Schema(required = true)
     private Long doctorId;
 }
