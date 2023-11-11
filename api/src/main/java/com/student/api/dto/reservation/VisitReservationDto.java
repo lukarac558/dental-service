@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class VisitReservationDto {
     @NotNull
-    private VisitDto visitDto;
+    private VisitDto visit;
 
     @NotEmpty
     private List<Long> serviceTypeIds;
