@@ -15,7 +15,7 @@ export class LocationsService {
 
     getVoivodeships(): Observable<Lookup[]> {
         if (!this._voivodeships$) {
-            this._voivodeships$ = this._http.get<Lookup[]>(`${appConfig.apiUrl}/location/voivodeship`).pipe(
+            this._voivodeships$ = this._http.get<Lookup[]>(`${appConfig.apiUrl}/location/voivodeships`).pipe(
                 shareReplay({ refCount: true, bufferSize: 1 })
             );
         }

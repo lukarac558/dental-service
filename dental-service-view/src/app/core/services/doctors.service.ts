@@ -47,7 +47,7 @@ export class DoctorsService {
     }
 
     getCurrentDoctorCompetency(): Observable<DoctorCompetency> {
-        return this._http.get<DoctorCompetency>(`${appConfig.apiUrl}/user/competency-information`).pipe(
+        return this._http.get<DoctorCompetency>(`${appConfig.apiUrl}/user/competency-informations`).pipe(
             catchError((_error: HttpErrorResponse) => {
                 return of({
                     id: null,
@@ -71,7 +71,7 @@ export class DoctorsService {
     }
 
     getCurrentDoctorServices(): Observable<DoctorService[]> {
-        return this._http.post<DoctorService[]>(`${appConfig.apiUrl}/user/service-type/all`, {
+        return this._http.post<DoctorService[]>(`${appConfig.apiUrl}/user/service-types/all`, {
             page: 0,
             pageSize: 1,
             enabled: false,
@@ -83,23 +83,23 @@ export class DoctorsService {
     }
 
     addCurrentDoctorService(service: DoctorServiceForm): Observable<void> {
-        return this._http.post<void>(`${appConfig.apiUrl}/user/service-type`, {
+        return this._http.post<void>(`${appConfig.apiUrl}/user/service-types`, {
             ...service
         });
     }
 
     updateCurrentDoctorService(id: number, service: DoctorServiceForm): Observable<void> {
-        return this._http.put<void>(`${appConfig.apiUrl}/user/service-type/${id}`, {
+        return this._http.put<void>(`${appConfig.apiUrl}/user/service-types/${id}`, {
             ...service
         });
     }
 
     deleteCurrentDoctorService(id: number): Observable<void> {
-        return this._http.delete<void>(`${appConfig.apiUrl}/user/service-type/${id}`);
+        return this._http.delete<void>(`${appConfig.apiUrl}/user/service-types/${id}`);
     }
 
     getDoctors(searchCriteria: CustomPageCriteria<DoctorSearch>): Observable<Page<DoctorShort>> {
-        return this._http.post<Page<DoctorShort>>(`${appConfig.apiUrl}/user/user/doctor/all`, {
+        return this._http.post<Page<DoctorShort>>(`${appConfig.apiUrl}/user/users/doctor/all`, {
             ...searchCriteria
         }).pipe(
             map((result: any) => {
@@ -112,7 +112,7 @@ export class DoctorsService {
     }
 
     getDoctor(id: number): Observable<Doctor> {
-        return this._http.post<Doctor>(`${appConfig.apiUrl}/user/user/doctor/${id}`, {});
+        return this._http.post<Doctor>(`${appConfig.apiUrl}/user/users/doctor/${id}`, {});
     }
 
     getDoctorAvailableDays(id: number, serviceIds: number[]): Observable<VisitAvailableDate[]> {
@@ -132,13 +132,13 @@ export class DoctorsService {
     }
 
     private addDoctorCompetency(doctorCompetency: DoctorCompetencyForm): Observable<void> {
-        return this._http.post<void>(`${appConfig.apiUrl}/user/competency-information`, {
+        return this._http.post<void>(`${appConfig.apiUrl}/user/competency-informations`, {
             ...doctorCompetency
         });
     }
 
     private updateDoctorCompetency(doctorCompetency: DoctorCompetencyForm): Observable<void> {
-        return this._http.put<void>(`${appConfig.apiUrl}/user/competency-information`, {
+        return this._http.put<void>(`${appConfig.apiUrl}/user/competency-informations`, {
             ...doctorCompetency
         });
     }

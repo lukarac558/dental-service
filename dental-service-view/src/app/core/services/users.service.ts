@@ -29,7 +29,7 @@ export class UsersService {
 
     getCurrentUserDetails(): Observable<UserDetails> {
         if (!this._userDetails$.value) {
-            return this._http.get<UserDetails>(`${appConfig.apiUrl}/user/user`).pipe(
+            return this._http.get<UserDetails>(`${appConfig.apiUrl}/user/users`).pipe(
                 catchError((_error: HttpErrorResponse) => {
                     return of({
                         id: null,
@@ -58,13 +58,13 @@ export class UsersService {
     }
 
     private updateCurrentUser(userDetails: UserDetailsForm): Observable<UserDetails> {
-        return this._http.put<UserDetails>(`${appConfig.apiUrl}/user/user`, {
+        return this._http.put<UserDetails>(`${appConfig.apiUrl}/user/users`, {
             ...userDetails
         });
     }
 
     private createCurrentUser(userDetails: UserDetailsForm): Observable<UserDetails> {
-        return this._http.post<UserDetails>(`${appConfig.apiUrl}/user/user`, {
+        return this._http.post<UserDetails>(`${appConfig.apiUrl}/user/users`, {
             ...userDetails
         });
     }
