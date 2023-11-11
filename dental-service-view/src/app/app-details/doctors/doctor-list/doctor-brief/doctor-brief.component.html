@@ -14,12 +14,14 @@
                         {{doctor.name}}
                         {{doctor.surname}}
                     </div>
-                    <div>
-                        {{doctor.competencyInformation.title}}
-                    </div>
-                    <div class="doctor__about-me">
-                        {{doctor.competencyInformation.description}}
-                    </div>
+                    <ng-container *ngIf="doctor.competencyInformation">
+                        <div>
+                            {{doctor.competencyInformation.title}}
+                        </div>
+                        <div class="doctor__about-me">
+                            {{doctor.competencyInformation.description}}
+                        </div>
+                    </ng-container>
                 </div>
             </div>
         </mat-card-content>

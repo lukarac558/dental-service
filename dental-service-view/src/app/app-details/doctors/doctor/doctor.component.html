@@ -14,11 +14,11 @@
                         {{doctor.name}}
                         {{doctor.surname}}
                     </div>
-                    <div class="doctor__specialization">
+                    <div *ngIf="doctor.competencyInformation">
                         {{doctor.competencyInformation.title}}
                     </div>
                 </div>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mt-4">
                     <a mat-flat-button
                        color="primary"
                        [routerLink]="'add-visit'">
@@ -33,7 +33,9 @@
             <mat-card-title>O mnie</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-            {{doctor.competencyInformation.description}}
+            <ng-container *ngIf="doctor.competencyInformation">
+                {{doctor.competencyInformation.description}}
+            </ng-container>
         </mat-card-content>
     </mat-card>
     <mat-card>

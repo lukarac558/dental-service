@@ -99,7 +99,7 @@ export class DoctorsService {
     }
 
     getDoctors(searchCriteria: CustomPageCriteria<DoctorSearch>): Observable<Page<DoctorShort>> {
-        return this._http.post<Page<DoctorShort>>(`${appConfig.apiUrl}/user/users/doctor/all`, {
+        return this._http.post<Page<DoctorShort>>(`${appConfig.apiUrl}/user/users/doctors`, {
             ...searchCriteria
         }).pipe(
             map((result: any) => {
