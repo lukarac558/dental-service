@@ -39,7 +39,7 @@ public class ModelMapperConfiguration {
             mapper.skip(ServiceTypeEntity::setId);
 //            mapper.skip(ServiceTypeEntity::setDoctor);
             mapper.using((Converter<String, Time>) mappingContext -> TimeFormatParser
-                    .parse(mappingContext.getSource())
+                    .parseOrThrow(mappingContext.getSource())
             ).map(ServiceTypeDto::getDurationTime, ServiceTypeEntity::setDurationTime);
         });
 

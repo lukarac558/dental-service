@@ -78,7 +78,7 @@ public class CalendarDayController {
 
     private void setTimesOrThrow(CalendarDayEntity calendarDayEntity, String startDate, String workDuration) {
         calendarDayEntity.setStartDate(TimestampFormatParser.parseOrThrow(startDate));
-        calendarDayEntity.setWorkDuration(TimeFormatParser.parse(workDuration));
+        calendarDayEntity.setWorkDuration(TimeFormatParser.parseOrThrow(workDuration));
     }
 
     private CalendarDayDto mapToCalendarDayDTO(CalendarDayEntity calendarDayEntity, Long doctorId) {

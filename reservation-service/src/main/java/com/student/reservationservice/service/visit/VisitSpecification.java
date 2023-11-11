@@ -11,41 +11,45 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.student.reservationservice.service.visit.VisitService.VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS;
+
 
 public class VisitSpecification implements Specification<VisitEntity> {
     private final Long userId;
-    private final boolean visitUpcoming;
+    private final boolean approved;
 
-    public VisitSpecification(Long userId, boolean visitUpcoming) {
+    public VisitSpecification(Long userId, boolean approved) {
         this.userId = userId;
-        this.visitUpcoming = visitUpcoming;
+        this.approved = approved;
     }
 
     @Override
     public Predicate toPredicate(Root<VisitEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if (userId > 0) {
-            predicates.add(criteriaBuilder.equal(
-                    root.get("patientId"),
-                    userId
-            ));
-        }
-        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
-        if (visitUpcoming) {
-            predicates.add(criteriaBuilder.greaterThan(
-                    root.get("startDate"),
-                    currentTimestamp
-            ));
-        } else {
-            predicates.add(criteriaBuilder.lessThan(
-                    root.get("startDate"),
-                    currentTimestamp
-            ));
-        }
+        predicates.add(criteriaBuilder.equal(
+                root.get("patientId"),
+                userId
+        ));
 
+        predicates.add(criteriaBuilder.equal(
+                root.get("approved"),
+                approved
+        ));
+
+        if (!approved) {
+            predicates.add(criteriaBuilder.greaterThan(
+                    root.get("reservationDate"),
+                    geTimestampApprovalCondition()
+            ));
+        }
         return criteriaBuilder.and(
                 predicates.toArray(new Predicate[0])
         );
+    }
+
+    private Timestamp geTimestampApprovalCondition() {
+        long timeInMs = System.currentTimeMillis() - VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS;
+        return new Timestamp(timeInMs);
     }
 }

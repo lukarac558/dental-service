@@ -1,6 +1,6 @@
 package com.student.api.dto.reservation;
 
-import com.student.api.dto.user.ServiceTypeDto;
+import com.student.api.dto.user.ServiceTypeDetailDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -22,6 +22,6 @@ public class VisitPositionDetailDto {
     private Long id;
 
     @NotNull
-    private ServiceTypeDto serviceType;
+    private ServiceTypeDetailDto serviceType;
 
 }

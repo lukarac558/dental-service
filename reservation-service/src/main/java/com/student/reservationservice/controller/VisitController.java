@@ -1,9 +1,12 @@
 package com.student.reservationservice.controller;
 
 import com.student.api.dto.reservation.*;
+import com.student.api.dto.user.DoctorDto;
+import com.student.api.dto.user.ServiceTypeDetailDto;
 import com.student.api.dto.user.ServiceTypeDto;
 import com.student.api.dto.user.UserPersonalDetailsDto;
 import com.student.api.exception.NotFoundException;
+import com.student.api.util.TimeHelper;
 import com.student.api.util.TimestampFormatParser;
 import com.student.reservationservice.entity.VisitEntity;
 import com.student.reservationservice.entity.VisitPositionEntity;
@@ -21,11 +24,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static com.student.api.exception.handler.ErrorConstants.SERVICE_TYPE_NOT_FOUND_MESSAGE;
-import static com.student.api.exception.handler.ErrorConstants.VISIT_NOT_FOUND_MESSAGE;
+import static com.student.api.exception.handler.ErrorConstants.*;
 
 @RestController
 @RequestMapping("/visits")
@@ -38,22 +41,12 @@ public class VisitController {
     private final UserClient userClient;
 
     @GetMapping("/{id}")
-    @ApiResponse(responseCode = "404", description = "Visit not found")
+    @ApiResponse(responseCode = "404", description = "Visit or doctor not found")
     @Operation(summary = "Find visit by id")
     public ResponseEntity<VisitReservationDetailDto> getVisitById(@PathVariable("id") Long id) {
         VisitEntity visitEntity = visitService.findVisitById(id)
                 .orElseThrow(() -> new NotFoundException(String.format(VISIT_NOT_FOUND_MESSAGE, id)));
-
-        VisitDto visitDTO = modelMapper.map(visitEntity, VisitDto.class);
-        List<VisitPositionDetailDto> visitPositionDetails = mapToVisitPositionDetails(visitEntity);
-        return new ResponseEntity<>(new VisitReservationDetailDto(visitDTO, visitPositionDetails), HttpStatus.OK);
-    }
-
-    @GetMapping("/not-approved/{patient_id}")
-    @Operation(summary = "Find all patient not approved visits by his id.")
-    public ResponseEntity<List<VisitReservationDetailDto>> getNotApprovedVisitsByPatientId(@PathVariable("patient_id") Long patientId) {
-        List<VisitEntity> visitEntities = visitService.findNotApprovedVisitsByPatientId(patientId);
-        return new ResponseEntity<>(mapToVisitReservationDetails(visitEntities), HttpStatus.OK);
+        return new ResponseEntity<>(mapToVisitReservationDetail(visitEntity), HttpStatus.OK);
     }
 
     @GetMapping("available-times/{service_type_ids}")
@@ -63,19 +56,19 @@ public class VisitController {
         return new ResponseEntity<>(visitStartDates, HttpStatus.OK);
     }
 
-    @PostMapping("/historical")
-    @Operation(summary = "Find all patient historical visits by provided search object.")
-    public ResponseEntity<Page<VisitReservationDetailDto>> getHistoricalVisitsByRequest(
+    @PostMapping("/not-approved")
+    @Operation(summary = "Find all patient not approved visits by provided search object.")
+    public ResponseEntity<Page<VisitReservationDetailDto>> getNotApprovedVisitsByPatientId(
             @Validated @RequestBody VisitSearchRequestDto searchRequestDto) {
-        Page<VisitEntity> visitEntities = visitService.findHistoricalVisitsByPatientId(searchRequestDto);
+        Page<VisitEntity> visitEntities = visitService.findNotApprovedVisitsByRequest(searchRequestDto);
         return new ResponseEntity<>(mapToVisitReservationDetails(visitEntities), HttpStatus.OK);
     }
 
     @PostMapping("/approved")
-    @Operation(summary = "Find all patient approved upcoming visits by provided search object.")
+    @Operation(summary = "Find all patient approved visits by provided search object.")
     public ResponseEntity<Page<VisitReservationDetailDto>> getApprovedVisitsByRequest(
             @Validated @RequestBody VisitSearchRequestDto searchRequestDto) {
-        Page<VisitEntity> visitEntities = visitService.findApprovedUpcomingVisitsByRequest(searchRequestDto);
+        Page<VisitEntity> visitEntities = visitService.findApprovedVisitsByRequest(searchRequestDto);
         return new ResponseEntity<>(mapToVisitReservationDetails(visitEntities), HttpStatus.OK);
     }
 
@@ -91,12 +84,9 @@ public class VisitController {
 
         UserPersonalDetailsDto user = userClient.getUserById(visit.getPatientId());
         VisitEntity visitEntity = visitService.addOrUpdateVisit(mapToVisitEntity(visit, user.getId()));
-        VisitDto visitDTO = mapToVisitDto(visitEntity, user.getId());
-        List<ServiceTypeDto> serviceTypes = userClient.getServiceTypes(serviceTypeIds);
-        List<VisitPositionEntity> visitPositionEntities = visitPositionService.addVisitPositions(visitEntity, serviceTypeIds);
-        List<VisitPositionDetailDto> visitPositionDetails = mapToVisitPositionDetails(visitPositionEntities, serviceTypes);
+        List<VisitPositionEntity> visitPositionsEntities = visitPositionService.addVisitPositions(visitEntity, serviceTypeIds);
 
-        return new ResponseEntity<>(new VisitReservationDetailDto(visitDTO, visitPositionDetails), HttpStatus.CREATED);
+        return new ResponseEntity<>(mapToVisitReservationDetail(visitEntity, visitPositionsEntities), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -145,23 +135,6 @@ public class VisitController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private Page<VisitReservationDetailDto> mapToVisitReservationDetails(Page<VisitEntity> visitEntities) {
-        return visitEntities.map(v -> {
-            VisitDto visitDTO = modelMapper.map(v, VisitDto.class);
-            List<VisitPositionDetailDto> visitPositionDetails = mapToVisitPositionDetails(v);
-            return new VisitReservationDetailDto(visitDTO, visitPositionDetails);
-        });
-    }
-
-    private List<VisitReservationDetailDto> mapToVisitReservationDetails(List<VisitEntity> visitEntities) {
-        return visitEntities.stream().map(v -> {
-                    VisitDto visitDTO = modelMapper.map(v, VisitDto.class);
-                    List<VisitPositionDetailDto> visitPositionDetails = mapToVisitPositionDetails(v);
-                    return new VisitReservationDetailDto(visitDTO, visitPositionDetails);
-                })
-                .toList();
-    }
-
     private VisitEntity mapToVisitEntity(VisitDto visitDto, Long patientId) {
         VisitEntity visitEntity = new VisitEntity();
         visitEntity.setStartDate(TimestampFormatParser.parseOrThrow(visitDto.getStartDate()));
@@ -171,31 +144,60 @@ public class VisitController {
         return visitEntity;
     }
 
-    private VisitDto mapToVisitDto(VisitEntity visitEntity, Long patientId) {
-        VisitDto visitDTO = modelMapper.map(visitEntity, VisitDto.class);
-        visitDTO.setPatientId(patientId);
-        return visitDTO;
+    private Page<VisitReservationDetailDto> mapToVisitReservationDetails(Page<VisitEntity> visitEntities) {
+        return visitEntities.map(this::mapToVisitReservationDetail);
     }
 
-    private List<VisitPositionDetailDto> mapToVisitPositionDetails(VisitEntity visitEntity) {
-        List<Long> serviceTypeIds = visitEntity.getVisitPositions().stream().map(VisitPositionEntity::getServiceTypeId).toList();
-        List<ServiceTypeDto> serviceTypes = userClient.getServiceTypes(serviceTypeIds);
-
-        return visitEntity.getVisitPositions().stream()
-                .map(vp -> {
-                    ServiceTypeDto serviceType = getServiceTypeOrThrow(serviceTypes, vp.getServiceTypeId());
-                    return new VisitPositionDetailDto(vp.getId(), serviceType);
-                })
-                .toList();
+    private List<VisitReservationDetailDto> mapToVisitReservationDetails(List<VisitEntity> visitEntities) {
+        return visitEntities.stream().map(this::mapToVisitReservationDetail).toList();
     }
 
-    private List<VisitPositionDetailDto> mapToVisitPositionDetails(List<VisitPositionEntity> visitPositionEntities, List<ServiceTypeDto> serviceTypes) {
+    private VisitReservationDetailDto mapToVisitReservationDetail(VisitEntity visitEntity) {
+        return mapToVisitReservationDetail(visitEntity, visitEntity.getVisitPositions());
+    }
+
+    private VisitReservationDetailDto mapToVisitReservationDetail(VisitEntity visitEntity, List<VisitPositionEntity> visitPositionEntities) {
+        VisitDetailDto visitDetail = mapToVisitDetail(visitEntity, visitPositionEntities);
+        List<VisitPositionDetailDto> visitPositionDetails = mapToVisitPositionDetails(visitPositionEntities);
+        return new VisitReservationDetailDto(visitDetail, visitPositionDetails);
+    }
+
+    private List<ServiceTypeDto> getServiceTypes(List<VisitPositionEntity> visitPositionEntities) {
+        List<Long> serviceTypeIds = visitPositionEntities.stream().map(VisitPositionEntity::getServiceTypeId).toList();
+        return userClient.getServiceTypes(serviceTypeIds);
+    }
+
+    private VisitDetailDto mapToVisitDetail(VisitEntity visitEntity, List<VisitPositionEntity> visitPositionEntities) {
+        VisitDetailDto visitDetail = modelMapper.map(visitEntity, VisitDetailDto.class);
+        List<ServiceTypeDto> serviceTypes = getServiceTypes(visitPositionEntities);
+        Time visitDuration = visitService.calculateVisitDuration(serviceTypes);
+        Timestamp endTime = TimeHelper.getEndDate(visitEntity.getStartDate(), visitDuration);
+        visitDetail.setEndDate(TimestampFormatParser.parse(endTime));
+        return visitDetail;
+    }
+
+    private List<VisitPositionDetailDto> mapToVisitPositionDetails(List<VisitPositionEntity> visitPositionEntities) {
+        List<ServiceTypeDto> serviceTypes = getServiceTypes(visitPositionEntities);
+        DoctorDto doctor = getDoctorOrThrow(serviceTypes);
         return visitPositionEntities.stream()
                 .map(vp -> {
-                    ServiceTypeDto serviceType = getServiceTypeOrThrow(serviceTypes, vp.getServiceTypeId());
-                    return new VisitPositionDetailDto(vp.getId(), serviceType);
+                    ServiceTypeDetailDto serviceTypeDetail = mapToServiceTypeDetail(vp, serviceTypes, doctor);
+                    return new VisitPositionDetailDto(vp.getId(), serviceTypeDetail);
                 })
                 .toList();
+    }
+
+    private DoctorDto getDoctorOrThrow(List<ServiceTypeDto> serviceTypes) {
+        long doctorId = serviceTypes.stream().map(ServiceTypeDto::getDoctorId).findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format(DOCTOR_NOT_FOUND_MESSAGE, serviceTypes.stream().map(ServiceTypeDto::getId).toList())));
+        return userClient.getDoctorById(doctorId);
+    }
+
+    private ServiceTypeDetailDto mapToServiceTypeDetail(VisitPositionEntity visitPosition, List<ServiceTypeDto> serviceTypes, DoctorDto doctor) {
+        ServiceTypeDto serviceType = getServiceTypeOrThrow(serviceTypes, visitPosition.getServiceTypeId());
+        ServiceTypeDetailDto serviceTypeDetail = modelMapper.map(serviceType, ServiceTypeDetailDto.class);
+        serviceTypeDetail.setDoctor(doctor);
+        return serviceTypeDetail;
     }
 
     private ServiceTypeDto getServiceTypeOrThrow(List<ServiceTypeDto> serviceTypes, Long serviceTypeId) {

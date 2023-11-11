@@ -1,14 +1,15 @@
 package com.student.reservationservice.service.visit;
 
+import com.student.api.dto.reservation.StartEndTime;
 import com.student.api.dto.reservation.VisitSearchRequestDto;
 import com.student.api.dto.user.ServiceTypeDto;
 import com.student.api.exception.ApprovalForbiddenException;
 import com.student.api.exception.CancellationForbiddenException;
 import com.student.api.exception.IncorrectValueException;
 import com.student.api.exception.NotFoundException;
+import com.student.api.util.TimeHelper;
 import com.student.api.util.TimestampFormatParser;
 import com.student.reservationservice.entity.CalendarDayEntity;
-import com.student.reservationservice.entity.StartEndTime;
 import com.student.reservationservice.entity.VisitEntity;
 import com.student.reservationservice.entity.VisitPositionEntity;
 import com.student.reservationservice.repository.CalendarDayRepository;
@@ -17,7 +18,6 @@ import com.student.reservationservice.user.UserClient;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -28,14 +28,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.student.api.exception.handler.ErrorConstants.*;
+import static com.student.api.util.TimeHelper.ONE_MINUTE_IN_MS;
 
 @Service
 @AllArgsConstructor
 public class VisitService {
     private static final int VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MINUTES = 15;
-    private static final int ONE_MINUTE_IN_MS = 60000;
-    private static final int VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS = VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MINUTES * ONE_MINUTE_IN_MS;
-    private static final int ONE_HOUR_IN_MS = 60 * ONE_MINUTE_IN_MS;
+    public static final int VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS = VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MINUTES * ONE_MINUTE_IN_MS;
     private static final int VISIT_CANCELLATION_LIMIT_IN_HOURS = 24;
     private final VisitRepository visitRepository;
     private final UserClient userClient;
@@ -52,7 +51,6 @@ public class VisitService {
 
         Timestamp currentDate = Timestamp.from(Instant.now());
         Timestamp visitStartDate = visitEntity.getStartDate();
-
         Duration remainingTimeToVisit = Duration.between(currentDate.toInstant(), visitStartDate.toInstant());
 
         if (remainingTimeToVisit.toHours() >= VISIT_CANCELLATION_LIMIT_IN_HOURS) {
@@ -73,24 +71,12 @@ public class VisitService {
         return visitRepository.findVisitById(id);
     }
 
-    public Page<VisitEntity> findApprovedUpcomingVisitsByRequest(VisitSearchRequestDto searchRequestDto) {
-        Page<VisitEntity> upcomingVisits = findUpcomingVisitsByRequest(searchRequestDto);
-        List<VisitEntity> filteredVisits = upcomingVisits.getContent().stream()
-                .filter(VisitEntity::isApproved)
-                .toList();
-        return new PageImpl<>(filteredVisits, upcomingVisits.getPageable(), filteredVisits.size());
+    public Page<VisitEntity> findApprovedVisitsByRequest(VisitSearchRequestDto searchRequestDto) {
+        return findVisitsByRequest(searchRequestDto, true);
     }
 
-    public Page<VisitEntity> findHistoricalVisitsByPatientId(VisitSearchRequestDto searchRequestDto) {
-        return visitRepository.findAll(
-                new VisitSpecification(searchRequestDto.getUserId(), false),
-                searchRequestDto.pageable()
-        );
-    }
-
-    public List<VisitEntity> findNotApprovedVisitsByPatientId(Long patientId) {
-        List<VisitEntity> notApprovedVisits = visitRepository.findVisitsByPatientIdAndApproved(patientId, false);
-        return notApprovedVisits.stream().filter(v -> isApprovalPossible(v.getReservationDate())).toList();
+    public Page<VisitEntity> findNotApprovedVisitsByRequest(VisitSearchRequestDto searchRequestDto) {
+        return findVisitsByRequest(searchRequestDto, false);
     }
 
     public List<String> findAvailableVisitTimesInIntervals(List<Long> serviceTypeIds) {
@@ -102,13 +88,12 @@ public class VisitService {
         Map<CalendarDayEntity, List<VisitEntity>> visitsToCalendarDay = fillVisitsToDay(calendarDayEntities, allDoctorServiceTypeIds);
         Map<CalendarDayEntity, List<StartEndTime>> visitsTimeToCalendarDay = fillVisitTimesToDay(visitsToCalendarDay);
         Time visitDuration = calculateVisitDuration(serviceTypes);
-
         List<StartEndTime> possibleVisitTimes =
                 getAvailableVisitTimes(visitsTimeToCalendarDay).stream()
-                        .filter(visitTime -> isEnoughTimeForVisit(visitTime, visitDuration))
+                        .filter(visitTime -> TimeHelper.isEnough(visitTime, visitDuration))
                         .toList();
 
-        return getVisitStartDatesInIntervals(possibleVisitTimes, visitDuration);
+        return TimeHelper.getStartDatesInIntervals(possibleVisitTimes, visitDuration, VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS);
     }
 
     public void setVisitAsApprovedOrThrow(VisitEntity visitEntity) {
@@ -121,22 +106,8 @@ public class VisitService {
         }
     }
 
-    private Page<VisitEntity> findUpcomingVisitsByRequest(VisitSearchRequestDto searchRequestDto) {
-        return visitRepository.findAll(
-                new VisitSpecification(searchRequestDto.getUserId(), true),
-                searchRequestDto.pageable());
-    }
-
-    private boolean isApprovalPossible(Timestamp reservationDate) {
-        long currentTimeMs = System.currentTimeMillis();
-        long reservationTimeMs = reservationDate.getTime();
-
-        return (currentTimeMs - reservationTimeMs) < VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS;
-    }
-
     public void validateStartDateOrThrow(List<Long> serviceTypeIds, String startDate) {
         TimestampFormatParser.parseOrThrow(startDate);
-
         boolean isStartDateCorrect =
                 findAvailableVisitTimesInIntervals(serviceTypeIds).stream()
                         .anyMatch(time -> time.equals(startDate));
@@ -144,6 +115,19 @@ public class VisitService {
         if (!isStartDateCorrect) {
             throw new IncorrectValueException(String.format(INCORRECT_START_DATE_MESSAGE, startDate));
         }
+    }
+
+    private Page<VisitEntity> findVisitsByRequest(VisitSearchRequestDto searchRequestDto, boolean approved) {
+        return visitRepository.findAll(
+                new VisitSpecification(searchRequestDto.getUserId(), approved),
+                searchRequestDto.pageable()
+        );
+    }
+
+    private boolean isApprovalPossible(Timestamp reservationDate) {
+        long currentTimeMs = System.currentTimeMillis();
+        long reservationTimeMs = reservationDate.getTime();
+        return (currentTimeMs - reservationTimeMs) < VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS;
     }
 
     private Long getDoctorIdOrThrow(List<ServiceTypeDto> serviceTypes, List<Long> serviceTypeIds) {
@@ -179,29 +163,20 @@ public class VisitService {
                                     List<Long> typeIds = v.getVisitPositions().stream()
                                             .map(VisitPositionEntity::getServiceTypeId)
                                             .toList();
-
                                     List<ServiceTypeDto> types = userClient.getServiceTypes(typeIds);
                                     Time totalTime = calculateVisitDuration(types);
-
-                                    Timestamp end = getWorkEnd(start, totalTime);
-
+                                    Timestamp end = TimeHelper.getEndDate(start, totalTime);
                                     return new StartEndTime(start, end);
                                 })
                                 .toList()
                 ));
     }
 
-    private Time calculateVisitDuration(List<ServiceTypeDto> serviceTypes) {
+    public Time calculateVisitDuration(List<ServiceTypeDto> serviceTypes) {
         return serviceTypes.stream()
                 .map(time -> Time.valueOf(time.getDurationTime()))
-                .reduce((time1, time2) -> new Time(time1.getTime() + time2.getTime()))
+                .reduce(TimeHelper::getSummed)
                 .orElse(Time.valueOf("00:00:00"));
-    }
-
-    private long calculateVisitDuration(Time visitDuration) {
-        int hours = visitDuration.getHours();
-        int minutes = visitDuration.getMinutes();
-        return (hours * ONE_HOUR_IN_MS) + (minutes * ONE_MINUTE_IN_MS);
     }
 
     private List<StartEndTime> getAvailableVisitTimes(Map<CalendarDayEntity, List<StartEndTime>> visitsTimeToCalendarDay) {
@@ -209,7 +184,7 @@ public class VisitService {
 
         visitsTimeToCalendarDay.forEach((day, visitTimes) -> {
             Timestamp workStart = day.getStartDate();
-            Timestamp workEnd = getWorkEnd(workStart, day.getWorkDuration());
+            Timestamp workEnd = TimeHelper.getEndDate(workStart, day.getWorkDuration());
 
             if (visitTimes.isEmpty()) {
                 availableVisitTimes.add(new StartEndTime(workStart, workEnd));
@@ -218,6 +193,7 @@ public class VisitService {
                 modifiableVisitTimes.sort(Comparator.comparing(StartEndTime::getStartTime));
                 for (int i = 0; i < modifiableVisitTimes.size(); i++) {
                     StartEndTime current = modifiableVisitTimes.get(i);
+
                     if (i == 0 && workStart.before(current.getStartTime())) {
                         availableVisitTimes.add(new StartEndTime(workStart, current.getStartTime()));
                     }
@@ -236,51 +212,5 @@ public class VisitService {
         });
 
         return availableVisitTimes;
-    }
-
-    private Timestamp getWorkEnd(Timestamp startDate, Time time) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(startDate.getTime());
-        cal.add(Calendar.HOUR, time.getHours());
-        cal.add(Calendar.MINUTE, time.getMinutes());
-        return new Timestamp(cal.getTime().getTime());
-    }
-
-    private boolean isEnoughTimeForVisit(StartEndTime startEndTime, Time totalTime) {
-        long difference = calculateTimeDifference(startEndTime);
-        long total = totalTime.getTime();
-
-        return difference > total;
-    }
-
-    private List<String> getVisitStartDatesInIntervals(List<StartEndTime> possibleVisitTimes, Time visitDuration) {
-        List<String> visitStartDates = new ArrayList<>();
-
-        possibleVisitTimes.forEach(visitTime -> {
-            long difference = calculateTimeDifference(visitTime);
-            long duration = calculateVisitDuration(visitDuration);
-            long intervals = (difference - duration) / VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS;
-
-            for (int i = 0; i <= intervals; i++) {
-                Timestamp startDate = getNextInterval(visitTime.getStartTime(), i * VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MINUTES);
-                String startDateString = TimestampFormatParser.parse(startDate);
-                visitStartDates.add(startDateString);
-            }
-        });
-
-        return visitStartDates;
-    }
-
-    private long calculateTimeDifference(StartEndTime startEndTime) {
-        long start = startEndTime.getStartTime().getTime();
-        long end = startEndTime.getEndTime().getTime();
-        return end - start;
-    }
-
-    private Timestamp getNextInterval(Timestamp startDate, int timeLaterInMs) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(startDate.getTime());
-        cal.add(Calendar.MINUTE, timeLaterInMs);
-        return new Timestamp(cal.getTime().getTime());
     }
 }

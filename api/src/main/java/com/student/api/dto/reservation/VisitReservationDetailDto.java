@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class VisitReservationDetailDto {
     @NotNull
-    private VisitDto visit;
+    private VisitDetailDto visit;
 
     @NotNull
     private List<VisitPositionDetailDto> visitPositionDetails;

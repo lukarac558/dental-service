@@ -1,4 +1,4 @@
-package com.student.reservationservice.entity;
+package com.student.api.dto.reservation;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.student.reservationservice;
 
-import com.student.reservationservice.entity.StartEndTime;
+import com.student.api.dto.reservation.StartEndTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

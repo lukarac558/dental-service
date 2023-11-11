@@ -12,15 +12,17 @@ import java.util.Optional;
 import static com.student.api.exception.handler.ErrorConstants.INCORRECT_TIME_FORMAT_MESSAGE;
 
 public class TimeFormatParser {
-    private TimeFormatParser(){}
+    private TimeFormatParser() {
+    }
+
     private static final List<SimpleDateFormat> allowedTimeFormats = List.of(
             new SimpleDateFormat("HH:mm:ss"),
             new SimpleDateFormat("HH:mm")
     );
 
-    public static Time parse(String timeString) {
+    public static Time parseOrThrow(String timeString) {
         for (SimpleDateFormat format : allowedTimeFormats) {
-            Optional<Time> time = parse(format, timeString);
+            Optional<Time> time = parseOrThrow(format, timeString);
             if (time.isPresent()) {
                 return time.get();
             }
@@ -28,7 +30,7 @@ public class TimeFormatParser {
         throw new IncorrectFormatException(INCORRECT_TIME_FORMAT_MESSAGE);
     }
 
-    private static Optional<Time> parse(SimpleDateFormat format, String timeString) {
+    private static Optional<Time> parseOrThrow(SimpleDateFormat format, String timeString) {
         try {
             Date date = format.parse(timeString);
             return Optional.of(new Time(date.getTime()));

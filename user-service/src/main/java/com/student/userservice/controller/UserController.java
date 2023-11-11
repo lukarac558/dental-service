@@ -39,6 +39,41 @@ public class UserController {
         return new ResponseEntity<>(modelMapper.map(user, UserPersonalDetailsDto.class), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @Operation(summary = "Find user by id.")
+    public ResponseEntity<UserPersonalDetailsDto> getUserById(@PathVariable("id") Long id) {
+        UserEntity user = userService.findUserById(id);
+        return new ResponseEntity<>(modelMapper.map(user, UserPersonalDetailsDto.class), HttpStatus.OK);
+    }
+
+    @GetMapping("/doctor/{id}")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @Operation(summary = "Find doctors by provided search object")
+    public ResponseEntity<DoctorDto> getDoctorById(
+            @PathVariable("id") Long id
+    ) {
+        return new ResponseEntity<>(
+                modelMapper.map(userService.findDoctorById(id), DoctorDto.class),
+                HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/doctors")
+    @ApiResponse(responseCode = "404", description = "User not found")
+    @Operation(summary = "Find doctors by provided search object")
+    public ResponseEntity<Page<DoctorDto>> getDoctorsByRequest(
+            @Validated
+            @RequestBody
+            DoctorSearchRequestDto doctorSearch
+    ) {
+        return new ResponseEntity<>(
+                userService.findDoctor(doctorSearch)
+                        .map(d -> modelMapper.map(d, DoctorDto.class)),
+                HttpStatus.OK
+        );
+    }
+
     @PostMapping("")
     @Operation(summary = "Creates user")
     public ResponseEntity<UserPersonalDetailsDto> createUser(
@@ -67,41 +102,6 @@ public class UserController {
                         modelMapper.map(userService.updateUser(info, user), UserPersonalDetailsDto.class),
                         UserPersonalDetailsDto.class
                 ),
-                HttpStatus.OK
-        );
-    }
-
-    @GetMapping("/{id}")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @Operation(summary = "Find user by id.")
-    public ResponseEntity<UserPersonalDetailsDto> getUserById(@PathVariable("id") Long id) {
-        UserEntity user = userService.findUserById(id);
-        return new ResponseEntity<>(modelMapper.map(user, UserPersonalDetailsDto.class), HttpStatus.OK);
-    }
-
-    @PostMapping("/doctor/{id}")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @Operation(summary = "Find doctors by provided search object")
-    public ResponseEntity<DoctorDto> getDoctorById(
-            @PathVariable("id") Long id
-    ) {
-        return new ResponseEntity<>(
-                modelMapper.map(userService.findDoctorById(id), DoctorDto.class),
-                HttpStatus.OK
-        );
-    }
-
-    @PostMapping("/doctors")
-    @ApiResponse(responseCode = "404", description = "User not found")
-    @Operation(summary = "Find doctors by provided search object")
-    public ResponseEntity<Page<DoctorDto>> getDoctorsByRequest(
-            @Validated
-            @RequestBody
-            DoctorSearchRequestDto doctorSearch
-    ) {
-        return new ResponseEntity<>(
-                userService.findDoctor(doctorSearch)
-                        .map(d -> modelMapper.map(d, DoctorDto.class)),
                 HttpStatus.OK
         );
     }

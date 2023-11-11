@@ -17,7 +17,5 @@ public interface VisitRepository extends JpaRepository<VisitEntity, Long>, JpaSp
 
     List<VisitEntity> findByApproved(boolean isApproved);
 
-    List<VisitEntity> findVisitsByPatientIdAndApproved(Long patientId, boolean isApproved);
-
     void deleteVisitById(Long id);
 }
