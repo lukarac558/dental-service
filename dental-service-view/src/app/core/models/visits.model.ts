@@ -1,27 +1,32 @@
-import { Lookup } from './lookup.model';
+import { Moment } from 'moment';
+
+import { DoctorService, DoctorShort } from './doctor.model';
 
 export type Visit = {
+    visit: VisitDetails;
+    visitPositionDetails: VisitPositiondetails[];
+    doctorInfo: DoctorShort;
+};
+
+export type VisitDetails = {
     id: number;
-    startDate: Date;
-    endDate: Date;
-    doctorName: string;
-    doctorGender: string;
-    doctorSpecialization: string;
-    services: Lookup[]
+    startDate: string;
+    reservationDate: string;
+    description: string;
+};
+
+export type VisitPositiondetails = {
+    id: number;
+    serviceType: DoctorService
 };
 
 export type VisitForm = {
-    doctorId: number;
     date: Date | null;
     startHour: string;
     serviceIds: number[] | null;
 };
 
 export type VisitAvailableDate = {
-    date: Date;
+    date: Moment;
     hours: string[];
-};
-
-export type ReservationVisit = Visit & {
-    reservationEndDate: Date;
 };

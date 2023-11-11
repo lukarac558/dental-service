@@ -3,7 +3,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { Page, PageCriteria } from 'src/app/core/models/page.model';
-import { ReservationVisit, Visit } from 'src/app/core/models/visits.model';
+import { Visit } from 'src/app/core/models/visits.model';
+import { UsersService } from 'src/app/core/services/users.service';
 import { VisitsService } from 'src/app/core/services/visits.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { VisitsService } from 'src/app/core/services/visits.service';
 })
 export class VisitListComponent implements OnInit {
     visits$: Observable<Page<Visit>>;
-    reservedVisits$: Observable<ReservationVisit[]>;
+    reservedVisits$: Observable<Visit[]>;
     searchCriteria$ = new BehaviorSubject<PageCriteria>({
         page: 0,
         pageSize: 6
@@ -22,16 +23,19 @@ export class VisitListComponent implements OnInit {
 
     constructor(
         private _visitsService: VisitsService,
-        private _toastr: ToastrService
+        private _toastr: ToastrService,
+        private _userService: UsersService
     ) { }
 
     ngOnInit(): void {
         this.visits$ = this.searchCriteria$.pipe(
-            switchMap(searchCriteria => this._visitsService.getVisits(searchCriteria))
+            switchMap(_ => this._userService.getCurrentUserDetails()),
+            switchMap(result => this._visitsService.getVisits(result.id as number, this.searchCriteria$.value))
         );
 
         this.reservedVisits$ = this._refreshReservedVisits$.pipe(
-            switchMap(_ => this._visitsService.getReservedVisits())
+            switchMap(_ => this._userService.getCurrentUserDetails()),
+            switchMap(user => this._visitsService.getReservedVisits(user.id as number))
         );
     }
 

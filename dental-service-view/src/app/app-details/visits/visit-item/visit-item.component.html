@@ -1,35 +1,28 @@
-<mat-card class="visitEntity">
+<mat-card class="visit">
     <mat-card-content>
         <div class="visit__details">
             <div class="d-flex justify-content-center justify-content-md-start">
                 <div class="visit__avatar">
                     <ds-avatar [avatarSizePx]="90"
-                               [gender]="visit.doctorGender"
+                               [gender]="visit.doctorInfo.sex"
                                [role]="role.Doctor">
                     </ds-avatar>
                 </div>
                 <div>
                     <div class="visit__doctor-name">
-                        {{visit.doctorName}}
+                        {{visit.doctorInfo.name}} {{visit.doctorInfo.surname}}
                     </div>
                     <div>
-                        {{visit.doctorSpecialization}}
+                        {{visit.doctorInfo.competencyInformation.title}}
                     </div>
                 </div>
             </div>
             <div class="visit__dates">
-                <div [class.visit__status--finished]="visit.endDate <= now"
-                     [class.visit__status--in-future]="!!reservationEndDate || visit.endDate > now">
-                    {{!!reservationEndDate ? 'Rezerwacja do ' + (reservationEndDate | date: 'HH:mm') :
-                    (visit.endDate > now ? 'Nadchodząca wizyta' : 'Zakończona wizyta')}}
-                </div>
-                <div>{{visit.startDate | date:'dd MMMM yyyy'}}</div>
+                <div>{{visit.visit.startDate | date:'dd MMMM yyyy'}}</div>
                 <div>
-                    {{visit.startDate | date:'HH:mm'}}
-                    -
-                    {{visit.endDate | date:'HH:mm'}}
+                    {{visit.visit.startDate | date:'HH:mm'}}
                 </div>
-                <div>{{visit.startDate | date:'EEEE'}}</div>
+                <div>{{visit.visit.startDate| date:'EEEE'}}</div>
             </div>
             <div class="text-center text-md-start">
                 <div (click)="displayServices = !displayServices"
@@ -38,14 +31,14 @@
                 </div>
                 <div *ngIf="displayServices"
                      class="visit__service-list">
-                    <div *ngFor="let service of visit.services">
-                        {{service.name}}
+                    <div *ngFor="let service of visit.visitPositionDetails">
+                        {{service.serviceType.name}}
                     </div>
                 </div>
             </div>
         </div>
     </mat-card-content>
-    <mat-card-actions *ngIf="!!reservationEndDate"
+    <mat-card-actions *ngIf="reservation"
                       class="justify-content-center justify-content-md-end">
         <button mat-flat-button
                 color="primary"

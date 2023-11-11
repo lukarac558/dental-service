@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import * as moment from 'moment';
 import { Role } from 'src/app/core/models/role.model';
 import { Visit } from 'src/app/core/models/visits.model';
 
@@ -9,17 +10,17 @@ import { Visit } from 'src/app/core/models/visits.model';
 })
 export class VisitItemComponent {
     @Input() visit: Visit;
-    @Input() reservationEndDate: Date | null = null;
+    @Input() reservation: boolean = false;
 
     @Output() visitConfirmed = new EventEmitter<number>();
 
-    now = new Date();
+    now = moment();
     role = Role;
     displayServices = false;
     buttonDisabled = false;
 
     confirmVisit(): void {
-        this.visitConfirmed.next(this.visit.id);
+        this.visitConfirmed.next(this.visit.visit.id);
         this.buttonDisabled = true;
     }
 }

@@ -5,6 +5,7 @@ import { CalendarEvent, CalendarView } from 'angular-calendar';
 import { getMonth, getYear, isAfter, isSameDay, isSameMonth } from 'date-fns';
 import { BehaviorSubject, filter, map, Observable, Subject, switchMap } from 'rxjs';
 import { DoctorsService } from 'src/app/core/services/doctors.service';
+import { UsersService } from 'src/app/core/services/users.service';
 import { eventColor } from 'src/app/shared/constants/calendar.constants';
 
 import { AddWorkingDayModalComponent } from './add-schedule-modal/add-schedule-modal.component';
@@ -32,17 +33,21 @@ export class DoctorScheduleComponent implements OnInit {
     constructor(
         private _doctorsService: DoctorsService,
         private _datePipe: DatePipe,
-        private _dialog: MatDialog
+        private _dialog: MatDialog,
+        private _usersService: UsersService
     ) { }
 
     ngOnInit(): void {
         this.events$ = this.currentDate$.pipe(
-            switchMap(currentDate => this._doctorsService.getCurrentDoctorSchedule(currentDate.month, currentDate.year)),
+            switchMap(_ => this._usersService.getCurrentUserDetails()),
+            switchMap(user => this._doctorsService.getCurrentDoctorSchedule(user.id as number)),
             map(doctorSchedule => {
                 return doctorSchedule.map(schedule => {
+                    const startTime = this._datePipe.transform(schedule.startDate, 'HH:mm');
+                    const workDuration = schedule.workDuration.substring(0, 5);
                     return {
-                        start: schedule.startDate,
-                        title: `Rozpoczęcie pracy: ${this._datePipe.transform(schedule.startDate, 'HH:mm')}, czas pracy: ${schedule.workDuration}`,
+                        start: new Date(schedule.startDate),
+                        title: `Rozpoczęcie pracy: ${startTime}, czas pracy: ${workDuration}`,
                         color: { ...eventColor },
                         allDay: true
                     } as CalendarEvent
@@ -76,10 +81,6 @@ export class DoctorScheduleComponent implements OnInit {
             year: getYear(this.viewDate)
         });
         this.activeDayIsOpen = false;
-    }
-
-    handleEvent(action: string, event: CalendarEvent): void {
-        console.log('handle event', action, event);
     }
 
     private addWorkingDay(date: Date): void {

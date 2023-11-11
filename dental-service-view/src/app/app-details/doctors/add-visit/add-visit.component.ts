@@ -9,6 +9,7 @@ import { Doctor } from 'src/app/core/models/doctor.model';
 import { Role } from 'src/app/core/models/role.model';
 import { VisitAvailableDate, VisitForm } from 'src/app/core/models/visits.model';
 import { DoctorsService } from 'src/app/core/services/doctors.service';
+import { UsersService } from 'src/app/core/services/users.service';
 import { VisitsService } from 'src/app/core/services/visits.service';
 import { indicate } from 'src/app/shared/operators/indicate';
 import { ControlsOf } from 'src/main';
@@ -22,7 +23,7 @@ export class AddVisitComponent implements OnInit, OnDestroy {
     doctorId: number;
     doctor$: Observable<Doctor>;
     availableDates: VisitAvailableDate[];
-    availableDays: Date[] = [];
+    availableDays: Moment[] = [];
     availableHours$ = new BehaviorSubject<string[]>([]);
     role = Role;
     form: FormGroup;
@@ -37,14 +38,14 @@ export class AddVisitComponent implements OnInit, OnDestroy {
         private _fb: FormBuilder,
         private _toastr: ToastrService,
         private _router: Router,
-        private _visitsService: VisitsService
+        private _visitsService: VisitsService,
+        private _usersService: UsersService
     ) {
         this.doctorId = +this._activatedRoute.snapshot.params.id;
     }
 
     ngOnInit(): void {
         this.form = this._fb.group<ControlsOf<VisitForm>>({
-            doctorId: this._fb.nonNullable.control(this.doctorId, [Validators.required]),
             serviceIds: this._fb.control<number[]>([], [Validators.required]),
             date: this._fb.control({ value: null, disabled: true }, [Validators.required]),
             startHour: this._fb.nonNullable.control({ value: '', disabled: true }, [Validators.required])
@@ -59,7 +60,7 @@ export class AddVisitComponent implements OnInit, OnDestroy {
                 this.form.controls.date.setValue(null);
             }),
             filter(serviceIds => serviceIds && serviceIds.length > 0),
-            switchMap(serviceIds => this._doctorsService.getDoctorAvailableDays(this.doctorId, serviceIds))
+            switchMap(serviceIds => this._doctorsService.getDoctorAvailableDays(serviceIds))
         ).subscribe(result => {
             this.availableDays = result.map(r => r.date);
             this.availableDates = result;
@@ -94,9 +95,11 @@ export class AddVisitComponent implements OnInit, OnDestroy {
         if (this.form.valid) {
             const visit = this.form.value as VisitForm;
 
-            this._visitsService.addVisit(visit).pipe(
-                takeUntil(this._destroy$),
-                indicate(this.isSaving$)
+            this._usersService.getCurrentUserDetails().pipe(
+                switchMap(user => this._visitsService.addVisit(user.id as number, visit).pipe(
+                    indicate(this.isSaving$)
+                )),
+                takeUntil(this._destroy$)
             ).subscribe(_ => {
                 this._toastr.success("Pomyślnie dokonano rezerwacji");
                 this._router.navigateByUrl('/visits');
@@ -110,6 +113,6 @@ export class AddVisitComponent implements OnInit, OnDestroy {
         const date = (d || moment());
         const dateISO = date.toDate().toISOString();
 
-        return this.minDate <= date && this.availableDays.find(dad => dad.toISOString() === dateISO) !== undefined;
+        return this.minDate <= date && this.availableDays.find(dad => dad.toDate().toISOString() === dateISO) !== undefined;
     };
 }

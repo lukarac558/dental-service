@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export type DoctorShort = {
     id: number;
     name: string;
@@ -33,10 +35,20 @@ export type DoctorService = {
 export type DoctorServiceForm = Pick<DoctorService, 'name' | 'durationTime' | 'description'>;
 
 export type DoctorSchedule = {
-    startDate: Date | null;
+    id: number;
+    startDate: string;
+    workDuration: string;
+    doctorId: number;
+};
+
+export type DoctorAddScheduleForm = {
+    startDate: Moment | null;
+    startTime: string;
     workDuration: string;
 };
 
-export type DoctorAddScheduleForm = DoctorSchedule & {
-    startTime: string;
+export type DoctorAddSchedule = {
+    startDate: string;
+    workDuration: string;
+    doctorId: number;
 };

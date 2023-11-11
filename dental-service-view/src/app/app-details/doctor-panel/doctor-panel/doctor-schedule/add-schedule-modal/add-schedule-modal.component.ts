@@ -1,10 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 import { ToastrService } from 'ngx-toastr';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 import { DoctorAddScheduleForm } from 'src/app/core/models/doctor.model';
 import { DoctorsService } from 'src/app/core/services/doctors.service';
+import { UsersService } from 'src/app/core/services/users.service';
 import { indicate } from 'src/app/shared/operators/indicate';
 import { ControlsOf } from 'src/main';
 
@@ -18,7 +21,7 @@ export type AddWorkingDayModalData = {
     styleUrls: ['./add-schedule-modal.component.scss']
 })
 export class AddWorkingDayModalComponent implements OnInit, OnDestroy {
-    date: Date;
+    date: Moment;
     form: FormGroup;
     isSaving$ = new Subject<boolean>();
 
@@ -29,9 +32,10 @@ export class AddWorkingDayModalComponent implements OnInit, OnDestroy {
         @Inject(MAT_DIALOG_DATA) private _data: AddWorkingDayModalData,
         private _fb: FormBuilder,
         private _toastr: ToastrService,
-        private _doctorsService: DoctorsService
+        private _doctorsService: DoctorsService,
+        private _userService: UsersService
     ) {
-        this.date = this._data.date;
+        this.date = moment(this._data.date.toISOString());
     }
 
     ngOnInit(): void {
@@ -50,8 +54,15 @@ export class AddWorkingDayModalComponent implements OnInit, OnDestroy {
     save(): void {
         if (this.form.valid) {
             const doctorAddSchedule = this.form.getRawValue() as DoctorAddScheduleForm;
+            const time = doctorAddSchedule.startTime.split(':');
+            doctorAddSchedule.startDate?.hour(+time[0]).minute(+time[1]);
 
-            this._doctorsService.addCurrentDoctorSchedule(doctorAddSchedule).pipe(
+            this._userService.getCurrentUserDetails().pipe(
+                switchMap(user => this._doctorsService.addCurrentDoctorSchedule({
+                    doctorId: user.id as number,
+                    startDate: doctorAddSchedule.startDate?.format("YYYY-MM-DD HH:mm:ss") as string,
+                    workDuration: doctorAddSchedule.workDuration + ":00"
+                })),
                 takeUntil(this._destroy$),
                 indicate(this.isSaving$)
             ).subscribe(_ => {

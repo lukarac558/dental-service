@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, EMPTY, Observable, of, startWith } from 'rxjs';
+import * as moment from 'moment';
+import { map, Observable } from 'rxjs';
+import { appConfig } from 'src/app/app.config';
 
 import { Page, PageCriteria } from '../models/page.model';
-import { ReservationVisit, Visit, VisitForm } from '../models/visits.model';
+import { Visit, VisitForm } from '../models/visits.model';
 
 @Injectable({
     providedIn: 'root'
@@ -11,59 +13,69 @@ import { ReservationVisit, Visit, VisitForm } from '../models/visits.model';
 export class VisitsService {
     constructor(private _http: HttpClient) { }
 
-    getVisits(searchCriteria: PageCriteria): Observable<Page<Visit>> {
-        return of({
-            itemsCount: 2,
-            items: [{
-                id: 2,
-                startDate: new Date(2023, 10, 15, 12, 0, 0),
-                endDate: new Date(2023, 10, 15, 14, 0, 0),
-                doctorName: 'Alan Kwieciński',
-                doctorGender: 'MALE',
-                doctorSpecialization: 'Stomatolog',
-                services: [{
-                    id: 1,
-                    name: 'Konsultacja stomatologiczna'
-                }, {
-                    id: 4,
-                    name: 'Leczenie próchnicy'
-                }]
-            }, {
-                id: 1,
-                startDate: new Date(2023, 9, 21, 8, 0, 0),
-                endDate: new Date(2023, 9, 21, 9, 0, 0),
-                doctorName: 'Agata Fąk',
-                doctorGender: 'MALE',
-                doctorSpecialization: 'Stomatolog',
-                services: [{
-                    id: 5,
-                    name: 'Pakiet higienizacyjny'
-                }]
-            }]
-        }).pipe(delay(500));
+    getVisits(patientId: number, searchCriteria: PageCriteria): Observable<Page<Visit>> {
+        return this._http.post<Page<Visit>>(`${appConfig.apiUrl}/reservation/visits/approved`, {
+            ...searchCriteria,
+            userId: patientId
+        }).pipe(
+            map((result: any) => {
+                return {
+                    itemsCount: result.totalElements,
+                    items: result.content.map((visit: any) => {
+                        return {
+                            ...visit,
+                            doctorInfo: {
+                                id: 1,
+                                name: 'Alan',
+                                surname: 'Kwieciński',
+                                sex: 'MALE',
+                                competencyInformation: {
+                                    id: 1,
+                                    title: 'Stomatolog',
+                                    description: 'Miłośnik kotów'
+                                }
+                            }
+                        }
+                    })
+                }
+            })
+        );
     }
 
-    addVisit(visitForm: VisitForm): Observable<void> {
-        return EMPTY.pipe(startWith(undefined), delay(500));
+    addVisit(patientId: number, visitForm: VisitForm): Observable<void> {
+        const time = visitForm.startHour.split(':');
+        return this._http.post<void>(`${appConfig.apiUrl}/reservation/visits`, {
+            visit: {
+                startDate: moment(visitForm.date).hour(+time[0]).minute(+time[1]).format("YYYY-MM-DD HH:mm:ss"),
+                patientId: patientId,
+                description: ''
+            },
+            serviceTypeIds: visitForm.serviceIds
+        });
     }
 
-    getReservedVisits(): Observable<ReservationVisit[]> {
-        return of([{
-            id: 3,
-            startDate: new Date(2023, 10, 28, 12, 0, 0),
-            endDate: new Date(2023, 10, 28, 14, 0, 0),
-            doctorName: 'Alan Kwieciński',
-            doctorGender: 'MALE',
-            doctorSpecialization: 'Stomatolog',
-            reservationEndDate: new Date(2023, 10, 1, 20, 0, 0),
-            services: [{
-                id: 5,
-                name: 'Pakiet higienizacyjny'
-            }]
-        }]).pipe(delay(1000));
+    getReservedVisits(patientId: number): Observable<Visit[]> {
+        return this._http.get<Visit[]>(`${appConfig.apiUrl}/reservation/visits/not-approved/${patientId}`).pipe(
+            map(visits => visits.map(visit => {
+                return {
+                    ...visit,
+                    doctorInfo: {
+                        id: 1,
+                        name: 'Alan',
+                        surname: 'Kwieciński',
+                        sex: 'MALE',
+                        competencyInformation: {
+                            id: 1,
+                            title: 'Stomatolog',
+                            description: 'Miłośnik kotów'
+                        }
+                    }
+                }
+            }))
+        )
     }
 
     confirmVisit(id: number): Observable<void> {
-        return EMPTY.pipe(startWith(undefined), delay(500));
+        return this._http.put<void>(`${appConfig.apiUrl}/reservation/visits/approve/${id}`, {});
     }
 }

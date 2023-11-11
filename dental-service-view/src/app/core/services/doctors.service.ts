@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, delay, EMPTY, map, Observable, of, startWith, switchMap } from 'rxjs';
+import * as moment from 'moment';
+import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { appConfig } from 'src/app/app.config';
 
 import {
     Doctor,
-    DoctorAddScheduleForm,
+    DoctorAddSchedule,
     DoctorCompetency,
     DoctorCompetencyForm,
     DoctorSchedule,
@@ -23,27 +24,14 @@ import { VisitAvailableDate } from '../models/visits.model';
 export class DoctorsService {
     constructor(private _http: HttpClient) { }
 
-    getCurrentDoctorSchedule(month: number, year: number): Observable<DoctorSchedule[]> {
-        return of([{
-            startDate: new Date(2023, 9, 24, 8, 0),
-            workDuration: "8:00",
-            startBreakTime: "12:00",
-            breakDuration: "0:30"
-        }, {
-            startDate: new Date(2023, 9, 25, 8, 0),
-            workDuration: "7:00",
-            startBreakTime: "12:00",
-            breakDuration: "0:30"
-        }, {
-            startDate: new Date(2023, 9, 27, 8, 0),
-            workDuration: "6:00",
-            startBreakTime: "12:00",
-            breakDuration: "0:30"
-        }]).pipe(delay(500));
+    getCurrentDoctorSchedule(doctorId: number): Observable<DoctorSchedule[]> {
+        return this._http.get<DoctorSchedule[]>(`${appConfig.apiUrl}/reservation/calendar-days/user/${doctorId}`)
     }
 
-    addCurrentDoctorSchedule(schedule: DoctorAddScheduleForm): Observable<void> {
-        return EMPTY.pipe(startWith(undefined), delay(500));
+    addCurrentDoctorSchedule(schedule: DoctorAddSchedule): Observable<void> {
+        return this._http.post<void>(`${appConfig.apiUrl}/reservation/calendar-days`, {
+            ...schedule
+        });
     }
 
     getCurrentDoctorCompetency(): Observable<DoctorCompetency> {
@@ -115,20 +103,30 @@ export class DoctorsService {
         return this._http.post<Doctor>(`${appConfig.apiUrl}/user/users/doctor/${id}`, {});
     }
 
-    getDoctorAvailableDays(id: number, serviceIds: number[]): Observable<VisitAvailableDate[]> {
-        return of([{
-            date: new Date(Date.UTC(2023, 10, 21)),
-            hours: ["12:00", "12:30",]
-        }, {
-            date: new Date(Date.UTC(2023, 10, 22)),
-            hours: ["12:00", "12:30", "13:00", "13:30", "14:00"]
-        }, {
-            date: new Date(Date.UTC(2023, 10, 23)),
-            hours: ["12:00", "12:30", "13:00", "13:30", "14:00"]
-        }, {
-            date: new Date(Date.UTC(2023, 10, 24)),
-            hours: ["13:00", "13:30", "14:00"]
-        }]).pipe(delay(500));
+    getDoctorAvailableDays(serviceIds: number[]): Observable<VisitAvailableDate[]> {
+        return this._http.get<string[]>(`${appConfig.apiUrl}/reservation/visits/available-times/${serviceIds.join(',')}`).pipe(
+            tap(ts => console.log(ts)),
+            map(result => {
+                return result.reduce((group: { date: string, hours: string[] }[], dateAndTime) => {
+                    const [date, time] = dateAndTime.split(' ');
+                    const index = group.findIndex(v => v.date == date);
+                    if (index >= 0) {
+                        group[index].hours.push(time);
+                    } else {
+                        group.push({ date: date, hours: [time] });
+                    }
+                    return group;
+                }, [])
+            }),
+            map(result => {
+                return result.map(day => {
+                    return {
+                        date: moment(day.date).utc(true),
+                        hours: day.hours.map(hour => hour.substring(0, 5))
+                    } as VisitAvailableDate;
+                });
+            })
+        );
     }
 
     private addDoctorCompetency(doctorCompetency: DoctorCompetencyForm): Observable<void> {

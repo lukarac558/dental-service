@@ -36,14 +36,6 @@
                 grid-row-end: 2;
                 text-align: center;
             }
-
-            #{$self}__status--finished {
-                color: var.$font-grey-color;
-            }
-
-            #{$self}__status--in-future {
-                font-weight: 500;
-            }
         }
 
         #{$self}__display-services {
