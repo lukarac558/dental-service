@@ -42,7 +42,7 @@ export class DoctorServiceModalComponent implements OnInit, OnDestroy {
         const durationTime = this._service?.durationTime ? this._service?.durationTime.substring(0, 5) : this.defaultDurationTime;
         this.form = this._fb.group<ControlsOf<DoctorServiceForm>>({
             name: this._fb.nonNullable.control(this._service?.name || '', [Validators.required, Validators.maxLength(100)]),
-            durationTime: this._fb.nonNullable.control(durationTime, [Validators.required]),
+            durationTime: this._fb.nonNullable.control({ value: durationTime, disabled: true }, [Validators.required]),
             description: this._fb.nonNullable.control(this._service?.description || '', [Validators.required, Validators.maxLength(200)])
         });
     }

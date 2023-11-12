@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap } from 'rxjs';
 import { appConfig } from 'src/app/app.config';
 
 import {
@@ -105,7 +105,6 @@ export class DoctorsService {
 
     getDoctorAvailableDays(serviceIds: number[]): Observable<VisitAvailableDate[]> {
         return this._http.get<string[]>(`${appConfig.apiUrl}/reservation/visits/available-times/${serviceIds.join(',')}`).pipe(
-            tap(ts => console.log(ts)),
             map(result => {
                 return result.reduce((group: { date: string, hours: string[] }[], dateAndTime) => {
                     const [date, time] = dateAndTime.split(' ');

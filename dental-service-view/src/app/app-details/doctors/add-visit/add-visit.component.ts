@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +29,7 @@ export class AddVisitComponent implements OnInit, OnDestroy {
     role = Role;
     form: FormGroup;
     isSaving$ = new Subject<boolean>();
-    minDate = moment().add(1, 'day');
+    minDate = moment();
 
     private _destroy$ = new Subject<void>();
 
@@ -100,9 +101,16 @@ export class AddVisitComponent implements OnInit, OnDestroy {
                     indicate(this.isSaving$)
                 )),
                 takeUntil(this._destroy$)
-            ).subscribe(_ => {
-                this._toastr.success("Pomyślnie dokonano rezerwacji");
-                this._router.navigateByUrl('/visits');
+            ).subscribe({
+                next: _ => {
+                    this._toastr.success("Pomyślnie dokonano rezerwacji");
+                    this._router.navigateByUrl('/visits');
+                },
+                error: (error: HttpErrorResponse) => {
+                    this._toastr.error(error.error.reasons.length > 0 ? error.error.reasons[0] : 'Nieprawidłowe dane.');
+                    this.form.controls.serviceIds.setValue(this.form.controls.serviceIds.value);
+                    this.form.controls.date.setValue(null);
+                }
             });
         } else {
             this.form.markAllAsTouched();
