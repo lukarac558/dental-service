@@ -1,8 +1,4 @@
 <mat-nav-list>
-    <mat-list-item routerLink="/">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span matListItemTitle>Home</span>
-    </mat-list-item>
     <mat-list-item *dsRequiredRoles="[role.Patient]"
                    routerLink="/doctors">
         <mat-icon matListItemIcon>local_hospital</mat-icon>
