@@ -3,6 +3,7 @@ package com.student.userservice.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.sql.Time;
@@ -30,4 +31,8 @@ public class ServiceTypeEntity implements Serializable {
     private UserEntity doctor;
 
     private String description;
+
+    @Column(name = "enabled", nullable = false)
+    @Accessors(fluent = true)
+    private Boolean isEnabled;
 }

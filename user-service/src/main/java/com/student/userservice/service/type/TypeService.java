@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.student.api.exception.handler.ErrorConstants.SERVICE_TYPE_NOT_FOUND_MESSAGE;
 import static com.student.api.exception.handler.ErrorConstants.USER_BY_EMAIL_NOT_FOUND_MESSAGE;
@@ -32,28 +31,32 @@ public class TypeService {
                         info.getEmail()
                 )));
         type.setDoctor(user);
+        type.isEnabled(true);
         return typeRepository.save(type);
     }
 
     @Transactional
     public ServiceTypeEntity updateType(ServiceTypeEntity type, Info info) {
-        ServiceTypeEntity serviceType = typeRepository.findByIdAndDoctor_Email(type.getId(), info.getEmail())
-                .orElseThrow(() -> new NotFoundException(String.format(
-                        SERVICE_TYPE_NOT_FOUND_MESSAGE,
-                        type.getId()
-                )));
+        ServiceTypeEntity serviceType = findByIdAndDoctorEmail(type.getId(), info);
 
         serviceType.setName(type.getName());
-        serviceType.setDurationTime(type.getDurationTime());
         serviceType.setDescription(type.getDescription());
 
         return typeRepository.save(serviceType);
     }
 
+    public ServiceTypeEntity findByIdAndDoctorEmail(Long id, Info info) {
+        return typeRepository.findByIdAndDoctor_Email(id, info.getEmail())
+                .orElseThrow(() -> new NotFoundException(String.format(
+                        SERVICE_TYPE_NOT_FOUND_MESSAGE,
+                        id
+                )));
+    }
+
     public List<ServiceTypeEntity> findTypesByIds(List<Long> ids) {
         return ids.stream()
                 .map(this::findTypeById)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ServiceTypeEntity> findTypeByDoctorId(Long doctorId) {
@@ -74,7 +77,8 @@ public class TypeService {
 
     @Transactional
     public void deleteType(Info info, Long id) {
-        typeRepository.deleteByIdAndDoctor_Email(id, info.getEmail());
+        ServiceTypeEntity serviceType = findByIdAndDoctorEmail(id, info);
+        serviceType.isEnabled(false);
     }
 
 }

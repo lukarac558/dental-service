@@ -38,6 +38,8 @@
 		<mutation-test-junit.version>1.2.1</mutation-test-junit.version>
 		<swagger-api.version>2.2.15</swagger-api.version>
 
+		<maven-filtering.version>3.3.1</maven-filtering.version>
+
 		<api.version>0.0.1-SNAPSHOT</api.version>
 
 		<snakeyaml.version>2.2</snakeyaml.version>
@@ -100,6 +102,16 @@
 
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -131,6 +143,27 @@
 						</to>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven-resources-plugin.version}</version>
+					<configuration>
+						<nonFilteredFileExtensions>
+							<nonFilteredFileExtension>pem</nonFilteredFileExtension>
+							<nonFilteredFileExtension>p12</nonFilteredFileExtension>
+							<nonFilteredFileExtension>jks</nonFilteredFileExtension>
+						</nonFilteredFileExtensions>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.shared</groupId>
+							<artifactId>maven-filtering</artifactId>
+							<version>${maven-filtering.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+
 				<plugin>
 					<groupId>org.pitest</groupId>
 					<artifactId>pitest-maven</artifactId>

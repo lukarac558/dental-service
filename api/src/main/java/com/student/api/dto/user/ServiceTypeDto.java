@@ -26,12 +26,16 @@ public class ServiceTypeDto {
     private String name;
 
     @NotNull
-    @Schema(example = "01:00:00")
+    @Schema(example = "01:00:00", accessMode = Schema.AccessMode.READ_ONLY)
     private String durationTime;
 
     @Size(min = 1, max = 200)
     private String description;
 
     @NotNull
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long doctorId;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    private Boolean enabled;
 }

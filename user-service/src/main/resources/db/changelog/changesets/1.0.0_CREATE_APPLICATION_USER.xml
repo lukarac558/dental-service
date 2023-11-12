@@ -98,6 +98,9 @@
             <column name="doctor_id" type="bigint">
                 <constraints nullable="false" unique="false"/>
             </column>
+            <column name="enabled" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="address_id"

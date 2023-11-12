@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface ServiceTypeRepository extends JpaRepository<ServiceTypeEntity, Long>, JpaSpecificationExecutor<ServiceTypeEntity> {
     Optional<ServiceTypeEntity> findByIdAndDoctor_Email(Long id, String email);
-    void deleteByIdAndDoctor_Email(Long id, String email);
+
     List<ServiceTypeEntity> findServiceTypeEntitiesByDoctor_Id(Long doctorId);
+
+
 }
