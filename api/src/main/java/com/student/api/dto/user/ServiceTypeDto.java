@@ -26,7 +26,7 @@ public class ServiceTypeDto {
     private String name;
 
     @NotNull
-    @Schema(example = "01:00:00", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(example = "01:00:00")
     private String durationTime;
 
     @Size(min = 1, max = 200)
