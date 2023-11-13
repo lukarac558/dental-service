@@ -3,23 +3,28 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1.0.1_INSERT_USER_DATA" author="lraczka">
-        <!--Add example address-->
-        <sql>insert into address(id,voivodeship_id,city,postal_code,street,building_number) values(1,1,'Marklowice','44-321','Goplany','54a')</sql>
-        <sql>insert into address(id,voivodeship_id,city,postal_code,street,building_number) values(2,1,'Marklowice','44-321','Goplany','54a')</sql>
+        <!--Insert example addresses-->
+        <insert tableName="address"><column name="voivodeship_id" valueComputed="(select id from locationservice.voivodeship WHERE name = 'Śląskie')"/><column name="city" value="Marklowice"/>
+            <column name="postal_code" value="44-321"/><column name="street" value="Spokojna"/><column name="building_number" value="107"/></insert>
+        <insert tableName="address"><column name="voivodeship_id" valueComputed="(select id from locationservice.voivodeship WHERE name = 'Śląskie')"/><column name="city" value="Wodzisław Śląski"/>
+            <column name="postal_code" value="44-300"/><column name="street" value="Pomidorowa"/><column name="building_number" value="16a"/></insert>
 
-        <!--Add example user-->
-        <sql>insert into "dental-clinic".userservice.user(id,email,personal_id,name,surname,phone_number,address_id,competency_id)
-             values (1,'lukasz.raczka@gmail.com',78041259444,'Łukasz','Rączka','531090555',1,null)</sql>
+        <!--Insert example users-->
+        <insert tableName="user"><column name="email" value="lukasz.raczka@gmail.com"/><column name="personal_id" value="78041259444"/>
+            <column name="name" value="Łukasz"/><column name="surname" value="Rączka"/><column name="phone_number" value="554612576"/>
+            <column name="address_id" valueComputed="(select id from userservice.address WHERE postal_code = '44-321')"/></insert>
+        <insert tableName="user"><column name="email" value="pum3xlr@gmail.com"/><column name="personal_id" value="77011779469"/>
+            <column name="name" value="Andrzej"/><column name="surname" value="Rączka"/><column name="phone_number" value="9465821132"/>
+            <column name="address_id" valueComputed="(select id from userservice.address WHERE postal_code = '44-300')"/></insert>
 
-        <sql>insert into "dental-clinic".userservice.user(id,email,personal_id,name,surname,phone_number,address_id,competency_id)
-             values (2,'pum3xlr@gmail.com',77011779469,'Andrzej','Rączka','9465821132',2,null)</sql>
+        <!--Insert example user roles-->
+        <insert tableName="user_role"><column name="user_id" valueComputed="(select id from userservice.user WHERE email = 'lukasz.raczka@gmail.com')"/><column name="role" value="DOCTOR"/></insert>
+        <insert tableName="user_role"><column name="user_id" valueComputed="(select id from userservice.user WHERE email = 'pum3xlr@gmail.com')"/><column name="role" value="PATIENT"/></insert>
 
-        <!--Add example user role-->
-        <sql>insert into user_role(id,user_id,role) values(1,1,'DOCTOR')</sql>
-        <sql>insert into user_role(id,user_id,role) values(2,2,'PATIENT')</sql>
-
-        <!--Add example service types -->
-        <sql>insert into service_type(id,name,duration_time,doctor_id,description) values(1,'Plombowanie','01:00',1,'Opis uslugi plombowania zeba.')</sql>
-        <sql>insert into service_type(id,name,duration_time,doctor_id,description) values(2,'Wyrywanie','0:30',1,'Opis uslugi wyrywania zeba.')</sql>
+        <!--Insert example service types -->
+        <insert tableName="service_type"><column name="name" value="Plombowanie"/><column name="duration_time" value="01:00"/>
+            <column name="doctor_id" valueComputed="(select id from userservice.user WHERE email = 'lukasz.raczka@gmail.com')"/><column name="description" value="Opis uslugi plombowania zeba."/></insert>
+        <insert tableName="service_type"><column name="name" value="Wyrywanie"/><column name="duration_time" value="0:30"/>
+            <column name="doctor_id" valueComputed="(select id from userservice.user WHERE email = 'lukasz.raczka@gmail.com')"/><column name="description" value="Opis uslugi wyrywania zeba"/></insert>
     </changeSet>
 </databaseChangeLog>

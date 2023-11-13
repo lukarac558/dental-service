@@ -3,10 +3,10 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1.2.1_INSERT_EXAMPLE_CALENDAR_DAY" author="lraczka">
-        <!--Add example calendar days -->
-        <sql>insert into calendar_day(id,start_date,work_duration,doctor_id)
-            values(1,'2024-03-18 07:00:00','7:00',1)</sql>
-        <sql>insert into calendar_day(id,start_date,work_duration,doctor_id)
-            values(2,'2024-03-19 08:00:00','8:00',1)</sql>
+        <!--Insert example calendar days -->
+        <insert tableName="calendar_day"><column name="start_date" value="2024-03-18 07:00:00"/><column name="work_duration" value="7:00"/>
+            <column name="doctor_id" valueComputed="(select id from userservice.user WHERE email = 'lukasz.raczka@gmail.com')"/></insert>
+        <insert tableName="calendar_day"><column name="start_date" value="2024-03-19 08:00:00"/><column name="work_duration" value="8:00"/>
+            <column name="doctor_id" valueComputed="(select id from userservice.user WHERE email = 'lukasz.raczka@gmail.com')"/></insert>
     </changeSet>
 </databaseChangeLog>

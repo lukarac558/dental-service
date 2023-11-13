@@ -3,12 +3,16 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1.1.1_INSERT_EXAMPLE_VISITS" author="lraczka">
-        <!--Add example visit -->
-        <sql>insert into visit(id,start_date,patient_id,reservation_date,description,approved)
-            values(1,'2024-03-18 08:00:00',2,'2023-11-11 12:00:00',null,true)</sql>
+        <!--Insert example visit -->
+        <insert tableName="visit"><column name="start_date" value="2024-03-18 08:00:00"/>
+            <column name="patient_id" valueComputed="(select id from userservice.user WHERE email = 'pum3xlr@gmail.com')"/>
+            <column name="reservation_date" value="2023-11-11 12:00:00"/><column name="approved" value="true"/></insert>
 
-        <!--Add example visit positions-->
-        <sql>insert into visit_position(id,visit_id,service_type_id) values(1,1,1)</sql>
-        <sql>insert into visit_position(id,visit_id,service_type_id) values(2,1,2)</sql>
+        <!--Insert example visit positions-->
+        <insert tableName="visit_position"><column name="visit_id" valueComputed="(select id from reservationservice.visit WHERE approved = true)"/>
+            <column name="service_type_id" valueComputed="(select id from userservice.service_type WHERE name = 'Plombowanie')"/></insert>
+
+        <insert tableName="visit_position"><column name="visit_id" valueComputed="(select id from reservationservice.visit WHERE approved = true)"/>
+            <column name="service_type_id" valueComputed="(select id from userservice.service_type WHERE name = 'Wyrywanie')"/></insert>
     </changeSet>
 </databaseChangeLog>
