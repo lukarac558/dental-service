@@ -107,7 +107,11 @@ export class AddVisitComponent implements OnInit, OnDestroy {
                     this._router.navigateByUrl('/visits');
                 },
                 error: (error: HttpErrorResponse) => {
-                    this._toastr.error(error.error.reasons.length > 0 ? error.error.reasons[0] : 'Nieprawidłowe dane.');
+                    if (error.status === 422) {
+                        this._toastr.error('Wybrana godzina jest już niedostępna. Proszę wybrać ponownie');
+                    } else {
+                        this._toastr.error(error.error.reasons.length > 0 ? error.error.reasons[0] : 'Nieprawidłowe dane.');
+                    }
                     this.form.controls.serviceIds.setValue(this.form.controls.serviceIds.value);
                     this.form.controls.date.setValue(null);
                 }
