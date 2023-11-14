@@ -5,14 +5,16 @@
 
     <changeSet id="1.0.0_CREATE_VISIT" author="lraczka">
 
+        <createSequence sequenceName="visit_id_seq" cacheSize="5" incrementBy="1"/>
+        <createSequence sequenceName="visit_position_id_seq" cacheSize="5" incrementBy="1"/>
+
         <createTable tableName="visit">
-            <column name="id" type="bigint">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="bigint" defaultValueComputed="nextval('visit_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="visit_pkey" unique="true" nullable="false"/>
             </column>
             <column name="start_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <!--patient identifier -->
             <column name="patient_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -22,12 +24,13 @@
             <column name="description" type="varchar(500)">
             </column>
             <column name="approved" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
             </column>
         </createTable>
 
         <createTable tableName="visit_position">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="bigint" defaultValueComputed="nextval('visit_position_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="visit_position_pkey" unique="true" nullable="false"/>
             </column>
             <column name="visit_id" type="bigint">
                 <constraints nullable="false"/>

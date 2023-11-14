@@ -15,17 +15,8 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "calendar_day")
 public class CalendarDayEntity implements Serializable {
-    private static final String FK_CALENDAR_DAY_USER_ID = "fk_calendar_day_user_id";
-
-    @SequenceGenerator(
-            name = "calendar_day_sequence",
-            sequenceName = "calendar_day_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "calendar_day_sequence"
-    )
+    @SequenceGenerator(name = "calendar_day_id_seq", sequenceName = "calendar_day_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "calendar_day_id_seq")
     @Id
     private Long id;
 

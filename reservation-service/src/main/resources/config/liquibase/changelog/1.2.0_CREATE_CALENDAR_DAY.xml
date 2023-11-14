@@ -4,9 +4,12 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="1.2.0_CREATE_CALENDAR_DAYS" author="lraczka">
+
+        <createSequence sequenceName="calendar_day_id_seq" cacheSize="5" incrementBy="1"/>
+
         <createTable tableName="calendar_day">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="bigint" defaultValueComputed="nextval('calendar_day_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="calendar_day_pkey" unique="true" nullable="false"/>
             </column>
             <column name="start_date" type="timestamp">
                 <constraints nullable="false"/>
@@ -14,7 +17,6 @@
             <column name="work_duration" type="time">
                 <constraints nullable="false"/>
             </column>
-            <!--doctor identifier -->
             <column name="doctor_id" type="bigint">
                 <constraints nullable="false"/>
             </column>

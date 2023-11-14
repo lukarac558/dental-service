@@ -12,8 +12,6 @@ import lombok.*;
 @Entity
 @Table(name = "city")
 public class CityEntity {
-    private static final String FK_CITY_VOIVODESHIP_ID = "fk_city_voivodeship_id";
-
     @Id
     @SequenceGenerator(name = "city_id_seq", sequenceName = "city_id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_id_seq")
@@ -27,7 +25,7 @@ public class CityEntity {
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "voivodeship_id", foreignKey = @ForeignKey(name = FK_CITY_VOIVODESHIP_ID), nullable = false)
+    @JoinColumn(name = "voivodeship_id", foreignKey = @ForeignKey(name = "fk_city_voivodeship_id"), nullable = false)
     private VoivodeshipEntity voivodeship;
 
 }
