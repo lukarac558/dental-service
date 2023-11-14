@@ -30,6 +30,11 @@ export type DoctorService = {
     name: string;
     durationTime: string;
     description: string;
+    enabled: boolean;
+};
+
+export type DoctorServiceAndDoctorInfo = DoctorService & {
+    doctor: DoctorShort;
 };
 
 export type DoctorServiceForm = Pick<DoctorService, 'name' | 'durationTime' | 'description'>;

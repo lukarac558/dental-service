@@ -1,23 +1,23 @@
 import { Moment } from 'moment';
 
-import { DoctorService, DoctorShort } from './doctor.model';
+import { DoctorServiceAndDoctorInfo } from './doctor.model';
 
 export type Visit = {
     visit: VisitDetails;
     visitPositionDetails: VisitPositiondetails[];
-    doctorInfo: DoctorShort;
 };
 
 export type VisitDetails = {
     id: number;
     startDate: string;
+    endDate: string;
     reservationDate: string;
     description: string;
 };
 
 export type VisitPositiondetails = {
     id: number;
-    serviceType: DoctorService
+    serviceType: DoctorServiceAndDoctorInfo
 };
 
 export type VisitForm = {

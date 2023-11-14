@@ -20,23 +20,8 @@ export class VisitsService {
         }).pipe(
             map((result: any) => {
                 return {
-                    itemsCount: result.totalElements,
-                    items: result.content.map((visit: any) => {
-                        return {
-                            ...visit,
-                            doctorInfo: {
-                                id: 1,
-                                name: 'Alan',
-                                surname: 'Kwieciński',
-                                sex: 'MALE',
-                                competencyInformation: {
-                                    id: 1,
-                                    title: 'Stomatolog',
-                                    description: 'Miłośnik kotów'
-                                }
-                            }
-                        }
-                    })
+                    items: result.content,
+                    itemsCount: result.totalElements
                 }
             })
         );
@@ -55,23 +40,11 @@ export class VisitsService {
     }
 
     getReservedVisits(patientId: number): Observable<Visit[]> {
-        return this._http.get<Visit[]>(`${appConfig.apiUrl}/reservation/visits/not-approved/${patientId}`).pipe(
-            map(visits => visits.map(visit => {
-                return {
-                    ...visit,
-                    doctorInfo: {
-                        id: 1,
-                        name: 'Alan',
-                        surname: 'Kwieciński',
-                        sex: 'MALE',
-                        competencyInformation: {
-                            id: 1,
-                            title: 'Stomatolog',
-                            description: 'Miłośnik kotów'
-                        }
-                    }
-                }
-            }))
+        return this._http.post<Visit[]>(`${appConfig.apiUrl}/reservation/visits/not-approved`, {
+            userId: patientId,
+            enabled: false
+        }).pipe(
+            map((result: any) => result.content)
         )
     }
 

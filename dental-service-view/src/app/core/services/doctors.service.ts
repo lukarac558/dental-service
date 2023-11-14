@@ -66,7 +66,10 @@ export class DoctorsService {
             showOnlyYour: true,
             name: ""
         }).pipe(
-            map(result => (result as any).content)
+            map(result => (result as any).content),
+            map(services => {
+                return services.filter((service: DoctorService) => service.enabled)
+            })
         );
     }
 
@@ -100,7 +103,14 @@ export class DoctorsService {
     }
 
     getDoctor(id: number): Observable<Doctor> {
-        return this._http.post<Doctor>(`${appConfig.apiUrl}/user/users/doctor/${id}`, {});
+        return this._http.get<Doctor>(`${appConfig.apiUrl}/user/users/doctor/${id}`).pipe(
+            map(result => {
+                return {
+                    ...result,
+                    serviceTypes: result.serviceTypes.filter(serviceType => serviceType.enabled)
+                }
+            })
+        );
     }
 
     getDoctorAvailableDays(serviceIds: number[]): Observable<VisitAvailableDate[]> {

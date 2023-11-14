@@ -4,16 +4,17 @@
             <div class="d-flex justify-content-center justify-content-md-start">
                 <div class="visit__avatar">
                     <ds-avatar [avatarSizePx]="90"
-                               [gender]="visit.doctorInfo.sex"
+                               [gender]="visit.visitPositionDetails[0].serviceType.doctor.sex"
                                [role]="role.Doctor">
                     </ds-avatar>
                 </div>
                 <div>
                     <div class="visit__doctor-name">
-                        {{visit.doctorInfo.name}} {{visit.doctorInfo.surname}}
+                        {{visit.visitPositionDetails[0].serviceType.doctor.name}}
+                        {{visit.visitPositionDetails[0].serviceType.doctor.surname}}
                     </div>
                     <div>
-                        {{visit.doctorInfo.competencyInformation.title}}
+                        {{visit.visitPositionDetails[0].serviceType.doctor.competencyInformation.title}}
                     </div>
                 </div>
             </div>
