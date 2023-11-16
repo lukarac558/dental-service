@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.0.2_INSERT_CITY" author="lraczka">
+        <insert tableName="city">
+            <column name="id" value="7777"/>
+            <column name="voivodeship_id" valueComputed="(select id from voivodeship WHERE name = 'Kujawsko-Pomorskie')"/>
+            <column name="name" value="Piotrków Kujawski"/>
+            <column name="code" value="88-230"/>
+        </insert>
+        <insert tableName="city">
+            <column name="voivodeship_id" valueComputed="(select id from voivodeship WHERE name = 'Warmińsko-Mazurskie')"/>
+            <column name="name" value="Kalinowo"/>
+            <column name="code" value="07-210"/>
+        </insert>
+        <insert tableName="city">
+            <column name="voivodeship_id" valueComputed="(select id from voivodeship WHERE name = 'Śląskie')"/>
+            <column name="name" value="Jastrzębie-Zdrój"/>
+            <column name="code" value="44-268"/>
+        </insert>
+        <insert tableName="city">
+            <column name="voivodeship_id" valueComputed="(select id from voivodeship WHERE name = 'Łódzkie')"/>
+            <column name="name" value="Rawa Mazowiecka"/>
+            <column name="code" value="96-200"/>
+        </insert>
+        <insert tableName="city">
+            <column name="voivodeship_id" valueComputed="(select id from voivodeship WHERE name = 'Małopolskie')"/>
+            <column name="name" value="Pałecznica"/>
+            <column name="code" value="21-104"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

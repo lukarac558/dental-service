@@ -22,7 +22,7 @@ public class CalendarDayService {
         return calendarDayRepository.findCalendarDayById(id);
     }
 
-    public List<CalendarDayEntity> findCalendarDaysByUserId(Long userId) {
+    public List<CalendarDayEntity> findCalendarDaysByDoctorId(Long userId) {
         return calendarDayRepository.findCalendarDaysByDoctorId(userId);
     }
 

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.0.1_INSERT_USER_DATA" author="lraczka">
+        <!--Insert example competency information-->
+        <insert tableName="competency_information">
+            <column name="id" value="2222"/>
+            <column name="title" value="lek. dent."/>
+            <column name="description" value="Doświadczony lekarz."/>
+        </insert>
+
+        <insert tableName="competency_information">
+            <column name="id" value="2233"/>
+            <column name="title" value="lek. dent."/>
+            <column name="description" value="Bardzo oświadczony lekarz."/>
+        </insert>
+
+        <!--Insert example addresses-->
+        <insert tableName="address">
+            <column name="id" value="3333"/>
+            <column name="voivodeship_id" value="1"/>
+            <column name="city" value="Marklowice"/>
+            <column name="postal_code" value="44-321"/>
+            <column name="street" value="Spokojna"/>
+            <column name="building_number" value="107"/>
+        </insert>
+        <insert tableName="address">
+            <column name="id" value="3344"/>
+            <column name="voivodeship_id" value="2"/>
+            <column name="city" value="Wodzisław Śląski"/>
+            <column name="postal_code" value="44-300"/>
+            <column name="street" value="Pomidorowa"/>
+            <column name="building_number" value="16a"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="id" value="3355"/>
+            <column name="voivodeship_id" value="2"/>
+            <column name="city" value="Wodzisław Śląski"/>
+            <column name="postal_code" value="44-300"/>
+            <column name="street" value="Chrzanowa"/>
+            <column name="building_number" value="165"/>
+        </insert>
+
+        <insert tableName="address">
+            <column name="id" value="3366"/>
+            <column name="voivodeship_id" value="2"/>
+            <column name="city" value="Wodzisław Śląski"/>
+            <column name="postal_code" value="44-300"/>
+            <column name="street" value="Pożarowa"/>
+            <column name="building_number" value="1"/>
+        </insert>
+
+        <!--Insert example users-->
+        <insert tableName="user">
+            <column name="id" value="4444"/>
+            <column name="email" value="lukasz.raczka@gmail.com"/>
+            <column name="personal_id" value="97033046176"/>
+            <column name="name" value="Łukasz"/>
+            <column name="surname" value="Rączka"/>
+            <column name="phone_number" value="554612576"/>
+            <column name="address_id" value="3333"/>
+            <column name="competency_id" value="2222"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="4455"/>
+            <column name="email" value="pum3xlr@gmail.com"/>
+            <column name="personal_id" value="77011779469"/>
+            <column name="name" value="Andrzej"/>
+            <column name="surname" value="Rączka"/>
+            <column name="phone_number" value="946582113"/>
+            <column name="address_id" value="3344"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="4466"/>
+            <column name="email" value="kasia@gmail.com"/>
+            <column name="personal_id" value="80080722243"/>
+            <column name="name" value="Kasia"/>
+            <column name="surname" value="Rączka"/>
+            <column name="phone_number" value="462997532"/>
+            <column name="address_id" value="3355"/>
+        </insert>
+        <insert tableName="user">
+            <column name="id" value="4477"/>
+            <column name="email" value="maja.osa@gmail.com"/>
+            <column name="personal_id" value="49110761728"/>
+            <column name="name" value="Maja"/>
+            <column name="surname" value="Osa"/>
+            <column name="phone_number" value="462997532"/>
+            <column name="address_id" value="3366"/>
+            <column name="competency_id" value="2233"/>
+        </insert>
+
+        <!--Insert example user roles-->
+        <insert tableName="user_role">
+            <column name="user_id" value="4444"/>
+            <column name="role" value="DOCTOR"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" value="4455"/>
+            <column name="role" value="PATIENT"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" value="4466"/>
+            <column name="role" value="DOCTOR"/>
+        </insert>
+        <insert tableName="user_role">
+            <column name="user_id" value="4477"/>
+            <column name="role" value="DOCTOR"/>
+        </insert>
+
+        <!--Insert example service types -->
+        <insert tableName="service_type">
+            <column name="id" value="6666"/>
+            <column name="name" value="Plombowanie"/>
+            <column name="duration_time" value="01:00"/>
+            <column name="doctor_id" value="4444"/>
+            <column name="description" value="Opis uslugi plombowania zeba."/>
+        </insert>
+        <insert tableName="service_type">
+            <column name="id" value="6677"/>
+            <column name="name" value="Wyrywanie"/>
+            <column name="duration_time" value="0:30"/>
+            <column name="doctor_id" value="4444"/>
+            <column name="description" value="Opis uslugi wyrywania zeba"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

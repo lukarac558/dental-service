@@ -49,7 +49,7 @@ public class UserController {
 
     @GetMapping("/doctor/{id}")
     @ApiResponse(responseCode = "404", description = "User not found")
-    @Operation(summary = "Find doctors by provided search object")
+    @Operation(summary = "Find doctors by id")
     public ResponseEntity<DoctorDto> getDoctorById(
             @PathVariable("id") Long id
     ) {

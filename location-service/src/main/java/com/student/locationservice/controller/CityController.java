@@ -28,7 +28,7 @@ public class CityController {
     @PostMapping("")
     @ApiResponse(responseCode = "400", description = "Invalid request content")
     @Operation(summary = "Find all cities by provided search parameters")
-    public ResponseEntity<Page<CityDto>> getAll(
+    public ResponseEntity<Page<CityDto>> getCitiesByRequest(
             @Validated @RequestBody CitySearchRequestDto searchRequestDto
     ) {
         Page<CityEntity> cities = cityService.findAll(searchRequestDto);
@@ -36,9 +36,9 @@ public class CityController {
     }
 
     @GetMapping("/{id}")
-    @ApiResponse(responseCode = "404", description = "CityEntity not found")
-    @Operation(summary = "Find city by code")
-    public ResponseEntity<CityDto> getCityByCode(@PathVariable("id") Long id) {
+    @ApiResponse(responseCode = "404", description = "City not found")
+    @Operation(summary = "Find city by id")
+    public ResponseEntity<CityDto> getCityById(@PathVariable("id") Long id) {
         CityEntity city = cityService.findCityById(id);
         return new ResponseEntity<>(modelMapper.map(city, CityDto.class), HttpStatus.OK);
     }

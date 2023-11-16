@@ -10,7 +10,7 @@
             <column name="postal_code" value="44-300"/><column name="street" value="Pomidorowa"/><column name="building_number" value="16a"/></insert>
 
         <!--Insert example users-->
-        <insert tableName="user"><column name="email" value="lukasz.raczka@gmail.com"/><column name="personal_id" value="78041259444"/>
+        <insert tableName="user"><column name="email" value="lukasz.raczka@gmail.com"/><column name="personal_id" value="97033046176"/>
             <column name="name" value="Łukasz"/><column name="surname" value="Rączka"/><column name="phone_number" value="554612576"/>
             <column name="address_id" valueComputed="(select id from userservice.address WHERE postal_code = '44-321')"/></insert>
         <insert tableName="user"><column name="email" value="pum3xlr@gmail.com"/><column name="personal_id" value="77011779469"/>

@@ -20,13 +20,13 @@ public class VisitPositionService {
         this.visitPositionRepository = visitPositionRepository;
     }
 
-    public List<VisitPositionEntity> addVisitPositions(VisitEntity visitEntity, List<Long> serviceTypeIds) {
+    public List<VisitPositionEntity> createVisitPositions(VisitEntity visitEntity, List<Long> serviceTypeIds) {
         return serviceTypeIds.stream()
-                .map(typeId -> addVisitPosition(new VisitPositionEntity(visitEntity, typeId)))
+                .map(typeId -> createVisitPosition(new VisitPositionEntity(visitEntity, typeId)))
                 .collect(Collectors.toList());
     }
 
-    public VisitPositionEntity addVisitPosition(VisitPositionEntity visitPositionEntity) {
+    public VisitPositionEntity createVisitPosition(VisitPositionEntity visitPositionEntity) {
         return visitPositionRepository.save(visitPositionEntity);
     }
 

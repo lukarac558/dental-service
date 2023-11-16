@@ -11,3 +11,5 @@ spring:
         multiplier: 1.3
         maxInterval: 5000
         maxAttempts: 20
+
+openApiConfig: "production"

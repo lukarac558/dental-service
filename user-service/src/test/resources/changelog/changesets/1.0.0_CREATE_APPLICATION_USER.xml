@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.0.0_CREATE_APPLICATION_USER" author="lraczka">
+
+        <createSequence sequenceName="user_id_seq" cacheSize="5" incrementBy="1"/>
+        <createSequence sequenceName="competency_information_id_seq" cacheSize="5" incrementBy="1"/>
+        <createSequence sequenceName="user_role_id_seq" cacheSize="5" incrementBy="1"/>
+        <createSequence sequenceName="service_type_id_seq" cacheSize="5" incrementBy="1"/>
+        <createSequence sequenceName="address_id_seq" cacheSize="5" incrementBy="1"/>
+
+        <createTable tableName="user">
+            <column name="id" type="bigint" defaultValueComputed="nextval('user_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="user_pkey" unique="true" nullable="false"/>
+            </column>
+            <column name="email" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="personal_id" type="varchar(11)">-->
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_number" type="varchar(12)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_id" type="bigint">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="competency_id" type="bigint">
+                <constraints nullable="true" unique="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="address">
+            <column name="id" type="bigint" defaultValueComputed="nextval('address_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="address_data_pkey" nullable="false"/>
+            </column>
+            <column name="voivodeship_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postal_code" type="varchar(8)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" type="varchar(80)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="building_number" type="varchar(8)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="user_role">
+            <column name="id" type="bigint" defaultValueComputed="nextval('user_role_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="user_role_pkey" unique="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(7)" defaultValue="PATIENT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="competency_information">
+            <column name="id" type="bigint" defaultValueComputed="nextval('competency_information_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="competency_information_pkey" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="service_type">
+            <column name="id" type="bigint" defaultValueComputed="nextval('service_type_id_seq')">
+                <constraints primaryKey="true" primaryKeyName="service_type_pkey" nullable="false" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_time" type="time">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(200)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="doctor_id" type="bigint">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="enabled" type="boolean" defaultValue="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="address_id"
+                                 baseTableName="user"
+                                 constraintName="fk_user_address_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="address"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_role"
+                                 constraintName="fk_user_role_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+
+        <addForeignKeyConstraint baseColumnNames="competency_id"
+                                 baseTableName="user"
+                                 constraintName="fk_user_competency_information_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="competency_information"/>
+
+        <addForeignKeyConstraint baseColumnNames="doctor_id"
+                                 baseTableName="service_type"
+                                 constraintName="fk_service_type_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"/>
+    </changeSet>
+</databaseChangeLog>

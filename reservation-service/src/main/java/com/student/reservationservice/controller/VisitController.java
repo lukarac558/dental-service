@@ -84,7 +84,7 @@ public class VisitController {
 
         UserPersonalDetailsDto user = userClient.getUserById(visit.getPatientId());
         VisitEntity visitEntity = visitService.addOrUpdateVisit(mapToVisitEntity(visit, user.getId()));
-        List<VisitPositionEntity> visitPositionsEntities = visitPositionService.addVisitPositions(visitEntity, serviceTypeIds);
+        List<VisitPositionEntity> visitPositionsEntities = visitPositionService.createVisitPositions(visitEntity, serviceTypeIds);
 
         return new ResponseEntity<>(mapToVisitReservationDetail(visitEntity, visitPositionsEntities), HttpStatus.CREATED);
     }
@@ -123,7 +123,7 @@ public class VisitController {
     @ApiResponse(responseCode = "403", description = "Visit cancellation is forbidden")
     @ApiResponse(responseCode = "404", description = "Visit not found")
     @Operation(summary = "Cancel visit by id.")
-    public ResponseEntity<Void> deleteVisit(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteVisitById(@PathVariable("id") Long id) {
         visitService.deleteVisit(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -146,10 +146,6 @@ public class VisitController {
 
     private Page<VisitReservationDetailDto> mapToVisitReservationDetails(Page<VisitEntity> visitEntities) {
         return visitEntities.map(this::mapToVisitReservationDetail);
-    }
-
-    private List<VisitReservationDetailDto> mapToVisitReservationDetails(List<VisitEntity> visitEntities) {
-        return visitEntities.stream().map(this::mapToVisitReservationDetail).toList();
     }
 
     private VisitReservationDetailDto mapToVisitReservationDetail(VisitEntity visitEntity) {

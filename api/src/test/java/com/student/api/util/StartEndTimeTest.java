@@ -1,4 +1,4 @@
-package com.student.reservationservice;
+package com.student.api.util;
 
 import com.student.api.dto.reservation.StartEndTime;
 import org.junit.jupiter.api.Assertions;

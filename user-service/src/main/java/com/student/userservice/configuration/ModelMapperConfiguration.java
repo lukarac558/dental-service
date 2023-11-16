@@ -32,12 +32,10 @@ public class ModelMapperConfiguration {
 
         mm.typeMap(CompetencyInformationDto.class, CompetencyInformationEntity.class).addMappings(mapper -> {
             mapper.skip(CompetencyInformationEntity::setId);
-            mapper.skip(CompetencyInformationEntity::setDoctor);
         });
 
         mm.typeMap(ServiceTypeDto.class, ServiceTypeEntity.class).addMappings(mapper -> {
             mapper.skip(ServiceTypeEntity::setId);
-//            mapper.skip(ServiceTypeEntity::setDoctor);
             mapper.using((Converter<String, Time>) mappingContext -> TimeFormatParser
                     .parseOrThrow(mappingContext.getSource())
             ).map(ServiceTypeDto::getDurationTime, ServiceTypeEntity::setDurationTime);

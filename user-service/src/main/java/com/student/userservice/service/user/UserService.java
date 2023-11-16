@@ -21,7 +21,6 @@ import static com.student.api.exception.handler.ErrorConstants.*;
 public class UserService {
     private final VoivodeshipClient voivodeshipClient;
     private final UserRepository userRepository;
-    private final UserRoleRepository roleRepository;
 
     public UserEntity findUserById(Long id) {
         return userRepository.findById(id)

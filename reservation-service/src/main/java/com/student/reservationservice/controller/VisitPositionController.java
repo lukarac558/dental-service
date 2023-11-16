@@ -50,14 +50,14 @@ public class VisitPositionController {
 
     @PostMapping("")
     @ApiResponse(responseCode = "404", description = "Visit or service type not found")
-    @Operation(summary = "Add new position for the visit.")
-    public ResponseEntity<VisitPositionDto> addVisitPosition(@RequestParam Long visitId,
-                                                             @RequestParam Long serviceTypeId) {
+    @Operation(summary = "Create position for the visit.")
+    public ResponseEntity<VisitPositionDto> createVisitPosition(@RequestParam Long visitId,
+                                                                @RequestParam Long serviceTypeId) {
         VisitEntity visitEntity = getVisitEntityOrThrow(visitId);
 
         ServiceTypeDto serviceTypeDto = userClient.getServiceTypeById(serviceTypeId);
 
-        VisitPositionEntity visitPositionEntity = visitPositionService.addVisitPosition(new VisitPositionEntity(visitEntity, serviceTypeDto.getId()));
+        VisitPositionEntity visitPositionEntity = visitPositionService.createVisitPosition(new VisitPositionEntity(visitEntity, serviceTypeDto.getId()));
 
         VisitPositionDto visitPositionDTO = modelMapper.map(visitPositionEntity, VisitPositionDto.class);
         return new ResponseEntity<>(visitPositionDTO, HttpStatus.CREATED);

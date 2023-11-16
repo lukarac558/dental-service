@@ -1,0 +1,13 @@
+spring:
+  liquibase:
+    enabled: true
+    change-log: classpath:changelog/liquibase-changeLog.xml
+    default-schema: ${spring.jpa.properties.hibernate.default_schema}
+  config:
+    import: "optional:configserver:"
+  jpa:
+    properties:
+      hibernate:
+        default_schema: "public"
+
+openApiConfig: "test"

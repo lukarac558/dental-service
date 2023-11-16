@@ -3,6 +3,7 @@ package com.student.api.dto.location;
 import com.student.api.dto.common.PagingDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

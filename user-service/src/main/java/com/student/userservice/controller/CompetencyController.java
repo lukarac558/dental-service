@@ -36,8 +36,8 @@ public class CompetencyController {
     }
 
     @PostMapping("")
-    @Operation(summary = "Add new competency information.")
-    public ResponseEntity<CompetencyInformationDto> addCompetencyInformation(
+    @Operation(summary = "Create competency information.")
+    public ResponseEntity<CompetencyInformationDto> createCompetencyInformation(
             @Parameter(hidden = true)
             @AuthInfo Info info,
             @RequestBody CompetencyInformationDto competencyInformation
@@ -81,7 +81,7 @@ public class CompetencyController {
                         ),
                         CompetencyInformationDto.class
                 ),
-                HttpStatus.CREATED
+                HttpStatus.OK
         );
     }
 }

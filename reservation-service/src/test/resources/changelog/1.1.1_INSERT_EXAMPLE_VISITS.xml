@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1.1.1_INSERT_EXAMPLE_VISITS" author="lraczka">
+        <!--Insert example visit-->
+        <insert tableName="visit">
+            <column name="start_date" value="2024-03-18 08:00:00"/>
+            <column name="id" value="1111"/>
+            <column name="patient_id" value="4455"/>
+            <column name="reservation_date" value="2023-11-11 12:00:00"/>
+            <column name="approved" value="true"/>
+        </insert>
+
+        <!--Insert example visit positions-->
+        <insert tableName="visit_position">
+            <column name="id" value="9999"/>
+            <column name="visit_id" value="1111"/>
+            <column name="service_type_id" value="6666"/>
+        </insert>
+
+        <insert tableName="visit_position">
+            <column name="visit_id" value="1111"/>
+            <column name="service_type_id" value="6688"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

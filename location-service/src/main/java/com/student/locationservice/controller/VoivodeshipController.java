@@ -23,8 +23,8 @@ public class VoivodeshipController {
     private final VoivodeshipService voivodeshipService;
 
     @GetMapping("/{id}")
-    @Operation(summary = "Find all available voivodeships.")
-    public ResponseEntity<VoivodeshipDto> getVoivodeship(
+    @Operation(summary = "Find voivodeship by id.")
+    public ResponseEntity<VoivodeshipDto> getVoivodeshipById(
             @PathVariable("id") Long id
     ) {
         VoivodeshipEntity voivodeship = voivodeshipService.findById(id);

@@ -42,8 +42,8 @@ public class CalendarDayController {
 
     @GetMapping("/user/{user_id}")
     @Operation(summary = "Find all calendar days associated with a doctor by his id.")
-    public ResponseEntity<List<CalendarDayDto>> getCalendarDaysByUserId(@PathVariable("user_id") Long userId) {
-        List<CalendarDayEntity> calendarDayEntities = calendarDayService.findCalendarDaysByUserId(userId);
+    public ResponseEntity<List<CalendarDayDto>> getCalendarDaysByDoctorId(@PathVariable("user_id") Long userId) {
+        List<CalendarDayEntity> calendarDayEntities = calendarDayService.findCalendarDaysByDoctorId(userId);
         List<CalendarDayDto> calendarDaysResponse = calendarDayEntities.stream().map(day -> modelMapper.map(day, CalendarDayDto.class)).toList();
         return new ResponseEntity<>(calendarDaysResponse, HttpStatus.OK);
     }
@@ -52,7 +52,7 @@ public class CalendarDayController {
     @ApiResponse(responseCode = "404", description = "User not found")
     @ApiResponse(responseCode = "422", description = "Incorrect time or timestamp format is given")
     @Operation(summary = "Add new calendar day for given doctor.")
-    public ResponseEntity<CalendarDayDto> addCalendarDay(@RequestBody CalendarDayDto calendarDayDto) {
+    public ResponseEntity<CalendarDayDto> createCalendarDay(@RequestBody CalendarDayDto calendarDayDto) {
         Long userId = calendarDayDto.getDoctorId();
         UserPersonalDetailsDto user = userClient.getUserById(userId);
 

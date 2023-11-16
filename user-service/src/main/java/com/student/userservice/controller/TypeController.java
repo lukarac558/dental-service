@@ -127,7 +127,7 @@ public class TypeController {
                         ),
                         ServiceTypeDto.class
                 ),
-                HttpStatus.CREATED
+                HttpStatus.OK
         );
     }
 
