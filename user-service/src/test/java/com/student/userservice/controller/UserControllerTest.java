@@ -1,60 +1,29 @@
 package com.student.userservice.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.student.api.annotation.extractor.auth.Info;
 import com.student.api.dto.common.enums.Role;
 import com.student.api.dto.common.enums.Sex;
 import com.student.api.dto.location.VoivodeshipDto;
 import com.student.api.dto.user.*;
 import com.student.api.exception.NotFoundException;
-import io.restassured.RestAssured;
 import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.util.List;
 import java.util.Objects;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class UserControllerTest {
-    @LocalServerPort
-    private Integer port;
-
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-            "postgres:16-alpine"
-    );
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.stop();
-    }
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
-
+public class UserControllerTest extends BaseControllerTests {
     @Autowired
     UserController userController;
 
@@ -62,11 +31,6 @@ public class UserControllerTest {
     static final Long EXISTING_DOCTOR_ID = 4444L;
     static final Long EXISTING_PATIENT_ADDRESS_ID = 3344L;
     static final Long EXISTING_PATIENT_ID = 4455L;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.baseURI = "http://localhost:" + port;
-    }
 
     @Transactional
     @Test
@@ -159,27 +123,39 @@ public class UserControllerTest {
     }
 
 
-//    @Transactional
-//    @Test
-//    void createUser_shouldCreate() {
-//        Info info = new Info("test@gmail.com", List.of(Role.PATIENT));
-//        AddressDto address = getAddress(2L, "Rybnik", "44-260", "Jabłoniowa", "47");
-//        UserPersonalDetailsDto personalDetails = getPersonalDetails("07211367537", "Jan", "Kowalski", "123456789", address);
-//
-//        ResponseEntity<UserPersonalDetailsDto> userResponse = userController.createUser(info, personalDetails);
-//        int statusCode = userResponse.getStatusCode().value();
-//
-//        UserPersonalDetailsDto user = Objects.requireNonNull(userResponse.getBody());
-//
-//        assertEquals(HttpStatus.OK.value(), statusCode);
-//        assertEquals("test@gmail.com", user.getEmail());
-//        assertEquals(1, user.getRoles().size());
-//        assertEquals("Jan", user.getName());
-//        assertEquals("Kowalski", user.getSurname());
-//        assertEquals("123456789", user.getPhoneNumber());
-//        assertEquals("07211367537", user.getPersonalId());
-//        assertNotNull(user.getAddress());
-//    }
+    @Transactional
+    @Test
+    void createUser_shouldCreate() throws JsonProcessingException {
+        Info info = new Info("test@gmail.com", List.of(Role.PATIENT));
+        AddressDto address = getAddress(2L, "Rybnik", "44-260", "Jabłoniowa", "47");
+        UserPersonalDetailsDto personalDetails = getPersonalDetails("07211367537", "Jan", "Kowalski", "123456789", address);
+
+        VoivodeshipDto voivodeshipDto = new VoivodeshipDto();
+        voivodeshipDto.setId(Math.toIntExact(address.getVoivodeshipId()));
+        server.stubFor(WireMock
+                .get(String.format("/voivodeships/%s",address.getVoivodeshipId()))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                        .withBody(new ObjectMapper().writeValueAsString(voivodeshipDto))
+                        .withStatus(HttpStatus.OK.value())
+                )
+        );
+
+
+        ResponseEntity<UserPersonalDetailsDto> userResponse = userController.createUser(info, personalDetails);
+        int statusCode = userResponse.getStatusCode().value();
+
+        UserPersonalDetailsDto user = Objects.requireNonNull(userResponse.getBody());
+
+        assertEquals(HttpStatus.OK.value(), statusCode);
+        assertEquals("test@gmail.com", user.getEmail());
+        assertEquals(1, user.getRoles().size());
+        assertEquals("Jan", user.getName());
+        assertEquals("Kowalski", user.getSurname());
+        assertEquals("123456789", user.getPhoneNumber());
+        assertEquals("07211367537", user.getPersonalId());
+        assertNotNull(user.getAddress());
+    }
 
     @Transactional
     @Test

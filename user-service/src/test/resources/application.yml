@@ -1,13 +1,26 @@
 spring:
   liquibase:
-    enabled: true
     change-log: classpath:changelog/liquibase-changeLog.xml
-    default-schema: ${spring.jpa.properties.hibernate.default_schema}
-  config:
-    import: "optional:configserver:"
   jpa:
     properties:
       hibernate:
-        default_schema: "public"
-
-openApiConfig: "test"
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      client:
+        simple:
+          instances:
+            location-service[0]:
+              uri: http://localhost:8789
+eureka:
+  client:
+    enabled: false

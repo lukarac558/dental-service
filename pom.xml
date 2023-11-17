@@ -37,6 +37,7 @@
 		<mutation-test.version>1.15.3</mutation-test.version>
 		<mutation-test-junit.version>1.2.1</mutation-test-junit.version>
 		<swagger-api.version>2.2.15</swagger-api.version>
+		<wiremock.version>3.3.1</wiremock.version>
 
 		<maven-filtering.version>3.3.1</maven-filtering.version>
 
@@ -95,6 +96,12 @@
 				<groupId>com.nimbusds</groupId>
 				<artifactId>nimbus-jose-jwt</artifactId>
 				<version>${nimbus-jwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wiremock</groupId>
+				<artifactId>wiremock</artifactId>
+				<version>${wiremock.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

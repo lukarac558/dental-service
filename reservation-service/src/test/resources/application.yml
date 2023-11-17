@@ -1,8 +1,26 @@
 spring:
   liquibase:
-    enabled: true
     change-log: classpath:changelog/liquibase-changeLog.xml
-  config:
-    import: "optional:configserver:"
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      client:
+        simple:
+          instances:
+            user-service[0]:
+              uri: http://localhost:8789
 
-openApiConfig: "test"
+eureka:
+  client:
+    enabled: false
