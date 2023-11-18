@@ -126,6 +126,5 @@
                                  constraintName="fk_service_type_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="user"/>
-        <trig=
     </changeSet>
 </databaseChangeLog>

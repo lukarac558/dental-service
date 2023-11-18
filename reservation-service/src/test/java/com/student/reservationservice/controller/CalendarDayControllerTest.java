@@ -59,11 +59,13 @@ class CalendarDayControllerTest extends BaseControllerTests {
     @Transactional
     @Test
     void createCalendarDay_shouldCreate() throws JsonProcessingException {
+        UserPersonalDetailsDto userPersonalDetailsDto = new UserPersonalDetailsDto();
+        userPersonalDetailsDto.setId(EXISTING_DOCTOR_ID);
         server.stubFor(WireMock
                 .get(String.format("/users/%s", EXISTING_DOCTOR_ID))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                        .withBody(new ObjectMapper().writeValueAsString(new UserPersonalDetailsDto()))
+                        .withBody(new ObjectMapper().writeValueAsString(userPersonalDetailsDto))
                         .withStatus(HttpStatus.OK.value())
                 )
         );
@@ -76,7 +78,7 @@ class CalendarDayControllerTest extends BaseControllerTests {
 
         assertEquals(HttpStatus.CREATED.value(), statusCode);
         assertNotNull(calendarDay.getId());
-        assertEquals("2023-12-24 08:00:00", calendarDay.getStartDate());
+        assertEquals("2023-12-24 08:00:00.0", calendarDay.getStartDate());
         assertEquals("04:00:00", calendarDay.getWorkDuration());
         assertEquals(EXISTING_DOCTOR_ID, calendarDay.getDoctorId());
     }
