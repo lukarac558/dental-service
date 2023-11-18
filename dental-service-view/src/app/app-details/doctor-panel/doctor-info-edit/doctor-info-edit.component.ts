@@ -29,8 +29,8 @@ export class DoctorInfoEditComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.form = this._fb.group<ControlsOf<DoctorCompetencyForm>>({
             id: this._fb.control(null),
-            description: this._fb.nonNullable.control('', [Validators.required]),
-            title: this._fb.nonNullable.control('', [Validators.required])
+            description: this._fb.nonNullable.control('', [Validators.required, Validators.maxLength(500)]),
+            title: this._fb.nonNullable.control('', [Validators.required, Validators.maxLength(50)])
         });
 
         this.doctorCompetency$ = this._doctorsService.getCurrentDoctorCompetency().pipe(
