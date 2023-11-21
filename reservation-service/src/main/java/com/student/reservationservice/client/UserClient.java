@@ -1,4 +1,4 @@
-package com.student.reservationservice.user;
+package com.student.reservationservice.client;
 
 import com.student.api.dto.user.DoctorDto;
 import com.student.api.dto.user.ServiceTypeDto;

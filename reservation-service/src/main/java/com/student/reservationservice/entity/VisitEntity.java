@@ -31,7 +31,7 @@ public class VisitEntity implements Serializable {
 
     private String description;
 
-    @OneToMany(mappedBy = "visit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "visit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VisitPositionEntity> visitPositions;
 
     private boolean approved;

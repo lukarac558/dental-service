@@ -21,7 +21,7 @@
 
         <insert tableName="visit_position">
             <column name="visit_id" value="1111"/>
-            <column name="service_type_id" value="6688"/>
+            <column name="service_type_id" value="6677"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

@@ -1,13 +1,10 @@
 package com.student.reservationservice.controller;
 
 import com.student.api.dto.reservation.VisitPositionDto;
-import com.student.api.dto.user.ServiceTypeDto;
 import com.student.api.exception.NotFoundException;
-import com.student.reservationservice.service.VisitPositionService;
-import com.student.reservationservice.user.UserClient;
 import com.student.reservationservice.entity.VisitEntity;
-import com.student.reservationservice.service.visit.VisitService;
 import com.student.reservationservice.entity.VisitPositionEntity;
+import com.student.reservationservice.service.VisitPositionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +25,6 @@ import static com.student.api.exception.handler.ErrorConstants.VISIT_POSITION_NO
 public class VisitPositionController {
     private final ModelMapper modelMapper;
     private final VisitPositionService visitPositionService;
-    private final VisitService visitService;
-    private final UserClient userClient;
 
     @GetMapping("/{id}")
     @ApiResponse(responseCode = "404", description = "Visit position not found")
@@ -50,14 +45,13 @@ public class VisitPositionController {
 
     @PostMapping("")
     @ApiResponse(responseCode = "404", description = "Visit or service type not found")
+    @ApiResponse(responseCode = "422", description = "Incorrect timestamp format is given")
     @Operation(summary = "Create position for the visit.")
     public ResponseEntity<VisitPositionDto> createVisitPosition(@RequestParam Long visitId,
                                                                 @RequestParam Long serviceTypeId) {
-        VisitEntity visitEntity = getVisitEntityOrThrow(visitId);
+        VisitEntity visitEntity = visitPositionService.getVisitEntityOrThrow(visitId);
 
-        ServiceTypeDto serviceTypeDto = userClient.getServiceTypeById(serviceTypeId);
-
-        VisitPositionEntity visitPositionEntity = visitPositionService.createVisitPosition(new VisitPositionEntity(visitEntity, serviceTypeDto.getId()));
+        VisitPositionEntity visitPositionEntity = visitPositionService.createVisitPosition(new VisitPositionEntity(visitEntity, serviceTypeId));
 
         VisitPositionDto visitPositionDTO = modelMapper.map(visitPositionEntity, VisitPositionDto.class);
         return new ResponseEntity<>(visitPositionDTO, HttpStatus.CREATED);
@@ -68,10 +62,5 @@ public class VisitPositionController {
     public ResponseEntity<Void> deleteVisitPosition(@PathVariable("id") Long id) {
         visitPositionService.deleteVisitPosition(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    private VisitEntity getVisitEntityOrThrow(Long visitId) {
-        return visitService.findVisitById(visitId)
-                .orElseThrow(() -> new NotFoundException(String.format(VISIT_POSITION_NOT_FOUND_MESSAGE, visitId)));
     }
 }

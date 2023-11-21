@@ -24,7 +24,6 @@ class CalendarDayControllerTest extends BaseControllerTests {
     CalendarDayController calendarDayController;
     static final Long EXISTING_DOCTOR_ID = 4444L;
     static final Long EXISTING_CALENDAR_DAY_ID = 8888L;
-    static final Long EXISTING_ANOTHER_CALENDAR_DAY_ID = 8899L;
 
     @Test
     void getCalendarDayById_shouldFind() {

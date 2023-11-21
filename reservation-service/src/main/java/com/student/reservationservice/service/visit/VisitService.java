@@ -9,12 +9,12 @@ import com.student.api.exception.IncorrectValueException;
 import com.student.api.exception.NotFoundException;
 import com.student.api.util.TimeHelper;
 import com.student.api.util.TimestampFormatParser;
+import com.student.reservationservice.client.UserClient;
 import com.student.reservationservice.entity.CalendarDayEntity;
 import com.student.reservationservice.entity.VisitEntity;
 import com.student.reservationservice.entity.VisitPositionEntity;
 import com.student.reservationservice.repository.CalendarDayRepository;
 import com.student.reservationservice.repository.VisitRepository;
-import com.student.reservationservice.user.UserClient;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,7 +40,7 @@ public class VisitService {
     private final UserClient userClient;
     private final CalendarDayRepository calendarDayRepository;
 
-    public VisitEntity addOrUpdateVisit(VisitEntity visitEntity) {
+    public VisitEntity addOrUpdate(VisitEntity visitEntity) {
         return visitRepository.save(visitEntity);
     }
 
@@ -79,9 +79,8 @@ public class VisitService {
         return findVisitsByRequest(searchRequestDto, false);
     }
 
-    public List<String> findAvailableVisitTimesInIntervals(List<Long> serviceTypeIds) {
-        List<ServiceTypeDto> serviceTypes = userClient.getServiceTypes(serviceTypeIds);
-        Long doctorId = getDoctorIdOrThrow(serviceTypes, serviceTypeIds);
+    public List<String> findAvailableVisitTimesInIntervals(List<ServiceTypeDto> serviceTypes) {
+        Long doctorId = getDoctorIdOrThrow(serviceTypes);
         List<CalendarDayEntity> calendarDayEntities = calendarDayRepository.findCalendarDaysByDoctorId(doctorId);
 
         List<Long> allDoctorServiceTypeIds = userClient.getServiceTypesByDoctorId(doctorId).stream().map(ServiceTypeDto::getId).toList();
@@ -106,10 +105,10 @@ public class VisitService {
         }
     }
 
-    public void validateStartDateOrThrow(List<Long> serviceTypeIds, String startDate) {
+    public void validateStartDateOrThrow(List<ServiceTypeDto> serviceTypes, String startDate) {
         TimestampFormatParser.parseOrThrow(startDate);
         boolean isStartDateCorrect =
-                findAvailableVisitTimesInIntervals(serviceTypeIds).stream()
+                findAvailableVisitTimesInIntervals(serviceTypes).stream()
                         .anyMatch(time -> time.equals(startDate));
 
         if (!isStartDateCorrect) {
@@ -117,11 +116,10 @@ public class VisitService {
         }
     }
 
-    private Page<VisitEntity> findVisitsByRequest(VisitSearchRequestDto searchRequestDto, boolean approved) {
-        return visitRepository.findAll(
-                new VisitSpecification(searchRequestDto.getUserId(), approved),
-                searchRequestDto.pageable()
-        );
+    public Long getDoctorIdOrThrow(List<ServiceTypeDto> serviceTypes) {
+        List<Long> serviceTypeIds = serviceTypes.stream().map(ServiceTypeDto::getId).toList();
+        return serviceTypes.stream().map(ServiceTypeDto::getDoctorId).findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format(DOCTOR_NOT_FOUND_MESSAGE, serviceTypeIds)));
     }
 
     private boolean isApprovalPossible(Timestamp reservationDate) {
@@ -130,9 +128,11 @@ public class VisitService {
         return (currentTimeMs - reservationTimeMs) < VISIT_APPROVAL_AND_INTERVAL_TIME_IN_MS;
     }
 
-    private Long getDoctorIdOrThrow(List<ServiceTypeDto> serviceTypes, List<Long> serviceTypeIds) {
-        return serviceTypes.stream().map(ServiceTypeDto::getDoctorId).findFirst()
-                .orElseThrow(() -> new NotFoundException(String.format(DOCTOR_NOT_FOUND_MESSAGE, serviceTypeIds)));
+    private Page<VisitEntity> findVisitsByRequest(VisitSearchRequestDto searchRequestDto, boolean approved) {
+        return visitRepository.findAll(
+                new VisitSpecification(searchRequestDto.getUserId(), approved),
+                searchRequestDto.pageable()
+        );
     }
 
     private Map<CalendarDayEntity, List<VisitEntity>> fillVisitsToDay(List<CalendarDayEntity> calendarDayEntities, List<Long> serviceTypeIds) {

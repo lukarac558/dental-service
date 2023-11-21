@@ -8,11 +8,13 @@ import com.student.api.dto.user.UserPersonalDetailsDto;
 import com.student.api.exception.NotFoundException;
 import com.student.api.util.TimeHelper;
 import com.student.api.util.TimestampFormatParser;
+import com.student.reservationservice.client.UserClient;
 import com.student.reservationservice.entity.VisitEntity;
+import com.student.reservationservice.entity.VisitLockEntity;
 import com.student.reservationservice.entity.VisitPositionEntity;
+import com.student.reservationservice.repository.VisitLockRepository;
 import com.student.reservationservice.service.VisitPositionService;
 import com.student.reservationservice.service.visit.VisitService;
-import com.student.reservationservice.user.UserClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,6 +40,7 @@ public class VisitController {
     private final ModelMapper modelMapper;
     private final VisitService visitService;
     private final VisitPositionService visitPositionService;
+    private final VisitLockRepository visitLockRepository;
     private final UserClient userClient;
 
     @GetMapping("/{id}")
@@ -52,7 +55,8 @@ public class VisitController {
     @GetMapping("available-times/{service_type_ids}")
     @Operation(summary = "Find all available visit start dates by service type ids.")
     public ResponseEntity<List<String>> getVisitStartDatesByServiceTypeIds(@PathVariable("service_type_ids") List<Long> serviceTypeIds) {
-        List<String> visitStartDates = visitService.findAvailableVisitTimesInIntervals(serviceTypeIds);
+        List<ServiceTypeDto> serviceTypes = userClient.getServiceTypes(serviceTypeIds);
+        List<String> visitStartDates = visitService.findAvailableVisitTimesInIntervals(serviceTypes);
         return new ResponseEntity<>(visitStartDates, HttpStatus.OK);
     }
 
@@ -79,14 +83,24 @@ public class VisitController {
     public ResponseEntity<VisitReservationDetailDto> reserveVisit(@RequestBody VisitReservationDto visitReservationDto) {
         VisitDto visit = visitReservationDto.getVisit();
         List<Long> serviceTypeIds = visitReservationDto.getServiceTypeIds();
+        List<ServiceTypeDto> serviceTypes = userClient.getServiceTypes(serviceTypeIds);
 
-        visitService.validateStartDateOrThrow(serviceTypeIds, visit.getStartDate());
+        visitService.validateStartDateOrThrow(serviceTypes, visit.getStartDate());
 
         UserPersonalDetailsDto user = userClient.getUserById(visit.getPatientId());
-        VisitEntity visitEntity = visitService.addOrUpdateVisit(mapToVisitEntity(visit, user.getId()));
-        List<VisitPositionEntity> visitPositionsEntities = visitPositionService.createVisitPositions(visitEntity, serviceTypeIds);
+        VisitEntity visitToCreate = mapToVisitEntity(visit, user.getId());
 
-        return new ResponseEntity<>(mapToVisitReservationDetail(visitEntity, visitPositionsEntities), HttpStatus.CREATED);
+        Long doctorId = visitService.getDoctorIdOrThrow(serviceTypes);
+        VisitEntity createdVisitEntity = visitService.addOrUpdate(visitToCreate);
+
+        VisitLockEntity lockToCreate = new VisitLockEntity();
+        lockToCreate.setStartDate(createdVisitEntity.getStartDate());
+        lockToCreate.setDoctorId(doctorId);
+        VisitLockEntity createdLock = visitLockRepository.save(lockToCreate);
+
+        List<VisitPositionEntity> visitPositionEntities = visitPositionService.createVisitPositions(createdVisitEntity, serviceTypes, createdLock.getId());
+
+        return new ResponseEntity<>(mapToVisitReservationDetail(createdVisitEntity, visitPositionEntities), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -101,7 +115,7 @@ public class VisitController {
                 })
                 .orElseThrow(() -> new NotFoundException(String.format(VISIT_NOT_FOUND_MESSAGE, id)));
 
-        VisitEntity updatedVisitEntity = visitService.addOrUpdateVisit(visitEntity);
+        VisitEntity updatedVisitEntity = visitService.addOrUpdate(visitEntity);
         return new ResponseEntity<>(modelMapper.map(updatedVisitEntity, VisitDto.class), HttpStatus.OK);
     }
 
@@ -115,7 +129,7 @@ public class VisitController {
 
         visitService.setVisitAsApprovedOrThrow(visitEntity);
 
-        VisitEntity updatedVisitEntity = visitService.addOrUpdateVisit(visitEntity);
+        VisitEntity updatedVisitEntity = visitService.addOrUpdate(visitEntity);
         return new ResponseEntity<>(modelMapper.map(updatedVisitEntity, VisitDto.class), HttpStatus.OK);
     }
 

@@ -7,7 +7,7 @@ import com.student.api.util.TimeFormatParser;
 import com.student.api.util.TimestampFormatParser;
 import com.student.reservationservice.entity.CalendarDayEntity;
 import com.student.reservationservice.service.CalendarDayService;
-import com.student.reservationservice.user.UserClient;
+import com.student.reservationservice.client.UserClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,4 +1,4 @@
-package com.student.userservice.service;
+package com.student.userservice.client;
 
 import com.student.api.dto.location.VoivodeshipDto;
 import org.springframework.cloud.openfeign.FeignClient;

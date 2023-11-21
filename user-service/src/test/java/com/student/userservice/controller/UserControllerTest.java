@@ -112,7 +112,7 @@ public class UserControllerTest extends BaseControllerTests {
     @Transactional
     @Test
     void getDoctorByRequest_shouldFindTwo() {
-        DoctorSearchRequestDto searchRequest = getDoctorSearchRequest_byName("Rączka");
+        DoctorSearchRequestDto searchRequest = getDoctorSearchRequest_byName();
         ResponseEntity<Page<DoctorDto>> doctorResponse = userController.getDoctorsByRequest(searchRequest);
         int statusCode = doctorResponse.getStatusCode().value();
 
@@ -127,11 +127,10 @@ public class UserControllerTest extends BaseControllerTests {
     @Test
     void createUser_shouldCreate() throws JsonProcessingException {
         Info info = new Info("test@gmail.com", List.of(Role.PATIENT));
-        AddressDto address = getAddress(2L, "Rybnik", "44-260", "Jabłoniowa", "47");
-        UserPersonalDetailsDto personalDetails = getPersonalDetails("07211367537", "Jan", "Kowalski", "123456789", address);
+        AddressDto address = getAddress();
+        UserPersonalDetailsDto personalDetails = getPersonalDetails(address);
 
-        VoivodeshipDto voivodeshipDto = new VoivodeshipDto();
-        voivodeshipDto.setId(Math.toIntExact(address.getVoivodeshipId()));
+        VoivodeshipDto voivodeshipDto = getVoivodeship(Math.toIntExact(address.getVoivodeshipId()));
         server.stubFor(WireMock
                 .get(String.format("/voivodeships/%s",address.getVoivodeshipId()))
                 .willReturn(aResponse()
@@ -168,36 +167,36 @@ public class UserControllerTest extends BaseControllerTests {
         assertThrows(NotFoundException.class, () -> userController.getUser(info));
     }
 
-    AddressDto getAddress(Long voivodeshipId, String city, String postalCode, String street, String buildingNumber) {
+    AddressDto getAddress() {
         AddressDto address = new AddressDto();
-        address.setVoivodeshipId(voivodeshipId);
-        address.setCity(city);
-        address.setPostalCode(postalCode);
-        address.setStreet(street);
-        address.setBuildingNumber(buildingNumber);
+        address.setVoivodeshipId(2L);
+        address.setCity("Rybnik");
+        address.setPostalCode("44-260");
+        address.setStreet("Jabłoniowa");
+        address.setBuildingNumber("47");
         return address;
     }
 
-    UserPersonalDetailsDto getPersonalDetails(String pesel, String name, String surname, String phoneNumber, AddressDto address) {
+    UserPersonalDetailsDto getPersonalDetails(AddressDto address) {
         UserPersonalDetailsDto personalDetails = new UserPersonalDetailsDto();
-        personalDetails.setPersonalId(pesel);
-        personalDetails.setName(name);
-        personalDetails.setSurname(surname);
-        personalDetails.setPhoneNumber(phoneNumber);
+        personalDetails.setPersonalId("07211367537");
+        personalDetails.setName("Jan");
+        personalDetails.setSurname("Kowalski");
+        personalDetails.setPhoneNumber("123456789");
         personalDetails.setAddress(address);
         return personalDetails;
     }
 
-    VoivodeshipDto getVoivodeship(int id, String name) {
+    VoivodeshipDto getVoivodeship(int id) {
         VoivodeshipDto voivodeship = new VoivodeshipDto();
         voivodeship.setId(id);
-        voivodeship.setName(name);
+        voivodeship.setName("Śląskie");
         return voivodeship;
     }
 
-    DoctorSearchRequestDto getDoctorSearchRequest_byName(String name) {
+    DoctorSearchRequestDto getDoctorSearchRequest_byName() {
         DoctorSearchRequestDto searchRequest = new DoctorSearchRequestDto();
-        searchRequest.setName(name);
+        searchRequest.setName("Rączka");
         return searchRequest;
     }
 }
