@@ -89,16 +89,11 @@ public class VisitController {
 
         UserPersonalDetailsDto user = userClient.getUserById(visit.getPatientId());
         VisitEntity visitToCreate = mapToVisitEntity(visit, user.getId());
-
         Long doctorId = visitService.getDoctorIdOrThrow(serviceTypes);
-        VisitEntity createdVisitEntity = visitService.addOrUpdate(visitToCreate);
+        VisitLockEntity createdLock = visitLockRepository.save(getVisitLock(visit.getStartDate(), doctorId));
 
-        VisitLockEntity lockToCreate = new VisitLockEntity();
-        lockToCreate.setStartDate(createdVisitEntity.getStartDate());
-        lockToCreate.setDoctorId(doctorId);
-        VisitLockEntity createdLock = visitLockRepository.save(lockToCreate);
-
-        List<VisitPositionEntity> visitPositionEntities = visitPositionService.createVisitPositions(createdVisitEntity, serviceTypes, createdLock.getId());
+        VisitEntity createdVisitEntity = visitService.addVisitOrThrow(visitToCreate, serviceTypes, createdLock.getId());
+        List<VisitPositionEntity> visitPositionEntities = visitPositionService.createVisitPositions(createdVisitEntity, serviceTypes);
 
         return new ResponseEntity<>(mapToVisitReservationDetail(createdVisitEntity, visitPositionEntities), HttpStatus.CREATED);
     }
@@ -115,7 +110,7 @@ public class VisitController {
                 })
                 .orElseThrow(() -> new NotFoundException(String.format(VISIT_NOT_FOUND_MESSAGE, id)));
 
-        VisitEntity updatedVisitEntity = visitService.addOrUpdate(visitEntity);
+        VisitEntity updatedVisitEntity = visitService.updateVisit(visitEntity);
         return new ResponseEntity<>(modelMapper.map(updatedVisitEntity, VisitDto.class), HttpStatus.OK);
     }
 
@@ -129,7 +124,7 @@ public class VisitController {
 
         visitService.setVisitAsApprovedOrThrow(visitEntity);
 
-        VisitEntity updatedVisitEntity = visitService.addOrUpdate(visitEntity);
+        VisitEntity updatedVisitEntity = visitService.updateVisit(visitEntity);
         return new ResponseEntity<>(modelMapper.map(updatedVisitEntity, VisitDto.class), HttpStatus.OK);
     }
 
@@ -214,5 +209,12 @@ public class VisitController {
         return serviceTypes.stream().filter(type -> type.getId().equals(serviceTypeId)).findFirst()
                 .orElseThrow(() -> new NotFoundException(String.format(SERVICE_TYPE_NOT_FOUND_MESSAGE, serviceTypeId)));
 
+    }
+
+    private VisitLockEntity getVisitLock(String startDate, Long doctorId) {
+        VisitLockEntity lockToCreate = new VisitLockEntity();
+        lockToCreate.setStartDate(TimestampFormatParser.parseOrThrow(startDate));
+        lockToCreate.setDoctorId(doctorId);
+        return lockToCreate;
     }
 }

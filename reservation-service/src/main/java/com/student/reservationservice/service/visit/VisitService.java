@@ -12,8 +12,10 @@ import com.student.api.util.TimestampFormatParser;
 import com.student.reservationservice.client.UserClient;
 import com.student.reservationservice.entity.CalendarDayEntity;
 import com.student.reservationservice.entity.VisitEntity;
+import com.student.reservationservice.entity.VisitLockEntity;
 import com.student.reservationservice.entity.VisitPositionEntity;
 import com.student.reservationservice.repository.CalendarDayRepository;
+import com.student.reservationservice.repository.VisitLockRepository;
 import com.student.reservationservice.repository.VisitRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -39,8 +41,14 @@ public class VisitService {
     private final VisitRepository visitRepository;
     private final UserClient userClient;
     private final CalendarDayRepository calendarDayRepository;
+    private final VisitLockRepository visitLockRepository;
 
-    public VisitEntity addOrUpdate(VisitEntity visitEntity) {
+    public VisitEntity addVisitOrThrow(VisitEntity visitEntity, List<ServiceTypeDto> serviceTypes, Long lockId) {
+        validateIfStartDateIsAvailable(visitEntity.getStartDate(), serviceTypes, lockId);
+        return visitRepository.save(visitEntity);
+    }
+
+    public VisitEntity updateVisit(VisitEntity visitEntity) {
         return visitRepository.save(visitEntity);
     }
 
@@ -122,6 +130,13 @@ public class VisitService {
                 .orElseThrow(() -> new NotFoundException(String.format(DOCTOR_NOT_FOUND_MESSAGE, serviceTypeIds)));
     }
 
+    public Time calculateVisitDuration(List<ServiceTypeDto> serviceTypes) {
+        return serviceTypes.stream()
+                .map(time -> Time.valueOf(time.getDurationTime()))
+                .reduce(TimeHelper::getSummed)
+                .orElse(Time.valueOf("00:00:00"));
+    }
+
     private boolean isApprovalPossible(Timestamp reservationDate) {
         long currentTimeMs = System.currentTimeMillis();
         long reservationTimeMs = reservationDate.getTime();
@@ -172,13 +187,6 @@ public class VisitService {
                 ));
     }
 
-    public Time calculateVisitDuration(List<ServiceTypeDto> serviceTypes) {
-        return serviceTypes.stream()
-                .map(time -> Time.valueOf(time.getDurationTime()))
-                .reduce(TimeHelper::getSummed)
-                .orElse(Time.valueOf("00:00:00"));
-    }
-
     private List<StartEndTime> getAvailableVisitTimes(Map<CalendarDayEntity, List<StartEndTime>> visitsTimeToCalendarDay) {
         List<StartEndTime> availableVisitTimes = new ArrayList<>();
 
@@ -212,5 +220,26 @@ public class VisitService {
         });
 
         return availableVisitTimes;
+    }
+
+    private void validateIfStartDateIsAvailable(Timestamp startDate, List<ServiceTypeDto> serviceTypes, Long lockId) {
+        Long doctorId = getDoctorIdOrThrow(serviceTypes);
+        List<VisitLockEntity> locks = new ArrayList<>(getLockToDoctorInSameTime(doctorId, startDate));
+        locks.sort(Comparator.comparing(VisitLockEntity::getId));
+        VisitLockEntity firstEntity = locks.get(0);
+        VisitLockEntity lastEntity = locks.get(locks.size() - 1);
+
+        if (locks.size() > 1 && lastEntity.getId().equals(lockId)) {
+            visitLockRepository.deleteVisitLockEntitiesByDoctorIdAndStartDate(doctorId, startDate);
+            throw new IncorrectValueException(String.format(INCORRECT_START_DATE_MESSAGE, startDate));
+        } else if (locks.size() > 1 && !firstEntity.getId().equals(lockId)) {
+            throw new IncorrectValueException(String.format(INCORRECT_START_DATE_MESSAGE, startDate));
+        } else if (locks.size() == 1) {
+            visitLockRepository.deleteVisitLockEntityById(lockId);
+        }
+    }
+
+    private List<VisitLockEntity> getLockToDoctorInSameTime(Long doctorId, Timestamp startDate) {
+        return visitLockRepository.findVisitLockEntitiesByDoctorIdAndStartDate(doctorId, startDate);
     }
 }
