@@ -1,7 +1,8 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
 
 export const appConfig = {
-    apiUrl: 'https://localhost:8080/api'
+    apiUrl: 'https://localhost:8080/api',
+    authSecurity: 'https://auth-service:8443/realms/dental-client/account/#/personal-info'
 }
 
 export const authConfig: AuthConfig = {

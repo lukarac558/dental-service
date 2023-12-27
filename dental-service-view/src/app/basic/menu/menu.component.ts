@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { appConfig } from 'src/app/app.config';
 import { Role } from 'src/app/core/models/role.model';
 
 @Component({
@@ -8,4 +9,8 @@ import { Role } from 'src/app/core/models/role.model';
 })
 export class MenuComponent {
     role = Role;
+
+    redirectToAuthSecurity(): void {
+        window.location.href = appConfig.authSecurity;
+    }
 }
