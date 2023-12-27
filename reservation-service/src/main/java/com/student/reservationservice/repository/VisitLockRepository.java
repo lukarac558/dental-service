@@ -13,5 +13,6 @@ public interface VisitLockRepository extends JpaRepository<VisitLockEntity, Long
     @Transactional
     void deleteVisitLockEntitiesByDoctorIdAndStartDate(Long doctorId, Timestamp startDate);
 
+    @Transactional
     void deleteVisitLockEntityById(Long id);
 }
